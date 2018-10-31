@@ -1,0 +1,13 @@
+Package: echarter
+Title: R Interface to Echarts
+Version: 0.0.1
+Date: 2018-10-01
+Authors@R: person("Jeevan", "Yue", email = "jeevanyue@foxmail.com", role = c("aut", "cre"))
+Description: R Interface to Echarts JavaScript library. Echarts <http://echarts.baidu.com/> is a powerful, interactive charting and visualization library for browser.
+URL: https://github.com/jeevanyue/echarter
+Depends: R (>= 3.4.0)
+License: MIT
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1
+Suggests: testthat

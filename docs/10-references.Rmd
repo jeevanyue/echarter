@@ -1,0 +1,11 @@
+\cleardoublepage 
+
+# (APPENDIX) 附录 {-}
+
+# 参考 {#articles}
+
+- [htmlwidgets](http://www.htmlwidgets.org)
+- [highcharter](http://jkunst.com/highcharter/)
+- [recharts](https://recharts.cosx.org)
+- [echarts4r](https://echarts4r.john-coene.com)
+- [How to write a useful htmlwidgets in R: tips and walk-through a real example](https://deanattali.com/blog/htmlwidgets-tips/)

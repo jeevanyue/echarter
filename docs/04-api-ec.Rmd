@@ -1,0 +1,1125 @@
+# API函数  {#api-ec}
+
+## 演示数据
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(lubridate)
+library(echarter)
+
+weekDays <- c('Mon','Tues','Wed','Thurs','Fri','Sat','Sun')
+dat <- data.frame(
+ saleNum = round(runif(21, 20, 100), 0),
+ fruit = c(rep("Apple", 7), rep("Pear", 7), rep("Banana", 7)),
+ weekDay = c(rep(weekDays,3)),
+ price = round(runif(21, 10, 20), 0),
+ stringsAsFactors = FALSE)
+
+dat_list <- dat %>%
+  select(-price) %>%
+  spread(weekDay, saleNum) %>%
+  unite("value", c('Mon','Tues','Wed','Thurs','Fri','Sat','Sun'))
+dat_list$value <- lapply(1:3, function(x){
+  as.numeric(strsplit(dat_list$value, "_")[[x]])})
+
+## echart从0开始索引
+dat_matrix <- data.frame(
+  fruit = as.numeric(factor(c(dat$fruit), levels = c('Apple', 'Pear', 'Banana'))) - 1,
+  weekDay = as.numeric(factor(c(dat$weekDay), levels = c('Mon','Tues','Wed','Thurs','Fri','Sat','Sun'))) - 1,
+  saleNum = dat$saleNum
+) %>%
+  as.matrix()
+
+dat_date <- data.frame(
+  date = as.Date('2017-01-01') + seq(0,364),
+  value = round(runif(365, 0, 1000), 0),
+  stringsAsFactors = FALSE)
+
+AQI <- read.csv("data/AQI.csv")
+dat_geo <- AQI %>%
+  select(城市, lng, lat, AQI) 
+
+opt = list(
+  xAxis = list(
+    show = TRUE,
+    type = 'category',
+    name = '星期',
+    data = c('Mon','Tues','Wed','Thurs','Fri','Sat','Sun')),
+  yAxis = list(
+    show = TRUE,
+    type = 'value'),
+  series = list(
+    list(
+      type = 'line',
+      name = 'Apple',
+      data = c(12, 5, 20, 36, 10, 10, 20)))
+)
+```
+
+## 基础组件
+### ec_title
+```{r ec_title}
+echart(opt, elementId = "ec") %>%
+  ec_title(text = '演示数据')
+```
+
+### ec_legend
+```{r ec_legend_data}
+echart(opt) %>%
+  ec_legend(
+    top = 'middle', right = 'right', 
+    data = list(list(name = 'Apple', icon = 'circle')),
+    textStyle = list(color = 'contrastColor')) 
+```
+
+### ec_backgroundColor
+```{r ec_backgroundColor}
+echart(opt) %>%
+  ec_backgroundColor(c('#24273e'))
+```
+
+### ec_colors
+```{r ec_colors}
+echart(opt) %>%
+  ec_colors(c('#247ba0', '#70c1b3', '#b2dbbf'))
+```
+
+### ec_textStyle
+```{r ec_textStyle}
+echart(opt) %>% 
+  ec_backgroundColor(c('#24273e')) %>%
+  ec_colors(c('#247ba0', '#70c1b3', '#b2dbbf')) %>%
+  ec_textStyle(color = '#ffffff')
+```
+
+## 其他组件
+
+### ec_tooltip
+
+```{r ec_tooltip}
+echart(opt) %>%
+  ec_tooltip(
+    trigger = 'item')
+```
+
+### ec_graphic
+
+```{r ec_graphic}
+graphic_opt <- list(
+  type = 'group',
+  rotation = 3.14 / 4,
+  bounding = 'raw',
+  right = 110,
+  bottom = 110,
+  z = 100,
+  children = list(
+    list(
+      type = 'rect',
+      left = 'center',
+      top = 'center',
+      z = 100,
+      shape = list(
+        width = 400,
+        height = 50
+      ),
+      style = list(
+        fill = 'rgba(0,0,0,0.3)'
+      )
+    ),
+    list(
+      type = 'text',
+      left = 'center',
+      top = 'center',
+      z = 100,
+      style = list(
+        fill = '#fff',
+        text = 'ECHARTER',
+        font = 'bold 26px Microsoft YaHei'
+      )
+    )
+  )
+)
+echart(opt) %>%
+  ec_graphic(graphic_opt)
+```
+
+### ec_axisPointer
+
+```{r ec_axisPointer}
+echart(opt) %>%
+  ec_tooltip(
+    trigger = 'item') %>% 
+  ec_axisPointer(show = TRUE, type = 'line')
+```
+
+[xAxis.axisPointer](http://echarts.baidu.com/option.html#xAxis.axisPointer)
+
+>默认不显示。但是如果 tooltip.trigger 设置为 'axis' 或者 tooltip.axisPointer.type 设置为 'cross'，则自动显示 axisPointer。坐标系会自动选择显示显示哪个轴的 axisPointer，也可以使用 tooltip.axisPointer.axis 改变这种选择。
+
+```{r}
+echart(opt) %>%
+  ec_tooltip(
+    trigger = 'item') %>% 
+  ec_xAxis(
+    axisPointer = list(
+      show = TRUE, type = 'shadow')) %>% 
+  ec_yAxis(
+    axisPointer = list(
+      show = TRUE, type = 'line'))
+```
+
+[tooltip.axisPointer](http://echarts.baidu.com/option.html#tooltip.axisPointer)
+
+>tooltip.axisPointer 是配置坐标轴指示器的快捷方式。实际上坐标轴指示器的全部功能，都可以通过轴上的 axisPointer 配置项完成（例如 xAxis.axisPointer 或 angleAxis.axisPointer）。但是使用 tooltip.axisPinter 在简单场景下会更方便一些。
+>注意： tooltip.axisPointer 中诸配置项的优先级低于轴上的 axisPointer 的配置项。
+
+```{r}
+echart(opt) %>%
+  ec_tooltip(
+    trigger = 'item', axisPointer = list(type = 'cross'))
+```
+
+### ec_toolbox
+
+```{r ec_toolbox}
+echart(opt) %>%
+  ec_toolbox(
+    show = TRUE,
+    orinent = 'horizontal',
+    feature = list(
+      dataView = list(
+        show = TRUE,
+        readOnly = TRUE),
+      magicType = list(
+        show = TRUE,
+        type = c('line', 'bar', 'stack', 'tiled')),
+      restore = list(
+        show = TRUE),
+      brush = list(),
+      saveAsImage = list(
+        show = TRUE)))
+```
+
+**拓展**
+
+```{r}
+toolbox_icon_excel <- "M821.469342 118.206149H205.714155c-48.380541 0-87.963909 39.583368-87.963909 87.965866v615.755187c0 48.380541 39.583368 87.963909 87.963909 87.963909h615.755187c48.380541 0 87.963909-39.583368 87.963909-87.963909V206.170058c0-48.380541-39.583368-87.963909-87.963909-87.963909z m-120.710683 615.755188h-80.487485l-105.726529-171.220078-105.728486 171.220078h-78.896715l148.100104-221.956445-148.156847-221.968185h78.955415l105.726529 171.231817 105.726529-171.018541h80.319212l-149.929587 221.754909 150.09786 221.956445z"
+
+toolbox_js_excel <- "function (params){console.log(params);alert('下载Excel');}"
+```
+
+```{r}
+echart() %>%
+  ec_add_series(
+    data = dat_date, type = 'line', name = "date",
+    mapping = ecaes(x = date, y = value)) %>%
+  ec_legend(data = list('date'), show = TRUE) %>% 
+  ec_toolbox(
+    orinent = 'horizontal',
+    feature = list(
+      dataView = list(
+        show = TRUE,
+        readOnly = TRUE),
+      magicType = list(
+        show = TRUE,
+        type = c('line', 'bar', 'stack', 'tiled')),
+      restore = list(
+        show = TRUE),
+      saveAsImage = list(
+        show = TRUE),
+      myexcel = list(
+        show = TRUE,
+        title = 'Excel',
+        icon = toolbox_icon_excel,
+        onclick = htmlwidgets::JS(toolbox_js_excel) 
+      )
+    )
+  )
+```
+
+### ec_visualMap
+
+数据可视化是数据到视觉元素的映射过程（这个过程也可称为视觉编码，视觉元素也可称为视觉通道）。
+
+ECharts 的每种图表本身就内置了这种映射过程，比如折线图把数据映射到『线』，柱状图把数据映射到『长度』。一些更复杂的图表，如graph、事件河流图、treemap 也都会做出他们内置的映射。
+
+此外，ECharts 还提供了 visualMap 组件 来提供通用的视觉映射。visualMap 组件中可以使用的视觉元素有：图形类别（symbol）、图形大小（symbolSize）、颜色（color）、透明度（opacity）、颜色透明度（colorAlpha）、颜色明暗度（colorLightness）、颜色饱和度（colorSaturation）、色调（colorHue）
+
+- 连续型（visualMapContinuous）
+- 分段型（visualMapPiecewise）
+
+分段型视觉映射组件（visualMapPiecewise），有三种模式：
+
+-连续型数据平均分段:依据visualMap-piecewise.splitNumber来自动平均分割成若干块。
+- 连续型数据自定义分段:依据visualMap-piecewise.pieces来定义每块范围。
+- 离散数据（类别性数据）:类别定义在 visualMap-piecewise.categories 中。
+
+```{r ec_visualMap_piecewise}
+echart() %>%
+  ec_grid(show = TRUE, right = '100') %>%
+  ec_add_series(
+    data = dat, type = "scatter",
+    mapping = ecaes(x = weekDay, y = saleNum)) %>%
+  ec_tooltip(
+    trigger = 'item', formatter = '{b}的销量: {c}') %>%
+  ec_visualMap(
+    TYPE = 'piecewise', splitNumber = 5, 
+    min = 0, max = 100, 
+    left = 'right', top = 'middle',
+    color = c('#d94e5d','#eac736','#50a3ba'))
+```
+
+```{r ec_visualMap_continuous}
+echart() %>%
+  ec_tooltip(
+    trigger = 'item', formatter = '{b}: {c}') %>%
+  ec_xAxis(type = 'category', 
+    data = c('Mon','Tues','Wed','Thurs','Fri','Sat','Sun')) %>%
+  ec_yAxis(type = 'value') %>%
+  ec_add_series(
+    data = filter(dat, fruit == 'Apple'), type = "scatter",
+    mapping = ecaes(name = weekDay, value = saleNum)) %>%
+  ec_grid(show = TRUE, right = '100') %>%
+  ec_visualMap(
+    type = 'continuous', calculable = TRUE,
+    min = 0, max = 100, 
+    left = 'right', top = 'middle',
+    color = c('#d94e5d','#eac736','#50a3ba'))
+```
+
+### ec_dataZoom
+
+dataZoom 组件能够在直角坐标系（grid）、极坐标系（polar）中实现这一功能。
+
+- 内置型数据区域缩放组件（dataZoomInside）：内置于坐标系中。
+- 滑动条型数据区域缩放组件（dataZoomSlider）：有单独的滑动条操作。
+- 框选型数据区域缩放组件（dataZoomSelect）：全屏的选框进行数据区域缩放。入口和配置项均在 toolbox中。
+
+```{r ec_dataZoom}
+echart() %>%
+  ec_grid(
+    show = TRUE, bottom = '80', right = '80') %>% 
+  ec_tooltip(
+    trigger = 'item', formatter = '{b}: {c}') %>%
+  ec_xAxis(type = 'category', 
+    data = c('Mon','Tues','Wed','Thurs','Fri','Sat','Sun')) %>%
+  ec_yAxis(type = 'value') %>%
+  ec_add_series(
+    data = dat, type = "scatter",
+    mapping = ecaes(name = weekDay, value = saleNum, group = fruit)) %>%
+  ec_legend(
+    top = 'middle', right = 'right') %>% 
+  ec_dataZoom(type = 'slider')
+```
+
+### ec_timeline
+
+```{r ec_timeline}
+ec1 <- echart() %>%
+  ec_add_series(
+    name = "Apple",
+    data = filter(dat, fruit == 'Apple'), type = "line",
+    mapping = ecaes(weekDay, saleNum)) %>%
+  ec_title(text = 'Apple') 
+
+ec2 <- echart() %>%
+  ec_add_series(
+    name = "Pear",
+    data = filter(dat, fruit == 'Pear'), type = "line",
+    mapping = ecaes(weekDay, saleNum)) %>%
+  ec_title(text = 'Pear')
+
+ec3 <- echart() %>%
+  ec_add_series(
+    name = "Banana",
+    data = filter(dat, fruit == 'Banana'), type = "line",
+    mapping = ecaes(weekDay, saleNum)) %>% 
+  ec_title(text = 'Banana')
+```
+
+```{r}
+echart() %>% 
+  ec_timeline(
+    axisType = 'category', autoPlay = TRUE,
+    data = list(
+    "Apple","Pear",
+    list(value = 'Banana', symbol = 'diamond', symbolSize = 16)
+    )) %>% 
+  ec_options(list(ec1,ec2,ec3)) %>%
+  ec_grid(show = TRUE, bottom = '100', baseoption = TRUE) %>% 
+  ec_title(
+    subtext = "data from sale", baseoption = TRUE) %>% 
+  ec_tooltip(trigger = 'axis', baseoption = TRUE) %>% 
+  ec_legend(
+    data = list('Apple', 'Pear', 'Banana'), baseoption = TRUE) 
+```
+
+
+```{r}
+ec_timeline2(
+  ecs = list(ec1,ec2,ec3), 
+  axisType = 'category', autoPlay = TRUE,
+  data = list(
+    "Apple","Pear",
+    list(value = 'Banana', symbol = 'diamond', symbolSize = 16)
+    )) %>%
+  ec_grid(show = TRUE, bottom = '100', baseoption = TRUE) %>% 
+  ec_title(
+    subtext = "data from sale", baseoption = TRUE) %>% 
+  ec_tooltip(trigger = 'axis', baseoption = TRUE) %>% 
+  ec_legend(
+    data = list('Apple', 'Pear', 'Banana'), baseoption = TRUE) 
+```
+
+### ec_brush
+
+>启动 brush 的按钮既可以在 toolbox 中指定（参见 toolbox.feature.brush.type），也可以在 brush 组件的配置中指定（参见 brush.toolbox）。
+
+```{r}
+echart() %>%
+  ec_add_series(
+    data = dat, type = "line",
+    mapping = ecaes(x = weekDay, y = saleNum, group = fruit)) %>%
+  ec_title(text = '水果销量') %>%
+  ec_legend(
+    top = 'middle', right = 'right') %>% 
+  ec_toolbox(
+    show = TRUE,
+    orinent = 'horizontal',
+    feature = list(
+      dataView = list(
+        show = TRUE,
+        readOnly = TRUE),
+      magicType = list(
+        show = TRUE,
+        type = c('line', 'bar', 'stack', 'tiled')),
+      restore = list(
+        show = TRUE),
+      brush = list(),
+      saveAsImage = list(
+        show = TRUE))) %>% 
+  ec_brush(xAxisIndex = "all", yAxisIndex = "all")
+```
+
+### ec_mark
+
+#### ec_markPoint
+```{r}
+echart(opt) %>%
+  ec_mark(
+    markname = "markPoint", 
+    data = list(
+      list(type = "max", name="最大值"),
+      list(type = "min", name="最小值")), serie = 1)
+## 下列效果相同
+# echart(opt) %>%
+#   ec_markPoint(
+#     data = list(
+#       list(type = "max", name="最大值"),
+#       list(type = "min", name="最小值")), serie = 1)
+```
+
+#### ec_markLine
+```{r}
+echart(opt) %>%
+  ec_mark(
+    markname = "markLine", 
+    data = list(list(type = "max", name = "最大值")))
+## 下列效果相同
+# echart(opt) %>%
+#   ec_markLine(
+#     data = list(list(type = "max", name = "最大值")))
+```
+
+#### ec_markArea
+```{r}
+echart(opt) %>%
+  ec_mark(
+    markname = "markArea", serie = 1,
+    label = list(
+      normal = list(position = 'right')),
+    data = list(
+      list(list(name = "区域", yAxis = 15), list(yAxis = 25))))
+## 下列效果相同
+# echart(opt) %>%
+#   ec_markArea(
+#     serie = 1,
+#     label = list(
+#       normal = list(position = 'right')),
+#     data = list(
+#       list(list(name = "区域", yAxis = 15), list(yAxis = 25))))
+```
+
+
+## 直角坐标系ec_grid
+
+直角坐标系内绘图网格，单个 grid 内最多可以放置上下两个 X 轴，左右两个 Y 轴。在单个 ECharts 实例中可以存在任意个 grid 组件。
+
+支持直角坐标系的有：line、bar、scatter、effectScatter、boxplot、candlestick、pictorialBar、lines、heatmap。并且boxplot、candlestick、pictorialBar只支持直角坐标系。
+
+- ec_xAxis，
+- ec_yAxis
+
+```{r ec_grid}
+echart(opt) %>%
+  ec_grid(
+    show = TRUE, right = '100') %>%
+  ec_xAxis(
+    name = 'Week', nameLocation = 'center', nameGap = 30,
+    axisPointer = list(show = TRUE),
+    data = c("周一","周二","周三","周四","周五","周六","周日")) %>%
+  ec_yAxis(max = 'dataMax') 
+```
+
+
+## 极坐标系: ec_polar
+
+
+支持极坐标系的有：line、bar、scatter、effectScatter。
+
+
+- 极坐标系的角度轴：ec_angleAxis，类似于ec_xAxis
+- 极坐标系的径向轴：ec_radiusAxis，类似于ec_yAxis
+
+```{r}
+echart() %>%
+  ec_tooltip(
+    trigger = 'item', formatter = '{b}: {c}') %>%
+  ec_polar(
+    center = c('50%', '50%')
+  ) %>%
+  ec_angleAxis(
+    type = 'category',
+    data = c('Mon','Tues','Wed','Thurs','Fri','Sat','Sun'),
+    boundaryGap = FALSE,
+    splitLine = list(
+      show = TRUE,
+      lineStyle = list(
+        color = '#999', type = 'dashed'
+      )),
+    axisLine =list(show = FALSE)
+  ) %>%
+  ec_radiusAxis(type = 'value') %>%
+  ec_add_series(
+    type = "scatter", stack = '水果',
+    coordinateSystem = 'polar',
+    data = dat, 
+    mapping = ecaes(name = weekDay, value = saleNum, group = fruit))
+```
+
+## 雷达坐标系ec_radar
+
+仅用于series.type为radar
+
+series.tooltip 仅在 tooltip.trigger 为 'item' 时有效。
+
+
+series-radar.data.value项数组是具体的数据，每个值跟radar.indicator 一一对应，所以需要提前配置radar.indicator。雷达图的数据是多变量（维度）的，如下示例：
+
+```
+data : [
+  {
+    value : [4300, 10000, 28000, 35000, 50000, 19000],
+    name : '预算分配（Allocated Budget）'
+  },
+  {
+    value : [5000, 14000, 28000, 31000, 42000, 21000],
+    name : '实际开销（Actual Spending）'
+  }
+]
+```
+
+```{r ec_radar}
+echart() %>%
+  ec_legend(show =TRUE) %>% 
+  ec_tooltip(
+    trigger = 'item', formatter = '{b}: {c}') %>%
+  ec_radar(
+    indicator = list(
+      list(name = 'Mon', max = 100),
+      list(name = 'Tues', max = 100),
+      list(name = 'Wed', max = 100),
+      list(name = 'Thurs', max = 100),
+      list(name = 'Fri', max = 100),
+      list(name = 'Sat', max = 100),
+      list(name = 'Sun', max = 100)
+    )
+  ) %>% 
+  ec_add_series(
+    data = dat, type = "radar",
+    mapping = ecaes(x = weekDay, y = saleNum, group = fruit)) 
+```
+
+```{r ec_radar_adds_eries, eval=FALSE, echo=FALSE}
+echart() %>%
+  ec_legend(show =TRUE) %>% 
+  ec_tooltip(
+    trigger = 'item', formatter = '{b}: {c}') %>%
+  ec_radar(
+    indicator = list(
+      list(name = 'Mon', max = 100),
+      list(name = 'Tues', max = 100),
+      list(name = 'Wed', max = 100),
+      list(name = 'Thurs', max = 100),
+      list(name = 'Fri', max = 100),
+      list(name = 'Sat', max = 100),
+      list(name = 'Sun', max = 100)
+    )
+  ) %>% 
+  ec_add_series(
+    data = filter(dat, fruit == 'Apple'), 
+    type = "radar", name = "Apple",
+    mapping = ecaes(x = weekDay, y = saleNum)) %>%
+  ec_add_series(
+    data = filter(dat, fruit == 'Pear'), 
+    type = "radar", name = "Pear",
+    mapping = ecaes(x = weekDay, y = saleNum))
+```
+
+## 平行坐标系: ec_parallel
+
+仅用于series.type为parallel，平行坐标系中的坐标轴为ec_parallelAxis。
+
+平行坐标系数据中，每一行是一个『数据项』，每一列属于一个『维度』，如下示例：
+
+```
+data: [
+  [1,  55,  9,   56,  0.46,  18,  6,  '良'],
+  [2,  25,  11,  21,  0.65,  34,  9,  '优'],
+  [3,  56,  7,   63,  0.3,   14,  5,  '良'],
+  [4,  33,  7,   29,  0.33,  16,  6,  '优'],
+  { // 数据项也可以是 Object，从而里面能含有对线条的特殊设置。
+      value: [5,  42,  24,  44,  0.76,  40,  16, '优']
+      lineStyle: {...},
+  }
+  ...
+]
+```
+
+radar和parallel的数据格式的区别只是，parallel支持字符类型，radar只支持数值。另外parallel.data.name不是系列名称，所以一般不填写，而radar.data.name是系列名称，一般要填写。
+
+```{r}
+echart() %>%
+  ec_legend(
+    data = list('Apple', 'Pear', 'Banana')) %>%  
+  ec_parallel(
+    left = '5%', right = '13%', bottom = '10%', top = '20%',
+    parallelAxisDefault = list(
+      type = 'value', nameLocation = 'end', nameGap = 20)) %>%
+  ec_parallelAxis(
+    list(dim = 0, name = 'Mon'),
+    list(dim = 1, name = 'Tues'),
+    list(dim = 2, name = 'Wed'),
+    list(dim = 3, name = 'Thurs'),
+    list(dim = 4, name = 'Fri'),
+    list(dim = 5, name = 'Sat'),
+    list(dim = 6, name = 'Sun')
+  ) %>%
+  ec_tooltip(
+    trigger = 'item', formatter = '{b}: {c}') %>%
+  ec_add_series(
+    data = dat, type = "parallel",
+    mapping = ecaes(x = weekDay, y = saleNum, group = fruit))
+```
+
+## 单轴坐标系: ec_singleAxis
+
+```{r}
+echart() %>%
+  ec_title(
+    textBaseline = 'middle',
+    top = "50%",
+    text = "Apple") %>%
+  ec_tooltip(trigger = 'item') %>%
+  ec_singleAxis(
+    left = 80, type = 'category',
+    boundaryGap = FALSE,
+    top = 60, bottom = 60,
+    splitLine = list(
+      show = TRUE,
+      lineStyle = list(
+        color = '#999', type = 'dashed')),
+    axisLine = list(show = FALSE)) %>%
+  ec_add_series(
+    data = filter(dat, fruit == 'Apple'), type = "scatter", coordinateSystem = 'singleAxis',
+    mapping = ecaes(x = weekDay, y = saleNum, size = price))
+```
+
+```{r}
+opt_title <- lapply(0:2, function(x){
+  list(
+    id = x,
+    textBaseline = 'middle',
+    top = paste0((x + 0.5) * 100 / 3, '%'),
+    text = c("Apple","Pear","Banana")[x + 1]
+  )
+})
+opt_singleAxis <- lapply(0:2, function(x){
+  list(
+    id = x,
+    left = 80, type = 'category',
+    data = c('Mon','Tues','Wed','Thurs','Fri','Sat','Sun'),
+    boundaryGap = FALSE,
+    top = paste0(x * 100/3 + 5, '%'),
+    height = paste0(100/3 - 10, '%'),
+    splitLine = list(
+      show = TRUE,
+      lineStyle = list(
+        color = '#999', type = 'dashed'
+      )),
+    axisLine = list(show = FALSE)
+  )
+})
+
+echart() %>%
+  ec_title(opt_title) %>%
+  ec_tooltip(trigger = 'item') %>%
+  ec_singleAxis(opt_singleAxis) %>%
+  ec_add_series(
+    data = filter(dat, fruit == 'Apple'), 
+    type = "scatter", coordinateSystem = 'singleAxis',
+    singleAxisIndex = 0,
+    mapping = ecaes(x = weekDay, y = saleNum, size = price)) %>%
+  ec_add_series(
+    data = filter(dat, fruit == 'Pear'), 
+    type = "scatter", coordinateSystem = 'singleAxis',
+    singleAxisIndex = 1,
+    mapping = ecaes(x = weekDay, y = saleNum, size = price)) %>%
+  ec_add_series(
+    data = filter(dat, fruit == 'Banana'), 
+    type = "scatter", coordinateSystem = 'singleAxis',
+    singleAxisIndex = 2,
+    mapping = ecaes(x = weekDay, y = saleNum, size = price))
+
+```
+
+## 日历坐标系: ec_calendar
+
+```{r}
+echart() %>%
+  ec_tooltip(trigger = 'item') %>%
+  ec_visualMap(
+    min = 0, max = 1000, type = 'piecewise',
+    left = 'center', top = 30, orient = 'horizontal'
+  ) %>%
+  ec_calendar(
+    top = 120, left = 30, right = 30, 
+    cellSize = c('auto', 20),
+    range = c('2017')
+    # range = c('2017-01-01', '2017-06-10')
+  ) %>%
+  ec_add_series(
+    type = 'heatmap', coordinateSystem = 'calendar',
+    data = dat_date, mapping = ecaes(x = date, y = value))
+```
+
+## 地理坐标系: ec_geo
+
+```{r eval=FALSE}
+# 获取空气质量数据
+# http://datacenter.mep.gov.cn/index
+# http://pm25.in
+# https://www.zq12369.com
+library(rvest)
+library(XML)
+library(RCurl)
+library(jsonlite)
+library(httr)
+
+url <-'https://www.zq12369.com/environment.php?order=desc&tab=rank'
+
+htmlCode <- getURL(url)
+d <- htmlParse(htmlCode, encoding = 'utf-8')
+
+xpath <- '//*[@id="rank1"]//table'
+line_node <- getNodeSet(d, xpath)
+line_table <- readHTMLTable(line_node[[1]], header=T)
+line_table <- line_table[-1,]
+rownames(line_table) <- NULL
+
+# 经纬度
+GPS <- function(chr){
+  url <- paste0("http://apis.map.qq.com/ws/geocoder/v1/?address=", chr, "&key=Z2LBZ-YEOCD-RHS46-HNHPJ-ULHLZ-ABFT3")
+  gps <- lapply(url, function(x){
+    ## 并发限制：5次/秒/接口/Key
+    Sys.sleep(0.25)
+    fromJSON(rawToChar(GET(x)$content))$result$location
+})
+  gps
+}
+
+location <- do.call(rbind.data.frame, GPS(line_table$城市))
+
+AQI <- line_table %>%
+  select(-降序) %>% 
+  mutate(lng = as.character(location$lng), 
+         lat = as.character(location$lat))
+```
+
+```{r}
+echart() %>%
+  ec_backgroundColor(c('#404a59')) %>% 
+  ec_legend(
+    show = TRUE,
+    left = 'right', top = 'bottom',
+    textStyle = list(color = '#fff')) %>% 
+  ec_title(
+    text = "全国主要城市空气质量",
+    subtext = "data from 真气网",
+    left = 'center', textStyle = list(color = '#fff')) %>% 
+  ec_tooltip(
+    trigger = 'item', 
+    formatter = htmlwidgets::JS("function (params) {return params.name + ' : ' + params.value[2];}")) %>% 
+  ec_visualMap(
+    min = 0, max = 200,
+    calculable = TRUE,
+    color = c('#d94e5d','#eac736','#50a3ba'),
+    textStyle = list(color = '#fff')) %>% 
+  ec_geo(
+    map = 'china',
+    label = list(
+        emphasis = list(show = FALSE)),
+    itemStyle = list(
+      normal = list(
+        areaColor = '#323c48',
+        borderColor = '#111'),
+      emphasis = list(areaColor = '#2a333d'))) %>% 
+  ec_add_series(
+    type = 'scatter', coordinateSystem = 'geo',
+    data = dat_geo, name = 'AQI',
+    mapping = ecaes(name = 城市, x = lng, y = lat, value = AQI))
+```
+
+## series.data
+
+系列中的数据内容数组。数组项通常为具体的数据项。
+
+注意，如果系列没有指定data，并且option有dataset，那么默认使用第一个dataset。如果指定了data，则不会再使用dataset。后续详细介绍dataset，本节主要介绍series中的data
+
+通常来说，数据用一个二维数组表示。如下，每一列被称为一个『维度』
+
+```
+series: [{
+    data: [
+        // 维度X   维度Y   其他维度 ...
+        [  3.4,    4.5,   15,   43],
+        [  4.2,    2.3,   20,   91],
+        [  10.8,   9.5,   30,   18],
+        [  7.2,    8.8,   18,   57]
+    ]
+}]
+```
+
+```{r}
+opt_dat <- dat %>% 
+  select(weekDay, saleNum, fruit, price) %>% 
+  setNames(NULL) %>% 
+  jsonlite::toJSON()
+  # as.matrix() 也可以转为matrix，但是若存在列类型为字符，则数值也会转为字符，会存在潜在的影响，建议转为json。
+
+opt_tmp = list(
+  xAxis = list(
+    type = "category", 
+    data = c('Mon','Tues','Wed','Thurs','Fri','Sat','Sun')),
+  yAxis = list(type = "value"),
+  series = list(type = 'scatter', data = opt_dat))
+echart(opt_tmp)
+```
+
+- 在 直角坐标系 (grid) 中『维度X』和『维度Y』会默认对应于 xAxis 和 yAxis。
+- 在 极坐标系 (polar) 中『维度X』和『维度Y』会默认对应于 radiusAxis 和 angleAxis。
+- 后面的其他维度是可选的，可以在别处被使用，例如：
+  - 在 visualMap 中可以将一个或多个维度映射到颜色，大小等多个图形属性上。
+  - 在 series.symbolSize 中可以使用回调函数，基于某个维度得到 symbolSize 值。
+  - 使用 tooltip.formatter 或 series.label.formatter 可以把其他维度的值展示出来。
+  
+特别地，当只有一个轴为类目轴（axis.type 为 'category'）的时候，数据可以简化用一个一维数组表示。例如：
+
+```
+xAxis: {
+  data: ['a', 'b', 'm', 'n']
+},
+series: [{
+  // 与 xAxis.data 一一对应。
+  data: [23,  44,  55,  19]
+  // 它其实是下面这种形式的简化：
+  // data: [[0, 23], [1, 44], [2, 55], [3, 19]]
+}]
+```
+
+```{r}
+dat_tmp_y <- c(12, 5, 20, 36, 10, 10, 20)
+dat_tmp <- data.frame(x = c(0:6), y = dat_tmp_y) %>% 
+  setNames(NULL) %>% 
+  jsonlite::toJSON()
+
+opt_tmp = list(
+  xAxis = list(
+    type = 'category',
+    data = c('Mon','Tues','Wed','Thurs','Fri','Sat','Sun')),
+  yAxis = list(type = "value"),
+  series = list(
+    type = 'line',
+    # data = dat_tmp_y 是dat_tmp的简化
+    data = dat_tmp))
+echart(opt_tmp)
+```
+
+
+『值』与 轴类型 的关系：
+
+- 当某维度对应于数值轴（axis.type为`'value'`或者`'log'`）的时候：其值可以为`number`（例如 12）。（也可以兼容`string`形式的`number`，例如 '12'）
+- 当某维度对应于类目轴（axis.type为`'category'`）的时候：其值须为类目的『序数』（从`0` 开始）或者类目的『字符串值』。例如：
+
+其值须为类目的『序数』（从 0 开始）或者类目的『字符串值』。例如：
+
+```
+xAxis: {
+  type: 'category',
+  data: ['星期一', '星期二', '星期三', '星期四']
+},
+yAxis: {
+  type: 'category',
+  data: ['a', 'b', 'm', 'n', 'p', 'q']
+},
+series: [{
+  data: [
+    // xAxis    yAxis
+    [0, 0, 2], // 意思是此点位于 xAxis: '星期一', yAxis: 'a'。
+    ['星期四', 2, 1], // 意思是此点位于 xAxis: '星期四', yAxis: 'm'。
+    [2, 'p', 2], // 意思是此点位于 xAxis: '星期三', yAxis: 'p'。
+    [3, 3, 5]
+  ]
+}]
+```
+
+当某维度对应于时间轴（type 为`'time'`）的时候，值可以为：
+- 一个时间戳，如 1484141700832，表示 UTC 时间。
+- 或者字符串形式的时间描述：
+  - ISO 8601 的子集，只包含这些形式（这几种格式，除非指明时区，否则均表示本地时间，与 moment 一致）：
+    - 部分年月日时间: '2012-03', '2012-03-01', '2012-03-01 05', '2012-03-01 05:06'.
+    - 使用 'T' 或空格分割: '2012-03-01T12:22:33.123', '2012-03-01 12:22:33.123'.
+    - 时区设定: '2012-03-01T12:22:33Z', '2012-03-01T12:22:33+8000', '2012-03-01T12:22:33-05:00'.
+  - 其他的时间字符串，包括（均表示本地时间）: '2012', '2012-3-1', '2012/3/1', '2012/03/01', '2009/6/12 2:00', '2009/6/12 2:05:08', '2009/6/12 2:05:08.123'
+- 或者用户自行初始化的 Date 实例：
+  - 注意，用户自行初始化 Date 实例的时候，浏览器的行为有差异，不同字符串的表示也不同。
+  - 例如：在 chrome 中，new Date('2012-01-01') 表示 UTC 时间的 2012 年 1 月 1 日，而 new Date('2012-1-1') 和 new Date('2012/01/01') 表示本地时间的 2012 年 1 月 1 日。在 safari 中，不支持 new Date('2012-1-1') 这种表示方法。
+  - 所以，使用 new Date(dataString) 时，可使用第三方库解析（如 moment），或者使用 echarts.number.parseDate，或者参见 这里。
+
+```{r}
+# datetime_to_timestamp <- function(dt) {
+#   assertthat::assert_that(assertthat::is.date(dt) | assertthat::is.time(dt))
+#   tmstmp <- as.numeric(as.POSIXct(dt))
+#   tmstmp <- 1000 * tmstmp
+#   tmstmp
+# }
+dat_tmp <- dat_date %>% 
+  mutate(date = datetime_to_timestamp(date)) %>% 
+  setNames(NULL) %>% 
+  jsonlite::toJSON()
+
+opt_tmp = list(
+  xAxis = list(
+    type = 'time'),
+  yAxis = list(type = "value"),
+  series = list(
+    type = 'line',
+    data = dat_tmp))
+echart(opt_tmp)
+```
+
+空值：
+
+当某数据不存在时（ps：不存在不代表值为 0），可以用 '-' 或者 null 或者 undefined 或者 NaN 表示。
+例如，无数据在折线图中可表现为该点是断开的，在其它图中可表示为图形不存在。
+
+## 数据集: ec_dataset
+
+支持的图表类型: line, bar, scatter, effectScatter, boxplot, candlestick, pictorialBar, custom
+
+### id
+
+如果 series.data 没有指定，并且 dataset 存在，那么就会使用 dataset。datasetIndex 指定本系列使用那个 dataset，需要注意的是：**datasetIndex并不是dataset.id的值，而是dataset的从0开始序列值**。
+
+### source/data
+
+[dataset.source](http://echarts.baidu.com/option.html#dataset.source)
+
+暂时只支持data.frame，matrix和json三种数据格式。
+
+如果是导入的数据合适为json，ec_dataset会直接取用该数据，并且默认`dimensions = NULL`。否则会通过`source = jsonlite::toJSON(setNames(data, NULL))`转为json，并且默认`dimensions =  colnames(data)`。
+
+另外可以通过data或source两种参数传入数据，若同时含有这两个参数，则取source数据。
+
+### dimensions
+
+[dataset.dimensions](http://echarts.baidu.com/option.html#dataset.dimensions)
+
+使用 dimensions 定义 dataset.source 的每个维度的信息。如果不设定 dimensions ，若导入的数据格式是data.frame，则默认为colnames(data)，若导入的数据格式是json，则默认为NULL。
+
+>注意：如果使用了 dataset，那么可以在 dataset.source 的第一行/列中给出 dimension 名称。于是就不用在这里指定 dimension。但是，如果在这里指定了 dimensions，那么 echarts 不再会自动从 dataset.source 的第一行/列中获取维度信息。
+
+目前发现一个问题，即使在dataset指定了 dimensions ，如果 dataset.source 的数据为字符型，echarts 虽然不会自动从 dataset.source 的第一行/列中获取维度信息，但是还会默认 dataset.source 的第一行/列为维度信息，不取第一行/列的值。
+
+### sourceHeader
+
+默认`sourceHeader = FALSE`，即第一行/列直接开始是数据。
+
+### encode
+
+用于可以定义 data 的哪个维度被编码成什么。
+
+>encode 支持的属性，根据坐标系不同而不同。 对于 直角坐标系（cartesian2d），支持 x、y。 对于 极坐标系（polar），支持 radius、angle。 对于 地理坐标系（geo），支持 lng，lat。 此外，均支持 tooltip 和 itemName（用于指定 tooltip 中数据项名称）。
+
+当使用 dimensions 给维度定义名称后，encode 中可直接引用名称
+
+```{r}
+dat_fruit_sp <- dat %>% 
+  select(fruit, weekDay, saleNum) %>% 
+  spread(fruit, saleNum) %>% 
+  arrange(match(weekDay, weekDays))
+
+echart() %>%
+  ec_title(text = '水果销量') %>%
+  ec_xAxis(type = 'category',
+    data = weekDays) %>%
+  ec_yAxis(type = 'value') %>% 
+  ec_dataset(data = dat_fruit_sp) %>% 
+  ec_dataset(source = jsonlite::toJSON(dat_fruit_sp), id = 1) %>% 
+  ec_dataset(source = as.matrix(dat_fruit_sp), id = 5) %>% 
+  ec_add_series(
+    name = "Apple", 
+    type = 'line', encode = list(y = "Apple")) %>% 
+  ec_add_series(
+    name = "Banana", datasetIndex = 1,
+    type = 'line', encode = list(x = "weekDay", y = 2)) %>% 
+  ec_add_series(
+    datasetIndex = 2,
+    type = 'line', encode = list(x = 0, y = 3, seriesName = 3, tooltip = c(0, 3))) 
+```
+
+## ec_add_series
+
+```{r}
+## 目前支持下列两种方式
+mapping = ecaes(name = dat$weekDay, value = dat$saleNum, group = dat$fruit)
+mapping = ecaes(name = weekDay, value = saleNum, group = fruit)
+mapping = ecaes(x = dat$weekDay, y = dat$saleNum, group = fruit)
+mapping = ecaes(x = weekDay, y = saleNum, group = fruit)
+## 暂不支持下列方式
+# mapping = ecaes(name = ~weekDay, value = ~saleNum, group = ~fruit)
+```
+
+```{r}
+echart() %>%
+  ec_add_series(
+    data = dat, type = "scatter", 
+    mapping = ecaes(x = weekDay, y = saleNum, symbolSize = price))
+```
+
+### ec_add_series.default
+
+```{r}
+echart() %>% 
+  ec_add_series(
+    data = dat, type = "bar",
+    mapping = ecaes(x = weekDay, y = saleNum, group = fruit))
+```
+
+### ec_add_series.data.frame
+
+```{r}
+echart() %>% 
+  ec_add_series(
+    data = filter(dat, fruit %in% c('Apple', 'Pear')), type = "bar",
+    mapping = ecaes(x = weekDay, y = saleNum, group = fruit)) %>%
+  ec_add_series(
+    data = filter(dat, fruit == 'Banana'), type = "line", name = 'Banana',
+    mapping = ecaes(x = weekDay, y = saleNum)) %>% 
+  ec_legend(show = TRUE) 
+```
+
+```{r}
+echart() %>% 
+  ec_add_series(
+    data = dat, type = "bar",
+    mapping = ecaes(x = weekDay, y = saleNum, group = fruit)) %>%
+  ec_legend(show = TRUE) %>% 
+  ec_xAxis(
+    data = list(list(
+      value = 'Mon',
+      textStyle = list(color = 'red')),
+    'Tues','Wed','Thurs','Fri','Sat','Sun'))
+```
+
+```{r}
+echart() %>% 
+  ec_add_series(
+    data = dat_date, type = "line",
+    mapping = ecaes(x = date, y = value))
+```
+
+### ec_add_series.numeric
+
+不需要设置mapping
+
+echarts没有xAxis的情况
+
+```{r}
+dat_numeric <- round(runif(20, 0, 10), 0)
+
+echart() %>%
+  ec_add_series(
+    data = dat_numeric, type = 'bar')
+```
+
+echarts提前设置xAxis的情况
+
+```{r}
+echart() %>%
+  ec_xAxis(
+    type = 'category', 
+    data = c('Mon','Tues','Wed','Thurs','Fri','Sat','Sun')) %>%
+  ec_yAxis(type = 'value') %>%
+  ec_add_series(
+    type = 'line', name = 'Pear',
+    data = c(15, 15, 25, 16, 20, 16, 22))
+```
+
+### ec_add_series.character
+
+不需要设置mapping
+
+```{r}
+echart() %>%
+  ec_add_series(
+    data = dat$fruit, type = 'bar')
+```
+
+### ec_add_series.ts
+
+```{r}
+echart() %>% 
+  ec_add_series(
+    data = LakeHuron, type = "line") %>%  
+  ec_yAxis(min = 'dataMin')
+```
+
+### ec_add_series.forecast
+
+```{r}
+library("forecast")
+
+dat_forecast <- forecast(ets(USAccDeaths), h = 48, level = 95)
+
+echart() %>% 
+  ec_add_series(dat_forecast, addOriginal = TRUE, addLevels = TRUE)
+```
+
+## 全局设置echarter.option
+
+```{r eval = FALSE}
+ec_option <- getOption("echarter.option")
+ec_option$legend <- list()
+options(echarter.option = ec_option)
+```

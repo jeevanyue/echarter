@@ -1,0 +1,23 @@
+# 官方案例  {#examples}
+
+echartsExample取自于[cosname/recharts](https://github.com/cosname/recharts)。
+
+echartsExample提供了一种从官网的[官方实例](http://echarts.baidu.com/examples/index.html)中获取JS代码并运行的途径, 除去某些需要加载JSON数据文件的例子, echartsExample`支持大部分Echarts的官网案例.
+
+这个函数支持的范围比较广, 包括Echarts的基本绘图, ecstat, bamap等高级功能, 是JS代码的源生接口
+
+参数:
+
+- url 例子的网址, 比如'http://echarts.baidu.com/demo.html#bubble-gradient'
+- JScontent 需要执行的JS代码(方便复制例子里面的代码调试执行), 注意要命名一个option对象用于数据加载
+- height 绘图区域的高度
+- weight 绘图区域的宽度, 支持百分比
+
+从http://echarts.baidu.com/demo.html#effectScatter-bmap 获取代码, 并转换为R绘图.
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(echarter)
+url = "http://echarts.baidu.com/examples/editor.html?c=bar-tick-align"
+echartsExample(url)
+```

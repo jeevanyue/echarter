@@ -1,0 +1,7 @@
+# echarter安装 {#install}
+
+echarter包的源代码发布在Github，[jeevanyue/echarter](https://github.com/jeevanyue/echarter)，可通过下列代码安装。
+
+```{r eval=FALSE}
+devtools::install_github("jeevanyue/echarter")
+```

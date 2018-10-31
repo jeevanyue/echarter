@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>echarter: ECharts的R语言接口</title>
+  <meta name="description" content="echarter: ECharts的R语言接口。">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+
+  <meta property="og:title" content="echarter: ECharts的R语言接口" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="echarter: ECharts的R语言接口。" />
+  <meta name="github-repo" content="yihui/bookdown-chinese" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="echarter: ECharts的R语言接口" />
+  
+  <meta name="twitter:description" content="echarter: ECharts的R语言接口。" />
+  
+
+<meta name="author" content="JeevanYue">
+
+
+<meta name="date" content="2018-10-31">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="install.html">
+<link rel="next" href="api-ec.html">
+<script src="libs/jquery/jquery.min.js"></script>
+<link href="libs/gitbook/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+<script src="libs/htmlwidgets/htmlwidgets.js"></script>
+<script src="libs/echarter/echarts.min.js"></script>
+<script src="libs/echarter-binding/echarter.js"></script>
+<script src="libs/china/map/china.js"></script>
+<script src="libs/dark/dark.js"></script>
+<script src="libs/infographic/infographic.js"></script>
+<script src="libs/macarons/macarons.js"></script>
+<script src="libs/roma/roma.js"></script>
+<script src="libs/shine/shine.js"></script>
+<script src="libs/vintage/vintage.js"></script>
+<script src="libs/star/star.js"></script>
+<script src="libs/liquidFill/echarts-liquidfill.min.js"></script>
+<script src="libs/wordCloud/echarts-wordcloud.min.js"></script>
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="css/style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">echarter: ECharts的R语言接口</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>前言</a></li>
+<li class="chapter" data-level="" data-path="author.html"><a href="author.html"><i class="fa fa-check"></i>作者简介</a></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="install.html"><a href="install.html"><i class="fa fa-check"></i><b>2</b> echarter安装</a></li>
+<li class="chapter" data-level="3" data-path="examples.html"><a href="examples.html"><i class="fa fa-check"></i><b>3</b> 官方案例</a></li>
+<li class="chapter" data-level="4" data-path="api-ec.html"><a href="api-ec.html"><i class="fa fa-check"></i><b>4</b> API函数</a><ul>
+<li class="chapter" data-level="4.1" data-path="api-ec.html"><a href="api-ec.html#section-4.1"><i class="fa fa-check"></i><b>4.1</b> 演示数据</a></li>
+<li class="chapter" data-level="4.2" data-path="api-ec.html"><a href="api-ec.html#section-4.2"><i class="fa fa-check"></i><b>4.2</b> 基础组件</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="api-ec.html"><a href="api-ec.html#ec_title"><i class="fa fa-check"></i><b>4.2.1</b> ec_title</a></li>
+<li class="chapter" data-level="4.2.2" data-path="api-ec.html"><a href="api-ec.html#ec_legend"><i class="fa fa-check"></i><b>4.2.2</b> ec_legend</a></li>
+<li class="chapter" data-level="4.2.3" data-path="api-ec.html"><a href="api-ec.html#ec_backgroundcolor"><i class="fa fa-check"></i><b>4.2.3</b> ec_backgroundColor</a></li>
+<li class="chapter" data-level="4.2.4" data-path="api-ec.html"><a href="api-ec.html#ec_colors"><i class="fa fa-check"></i><b>4.2.4</b> ec_colors</a></li>
+<li class="chapter" data-level="4.2.5" data-path="api-ec.html"><a href="api-ec.html#ec_textstyle"><i class="fa fa-check"></i><b>4.2.5</b> ec_textStyle</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="api-ec.html"><a href="api-ec.html#section-4.3"><i class="fa fa-check"></i><b>4.3</b> 其他组件</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="api-ec.html"><a href="api-ec.html#ec_tooltip"><i class="fa fa-check"></i><b>4.3.1</b> ec_tooltip</a></li>
+<li class="chapter" data-level="4.3.2" data-path="api-ec.html"><a href="api-ec.html#ec_graphic"><i class="fa fa-check"></i><b>4.3.2</b> ec_graphic</a></li>
+<li class="chapter" data-level="4.3.3" data-path="api-ec.html"><a href="api-ec.html#ec_axispointer"><i class="fa fa-check"></i><b>4.3.3</b> ec_axisPointer</a></li>
+<li class="chapter" data-level="4.3.4" data-path="api-ec.html"><a href="api-ec.html#ec_toolbox"><i class="fa fa-check"></i><b>4.3.4</b> ec_toolbox</a></li>
+<li class="chapter" data-level="4.3.5" data-path="api-ec.html"><a href="api-ec.html#ec_visualmap"><i class="fa fa-check"></i><b>4.3.5</b> ec_visualMap</a></li>
+<li class="chapter" data-level="4.3.6" data-path="api-ec.html"><a href="api-ec.html#ec_datazoom"><i class="fa fa-check"></i><b>4.3.6</b> ec_dataZoom</a></li>
+<li class="chapter" data-level="4.3.7" data-path="api-ec.html"><a href="api-ec.html#ec_timeline"><i class="fa fa-check"></i><b>4.3.7</b> ec_timeline</a></li>
+<li class="chapter" data-level="4.3.8" data-path="api-ec.html"><a href="api-ec.html#ec_brush"><i class="fa fa-check"></i><b>4.3.8</b> ec_brush</a></li>
+<li class="chapter" data-level="4.3.9" data-path="api-ec.html"><a href="api-ec.html#ec_mark"><i class="fa fa-check"></i><b>4.3.9</b> ec_mark</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="api-ec.html"><a href="api-ec.html#ec_grid"><i class="fa fa-check"></i><b>4.4</b> 直角坐标系ec_grid</a></li>
+<li class="chapter" data-level="4.5" data-path="api-ec.html"><a href="api-ec.html#-ec_polar"><i class="fa fa-check"></i><b>4.5</b> 极坐标系: ec_polar</a></li>
+<li class="chapter" data-level="4.6" data-path="api-ec.html"><a href="api-ec.html#ec_radar"><i class="fa fa-check"></i><b>4.6</b> 雷达坐标系ec_radar</a></li>
+<li class="chapter" data-level="4.7" data-path="api-ec.html"><a href="api-ec.html#-ec_parallel"><i class="fa fa-check"></i><b>4.7</b> 平行坐标系: ec_parallel</a></li>
+<li class="chapter" data-level="4.8" data-path="api-ec.html"><a href="api-ec.html#-ec_singleaxis"><i class="fa fa-check"></i><b>4.8</b> 单轴坐标系: ec_singleAxis</a></li>
+<li class="chapter" data-level="4.9" data-path="api-ec.html"><a href="api-ec.html#-ec_calendar"><i class="fa fa-check"></i><b>4.9</b> 日历坐标系: ec_calendar</a></li>
+<li class="chapter" data-level="4.10" data-path="api-ec.html"><a href="api-ec.html#-ec_geo"><i class="fa fa-check"></i><b>4.10</b> 地理坐标系: ec_geo</a></li>
+<li class="chapter" data-level="4.11" data-path="api-ec.html"><a href="api-ec.html#series.data"><i class="fa fa-check"></i><b>4.11</b> series.data</a></li>
+<li class="chapter" data-level="4.12" data-path="api-ec.html"><a href="api-ec.html#-ec_dataset"><i class="fa fa-check"></i><b>4.12</b> 数据集: ec_dataset</a><ul>
+<li class="chapter" data-level="4.12.1" data-path="api-ec.html"><a href="api-ec.html#id"><i class="fa fa-check"></i><b>4.12.1</b> id</a></li>
+<li class="chapter" data-level="4.12.2" data-path="api-ec.html"><a href="api-ec.html#sourcedata"><i class="fa fa-check"></i><b>4.12.2</b> source/data</a></li>
+<li class="chapter" data-level="4.12.3" data-path="api-ec.html"><a href="api-ec.html#dimensions"><i class="fa fa-check"></i><b>4.12.3</b> dimensions</a></li>
+<li class="chapter" data-level="4.12.4" data-path="api-ec.html"><a href="api-ec.html#sourceheader"><i class="fa fa-check"></i><b>4.12.4</b> sourceHeader</a></li>
+<li class="chapter" data-level="4.12.5" data-path="api-ec.html"><a href="api-ec.html#encode"><i class="fa fa-check"></i><b>4.12.5</b> encode</a></li>
+</ul></li>
+<li class="chapter" data-level="4.13" data-path="api-ec.html"><a href="api-ec.html#ec_add_series"><i class="fa fa-check"></i><b>4.13</b> ec_add_series</a><ul>
+<li class="chapter" data-level="4.13.1" data-path="api-ec.html"><a href="api-ec.html#ec_add_series.default"><i class="fa fa-check"></i><b>4.13.1</b> ec_add_series.default</a></li>
+<li class="chapter" data-level="4.13.2" data-path="api-ec.html"><a href="api-ec.html#ec_add_series.data.frame"><i class="fa fa-check"></i><b>4.13.2</b> ec_add_series.data.frame</a></li>
+<li class="chapter" data-level="4.13.3" data-path="api-ec.html"><a href="api-ec.html#ec_add_series.numeric"><i class="fa fa-check"></i><b>4.13.3</b> ec_add_series.numeric</a></li>
+<li class="chapter" data-level="4.13.4" data-path="api-ec.html"><a href="api-ec.html#ec_add_series.character"><i class="fa fa-check"></i><b>4.13.4</b> ec_add_series.character</a></li>
+<li class="chapter" data-level="4.13.5" data-path="api-ec.html"><a href="api-ec.html#ec_add_series.ts"><i class="fa fa-check"></i><b>4.13.5</b> ec_add_series.ts</a></li>
+<li class="chapter" data-level="4.13.6" data-path="api-ec.html"><a href="api-ec.html#ec_add_series.forecast"><i class="fa fa-check"></i><b>4.13.6</b> ec_add_series.forecast</a></li>
+</ul></li>
+<li class="chapter" data-level="4.14" data-path="api-ec.html"><a href="api-ec.html#echarter.option"><i class="fa fa-check"></i><b>4.14</b> 全局设置echarter.option</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="echarter.html"><a href="echarter.html"><i class="fa fa-check"></i><b>5</b> echarter</a><ul>
+<li class="chapter" data-level="5.1" data-path="echarter.html"><a href="echarter.html#data-frames"><i class="fa fa-check"></i><b>5.1</b> Data Frames</a></li>
+<li class="chapter" data-level="5.2" data-path="echarter.html"><a href="echarter.html#numeric-histograms"><i class="fa fa-check"></i><b>5.2</b> Numeric &amp; Histograms</a></li>
+<li class="chapter" data-level="5.3" data-path="echarter.html"><a href="echarter.html#densities"><i class="fa fa-check"></i><b>5.3</b> Densities</a></li>
+<li class="chapter" data-level="5.4" data-path="echarter.html"><a href="echarter.html#character-factor"><i class="fa fa-check"></i><b>5.4</b> Character &amp; Factor</a></li>
+<li class="chapter" data-level="5.5" data-path="echarter.html"><a href="echarter.html#time-series"><i class="fa fa-check"></i><b>5.5</b> Time Series</a></li>
+<li class="chapter" data-level="5.6" data-path="echarter.html"><a href="echarter.html#seasonal-decomposition-of-time-series-by-loess"><i class="fa fa-check"></i><b>5.6</b> Seasonal Decomposition of Time Series by Loess</a></li>
+<li class="chapter" data-level="5.7" data-path="echarter.html"><a href="echarter.html#forecast-package"><i class="fa fa-check"></i><b>5.7</b> Forecast package</a></li>
+<li class="chapter" data-level="5.8" data-path="echarter.html"><a href="echarter.html#igraph"><i class="fa fa-check"></i><b>5.8</b> igraph</a></li>
+<li class="chapter" data-level="5.9" data-path="echarter.html"><a href="echarter.html#xts-from-quantmod-package"><i class="fa fa-check"></i><b>5.9</b> xts from quantmod package</a></li>
+<li class="chapter" data-level="5.10" data-path="echarter.html"><a href="echarter.html#xts-ohlc-objects"><i class="fa fa-check"></i><b>5.10</b> xts ohlc objects</a></li>
+<li class="chapter" data-level="5.11" data-path="echarter.html"><a href="echarter.html#autocovariance-autocorrelation"><i class="fa fa-check"></i><b>5.11</b> Autocovariance &amp; Autocorrelation</a></li>
+<li class="chapter" data-level="5.12" data-path="echarter.html"><a href="echarter.html#multivariate-time-series"><i class="fa fa-check"></i><b>5.12</b> Multivariate Time series</a></li>
+<li class="chapter" data-level="5.13" data-path="echarter.html"><a href="echarter.html#survival-models"><i class="fa fa-check"></i><b>5.13</b> Survival Models</a></li>
+<li class="chapter" data-level="5.14" data-path="echarter.html"><a href="echarter.html#principal-components"><i class="fa fa-check"></i><b>5.14</b> Principal Components</a></li>
+<li class="chapter" data-level="5.15" data-path="echarter.html"><a href="echarter.html#matrix"><i class="fa fa-check"></i><b>5.15</b> Matrix</a></li>
+<li class="chapter" data-level="5.16" data-path="echarter.html"><a href="echarter.html#distance-matrix"><i class="fa fa-check"></i><b>5.16</b> Distance matrix</a></li>
+<li class="chapter" data-level="5.17" data-path="echarter.html"><a href="echarter.html#correlation-matrix"><i class="fa fa-check"></i><b>5.17</b> Correlation matrix</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="theme.html"><a href="theme.html"><i class="fa fa-check"></i><b>6</b> theme</a><ul>
+<li class="chapter" data-level="6.1" data-path="theme.html"><a href="theme.html#-1"><i class="fa fa-check"></i><b>6.1</b> 演示数据</a></li>
+<li class="chapter" data-level="6.2" data-path="theme.html"><a href="theme.html#dark"><i class="fa fa-check"></i><b>6.2</b> dark</a></li>
+<li class="chapter" data-level="6.3" data-path="theme.html"><a href="theme.html#infographic"><i class="fa fa-check"></i><b>6.3</b> infographic</a></li>
+<li class="chapter" data-level="6.4" data-path="theme.html"><a href="theme.html#macarons"><i class="fa fa-check"></i><b>6.4</b> macarons</a></li>
+<li class="chapter" data-level="6.5" data-path="theme.html"><a href="theme.html#roma"><i class="fa fa-check"></i><b>6.5</b> roma</a></li>
+<li class="chapter" data-level="6.6" data-path="theme.html"><a href="theme.html#shine"><i class="fa fa-check"></i><b>6.6</b> shine</a></li>
+<li class="chapter" data-level="6.7" data-path="theme.html"><a href="theme.html#vintage"><i class="fa fa-check"></i><b>6.7</b> vintage</a></li>
+<li class="chapter" data-level="6.8" data-path="theme.html"><a href="theme.html#js"><i class="fa fa-check"></i><b>6.8</b> 自定义js主题</a></li>
+<li class="chapter" data-level="6.9" data-path="theme.html"><a href="theme.html#ec_theme"><i class="fa fa-check"></i><b>6.9</b> 自定义ec_theme</a></li>
+<li class="chapter" data-level="6.10" data-path="api-ec.html"><a href="api-ec.html#echarter.option"><i class="fa fa-check"></i><b>6.10</b> 自定义echarter.option</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="basic.html"><a href="basic.html"><i class="fa fa-check"></i><b>7</b> 基本图表</a><ul>
+<li class="chapter" data-level="7.1" data-path="basic.html"><a href="basic.html#section-7.1"><i class="fa fa-check"></i><b>7.1</b> 基本图表类型</a></li>
+<li class="chapter" data-level="7.2" data-path="basic.html"><a href="basic.html#coordinatesystem"><i class="fa fa-check"></i><b>7.2</b> 坐标系coordinateSystem</a></li>
+<li class="chapter" data-level="7.3" data-path="basic.html"><a href="basic.html#-2"><i class="fa fa-check"></i><b>7.3</b> 演示数据</a></li>
+<li class="chapter" data-level="7.4" data-path="basic.html"><a href="basic.html#line"><i class="fa fa-check"></i><b>7.4</b> 折线图line</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="basic.html"><a href="basic.html#section-7.4.1"><i class="fa fa-check"></i><b>7.4.1</b> 基础折线图</a></li>
+<li class="chapter" data-level="7.4.2" data-path="basic.html"><a href="basic.html#section-7.4.2"><i class="fa fa-check"></i><b>7.4.2</b> 堆叠折线图</a></li>
+<li class="chapter" data-level="7.4.3" data-path="basic.html"><a href="basic.html#section-7.4.3"><i class="fa fa-check"></i><b>7.4.3</b> 光滑曲线图</a></li>
+<li class="chapter" data-level="7.4.4" data-path="basic.html"><a href="basic.html#section-7.4.4"><i class="fa fa-check"></i><b>7.4.4</b> 区域图</a></li>
+<li class="chapter" data-level="7.4.5" data-path="basic.html"><a href="basic.html#section-7.4.5"><i class="fa fa-check"></i><b>7.4.5</b> 堆叠区域图</a></li>
+<li class="chapter" data-level="7.4.6" data-path="basic.html"><a href="basic.html#section-7.4.6"><i class="fa fa-check"></i><b>7.4.6</b> 阶梯线图</a></li>
+<li class="chapter" data-level="7.4.7" data-path="basic.html"><a href="basic.html#section-7.4.7"><i class="fa fa-check"></i><b>7.4.7</b> 极坐标双数值轴</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="basic.html"><a href="basic.html#bar"><i class="fa fa-check"></i><b>7.5</b> 柱状图bar</a><ul>
+<li class="chapter" data-level="7.5.1" data-path="basic.html"><a href="basic.html#section-7.5.1"><i class="fa fa-check"></i><b>7.5.1</b> 基础柱状图</a></li>
+<li class="chapter" data-level="7.5.2" data-path="basic.html"><a href="basic.html#section-7.5.2"><i class="fa fa-check"></i><b>7.5.2</b> 堆叠柱状图</a></li>
+<li class="chapter" data-level="7.5.3" data-path="basic.html"><a href="basic.html#section-7.5.3"><i class="fa fa-check"></i><b>7.5.3</b> 条形图</a></li>
+<li class="chapter" data-level="7.5.4" data-path="basic.html"><a href="basic.html#section-7.5.4"><i class="fa fa-check"></i><b>7.5.4</b> 堆叠条形图</a></li>
+<li class="chapter" data-level="7.5.5" data-path="basic.html"><a href="basic.html#section-7.5.5"><i class="fa fa-check"></i><b>7.5.5</b> 极坐标柱状图</a></li>
+</ul></li>
+<li class="chapter" data-level="7.6" data-path="basic.html"><a href="basic.html#pie"><i class="fa fa-check"></i><b>7.6</b> 饼图pie</a><ul>
+<li class="chapter" data-level="7.6.1" data-path="basic.html"><a href="basic.html#section-7.6.1"><i class="fa fa-check"></i><b>7.6.1</b> 基础饼图</a></li>
+<li class="chapter" data-level="7.6.2" data-path="basic.html"><a href="basic.html#section-7.6.2"><i class="fa fa-check"></i><b>7.6.2</b> 环行图</a></li>
+<li class="chapter" data-level="7.6.3" data-path="basic.html"><a href="basic.html#section-7.6.3"><i class="fa fa-check"></i><b>7.6.3</b> 嵌套环形图</a></li>
+<li class="chapter" data-level="7.6.4" data-path="basic.html"><a href="basic.html#section-7.6.4"><i class="fa fa-check"></i><b>7.6.4</b> 玫瑰图</a></li>
+</ul></li>
+<li class="chapter" data-level="7.7" data-path="basic.html"><a href="basic.html#scatter"><i class="fa fa-check"></i><b>7.7</b> 散点图scatter</a><ul>
+<li class="chapter" data-level="7.7.1" data-path="basic.html"><a href="basic.html#section-7.7.1"><i class="fa fa-check"></i><b>7.7.1</b> 基本散点图</a></li>
+<li class="chapter" data-level="7.7.2" data-path="basic.html"><a href="basic.html#bubble"><i class="fa fa-check"></i><b>7.7.2</b> 气泡图Bubble</a></li>
+<li class="chapter" data-level="7.7.3" data-path="basic.html"><a href="basic.html#section-7.7.3"><i class="fa fa-check"></i><b>7.7.3</b> 地理散点图</a></li>
+</ul></li>
+<li class="chapter" data-level="7.8" data-path="basic.html"><a href="basic.html#effectscatter"><i class="fa fa-check"></i><b>7.8</b> 带特效散点图effectScatter</a></li>
+<li class="chapter" data-level="7.9" data-path="basic.html"><a href="basic.html#boxplot"><i class="fa fa-check"></i><b>7.9</b> 盒须图/箱线图boxplot</a></li>
+<li class="chapter" data-level="7.10" data-path="basic.html"><a href="basic.html#kcandlestick"><i class="fa fa-check"></i><b>7.10</b> k线图candlestick</a><ul>
+<li class="chapter" data-level="7.10.1" data-path="basic.html"><a href="basic.html#waterfall"><i class="fa fa-check"></i><b>7.10.1</b> 瀑布图waterfall</a></li>
+</ul></li>
+<li class="chapter" data-level="7.11" data-path="basic.html"><a href="basic.html#pictorialbar"><i class="fa fa-check"></i><b>7.11</b> 象形柱图pictorialBar</a></li>
+<li class="chapter" data-level="7.12" data-path="basic.html"><a href="basic.html#lines"><i class="fa fa-check"></i><b>7.12</b> 线图lines</a></li>
+<li class="chapter" data-level="7.13" data-path="basic.html"><a href="basic.html#heatmap"><i class="fa fa-check"></i><b>7.13</b> 热力图heatmap</a><ul>
+<li class="chapter" data-level="7.13.1" data-path="basic.html"><a href="basic.html#section-7.13.1"><i class="fa fa-check"></i><b>7.13.1</b> 直角坐标系</a></li>
+<li class="chapter" data-level="7.13.2" data-path="basic.html"><a href="basic.html#section-7.13.2"><i class="fa fa-check"></i><b>7.13.2</b> 日历坐标系</a></li>
+<li class="chapter" data-level="7.13.3" data-path="basic.html"><a href="basic.html#section-7.13.3"><i class="fa fa-check"></i><b>7.13.3</b> 地理坐标系</a></li>
+</ul></li>
+<li class="chapter" data-level="7.14" data-path="basic.html"><a href="basic.html#themeriver"><i class="fa fa-check"></i><b>7.14</b> 主题河流图themeRiver</a></li>
+<li class="chapter" data-level="7.15" data-path="basic.html"><a href="basic.html#radar"><i class="fa fa-check"></i><b>7.15</b> 雷达图radar</a></li>
+<li class="chapter" data-level="7.16" data-path="basic.html"><a href="basic.html#parallel"><i class="fa fa-check"></i><b>7.16</b> 平行坐标系parallel</a></li>
+<li class="chapter" data-level="7.17" data-path="basic.html"><a href="basic.html#map"><i class="fa fa-check"></i><b>7.17</b> 地图map</a><ul>
+<li class="chapter" data-level="7.17.1" data-path="basic.html"><a href="basic.html#section-7.17.1"><i class="fa fa-check"></i><b>7.17.1</b> 基础地理分布图</a></li>
+<li class="chapter" data-level="7.17.2" data-path="theme.html"><a href="theme.html#-1"><i class="fa fa-check"></i><b>7.17.2</b> 地理散点图</a></li>
+<li class="chapter" data-level="7.17.3" data-path="basic.html"><a href="basic.html#section-7.17.3"><i class="fa fa-check"></i><b>7.17.3</b> 地理流向图</a></li>
+</ul></li>
+<li class="chapter" data-level="7.18" data-path="basic.html"><a href="basic.html#funnel"><i class="fa fa-check"></i><b>7.18</b> 漏斗图funnel</a></li>
+<li class="chapter" data-level="7.19" data-path="basic.html"><a href="basic.html#gauge"><i class="fa fa-check"></i><b>7.19</b> 仪表盘gauge</a></li>
+<li class="chapter" data-level="7.20" data-path="basic.html"><a href="basic.html#tree"><i class="fa fa-check"></i><b>7.20</b> 树图tree</a></li>
+<li class="chapter" data-level="7.21" data-path="basic.html"><a href="basic.html#treemap"><i class="fa fa-check"></i><b>7.21</b> 矩形树图treemap</a></li>
+<li class="chapter" data-level="7.22" data-path="basic.html"><a href="basic.html#sunburst"><i class="fa fa-check"></i><b>7.22</b> 旭日图sunburst</a></li>
+<li class="chapter" data-level="7.23" data-path="basic.html"><a href="basic.html#sankey"><i class="fa fa-check"></i><b>7.23</b> - 桑基图sankey</a></li>
+<li class="chapter" data-level="7.24" data-path="basic.html"><a href="basic.html#graph"><i class="fa fa-check"></i><b>7.24</b> - 关系图graph</a></li>
+<li class="chapter" data-level="7.25" data-path="basic.html"><a href="basic.html#section-7.25"><i class="fa fa-check"></i><b>7.25</b> 组合</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="advanced.html"><a href="advanced.html"><i class="fa fa-check"></i><b>8</b> 图表拓展</a><ul>
+<li class="chapter" data-level="8.1" data-path="advanced.html"><a href="advanced.html#liquidfill"><i class="fa fa-check"></i><b>8.1</b> 水球图liquidfill</a></li>
+<li class="chapter" data-level="8.2" data-path="advanced.html"><a href="advanced.html#wordcloud"><i class="fa fa-check"></i><b>8.2</b> 字符云wordcloud</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="shiny.html"><a href="shiny.html"><i class="fa fa-check"></i><b>9</b> shiny</a><ul>
+<li class="chapter" data-level="9.1" data-path="shiny.html"><a href="shiny.html#section-9.1"><i class="fa fa-check"></i><b>9.1</b> 简单例子</a></li>
+<li class="chapter" data-level="9.2" data-path="shiny.html"><a href="shiny.html#shiny"><i class="fa fa-check"></i><b>9.2</b> shiny动态数据</a></li>
+<li class="chapter" data-level="9.3" data-path="shiny.html"><a href="shiny.html#shiny-events"><i class="fa fa-check"></i><b>9.3</b> shiny events</a><ul>
+<li class="chapter" data-level="9.3.1" data-path="shiny.html"><a href="shiny.html#section-9.3.1"><i class="fa fa-check"></i><b>9.3.1</b> 鼠标事件</a></li>
+<li class="chapter" data-level="9.3.2" data-path="shiny.html"><a href="shiny.html#section-9.3.2"><i class="fa fa-check"></i><b>9.3.2</b> 触发图表行为</a></li>
+</ul></li>
+<li class="chapter" data-level="9.4" data-path="shiny.html"><a href="shiny.html#shiny-toolbox"><i class="fa fa-check"></i><b>9.4</b> shiny toolbox拓展</a></li>
+</ul></li>
+<li class="appendix"><span><b>附录</b></span></li>
+<li class="chapter" data-level="A" data-path="articles.html"><a href="articles.html"><i class="fa fa-check"></i><b>A</b> 参考</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/jeevanyue/echarter" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">echarter: ECharts的R语言接口</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="examples" class="section level1">
+<h1><span class="header-section-number">第 3 章</span> 官方案例</h1>
+<p>echartsExample取自于<a href="https://github.com/cosname/recharts">cosname/recharts</a>。</p>
+<p>echartsExample提供了一种从官网的<a href="http://echarts.baidu.com/examples/index.html">官方实例</a>中获取JS代码并运行的途径, 除去某些需要加载JSON数据文件的例子, echartsExample`支持大部分Echarts的官网案例.</p>
+<p>这个函数支持的范围比较广, 包括Echarts的基本绘图, ecstat, bamap等高级功能, 是JS代码的源生接口</p>
+<p>参数:</p>
+<ul>
+<li>url 例子的网址, 比如’<a href="http://echarts.baidu.com/demo.html#bubble-gradient" class="uri">http://echarts.baidu.com/demo.html#bubble-gradient</a>’</li>
+<li>JScontent 需要执行的JS代码(方便复制例子里面的代码调试执行), 注意要命名一个option对象用于数据加载</li>
+<li>height 绘图区域的高度</li>
+<li>weight 绘图区域的宽度, 支持百分比</li>
+</ul>
+<p>从http://echarts.baidu.com/demo.html#effectScatter-bmap 获取代码, 并转换为R绘图.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+<span class="kw">library</span>(echarter)
+url =<span class="st"> &quot;http://echarts.baidu.com/examples/editor.html?c=bar-tick-align&quot;</span>
+<span class="kw">echartsExample</span>(url)</code></pre></div>
+<div id="htmlwidget-fc5077de9b31566f4c50" style="width:100%;height:500px;" class="echarter html-widget"></div>
+<script type="application/json" data-for="htmlwidget-fc5077de9b31566f4c50">{"x":{"opt":{"legend":{"show":true},"tooltip":{"show":true,"trigger":"axis","axisPointer":{"type":"shadow"}},"xAxis":[[]],"yAxis":[[]]},"theme":"default","dispose":true,"renderer":"canvas"},"evals":[],"jsHooks":{"render":[{"code":"function(el,x){var app={};myChart = echarts.getInstanceByDom(el);app.title = '坐标轴刻度与标签对齐';\n\noption = {\n    color: ['#3398DB'],\n    tooltip : {\n        trigger: 'axis',\n        axisPointer : {            // 坐标轴指示器，坐标轴触发有效\n            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'\n        }\n    },\n    grid: {\n        left: '3%',\n        right: '4%',\n        bottom: '3%',\n        containLabel: true\n    },\n    xAxis : [\n        {\n            type : 'category',\n            data : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],\n            axisTick: {\n                alignWithLabel: true\n            }\n        }\n    ],\n    yAxis : [\n        {\n            type : 'value'\n        }\n    ],\n    series : [\n        {\n            name:'直接访问',\n            type:'bar',\n            barWidth: '60%',\n            data:[10, 52, 200, 334, 390, 330, 220]\n        }\n    ]\n};myChart.setOption(option,true);}","data":null}]}}</script>
+
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="install.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="api-ec.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook/js/app.min.js"></script>
+<script src="libs/gitbook/js/lunr.js"></script>
+<script src="libs/gitbook/js/plugin-search.js"></script>
+<script src="libs/gitbook/js/plugin-sharing.js"></script>
+<script src="libs/gitbook/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": ["bookdown.pdf", "bookdown.epub"],
+"toc": {
+"collapse": "none"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

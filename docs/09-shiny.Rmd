@@ -1,0 +1,571 @@
+# shiny {#shiny}
+
+## 简单例子
+
+```{r eval=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(tidyverse)
+library(echarter)
+library(shiny)
+
+lf_opt = list(
+  series = list(
+    list(
+      type = 'liquidFill',
+      radius = '90%',
+      label = list(
+        normal = list(
+          formatter = '占比 \n 60%',
+          textStyle = list(
+            fontSize = 60
+          )
+        )
+      ),
+      data = c(0.6, 0.5, 0.4)
+    ))
+)
+
+dat <- data.frame(
+ saleNum = round(runif(21, 20, 100), 0),
+ fruit = c(rep("Apple", 7), rep("Pear", 7), rep("Banana", 7)),
+ weekDay = c(rep(c('Mon','Tues','Wed','Thurs','Fri','Sat','Sun'),3)),
+ price = round(runif(21, 10, 20), 0),
+ stringsAsFactors = FALSE)
+
+ui <- fluidPage(
+  title = "echarter Shiny",
+  fluidRow(
+    column(width = 6,
+      echartsOutput("result")
+    ),
+    column(width = 6, 
+      echartsOutput("liquidFill")
+    )
+  )
+)
+
+server <- function(input, output, session){
+  output$result <- renderEcharts({
+    echart(theme = 'shine') %>% 
+      ec_grid(right = "15%") %>% 
+      ec_legend(
+        show = TRUE, orient = "vertical",
+        left = "right", top = "middle") %>% 
+      ec_toolbox(
+        show = TRUE,
+        orinent = 'horizontal',
+        feature = list(
+          dataView = list(
+            show = TRUE,
+            readOnly = TRUE),
+          magicType = list(
+            show = TRUE,
+            type = c('line', 'bar', 'stack', 'tiled')),
+          restore = list(
+            show = TRUE),
+          brush = list(),
+          saveAsImage = list(
+            show = TRUE))) %>% 
+        ec_brush(xAxisIndex = "all", yAxisIndex = "all") %>% 
+        ec_dataZoom(type = 'slider') %>% 
+        ec_add_series(
+          dat, type = "scatter", 
+          mapping = ecaes(x = weekDay, y = saleNum, group = fruit)) %>% 
+        ec_title(text = "Fruit Sales") %>% 
+        ec_xAxis(nameLocation = "center", nameGap = 30) %>% 
+        ec_yAxis(nameLocation = "center", nameGap = 30)
+  })
+    
+  output$liquidFill <- renderEcharts({
+    echart(lf_opt)
+  })
+  
+}
+shinyApp(ui, server)
+```
+
+## shiny动态数据
+
+动态添加数据分为两种方式，一种是通过echarts的`setOption`修改`series.data`，另一种是直接使用shiny的`reactive`重新绘制echarts。
+
+```{r eval=FALSE}
+library(tidyverse)
+library(echarter)
+library(shiny)
+
+dat_date <- data.frame(
+  date = as.Date('2017-01-01') + seq(0,364),
+  value = round(runif(365, 0, 1000), 0),
+  stringsAsFactors = FALSE)
+
+dat_date_start <- head(dat_date, 10)
+
+jsCode <- "
+Shiny.addCustomMessageHandler('add_data', function(data) {
+  var chart = get_echarts('data_dynamic');
+
+  chart.setOption({
+    title: {
+        text: 'value:'+ data[Object.keys(data).pop()][1]
+    },
+    series: [{
+        data: data
+    }]
+  });
+});"
+
+ui <- fluidPage(
+  tags$head(
+    tags$script(jsCode)
+  ),
+  column(width = 6, echartsOutput("data_dynamic")),
+  column(width = 6, echartsOutput("data_dynamic2"))
+)
+
+server <- function(input, output, session) {
+  
+  data <- dat_date_start
+  
+  data_new <- reactive({
+    invalidateLater(1000)
+    date_last <- max(data$date)
+    add_data <- head(dat_date[dat_date$date > date_last,], 1)
+    data <<- rbind(data, add_data)[-1, ]
+    data
+  })
+  
+  datetime_to_timestamp <- function(dt) {
+    tmstmp <- as.numeric(as.POSIXct(dt))
+    tmstmp <- 1000 * tmstmp
+    tmstmp
+  }
+  
+  observe({
+    invalidateLater(1000)
+    data_new_ <- data_new() %>% 
+      mutate(date = datetime_to_timestamp(date)) %>% 
+      setNames(NULL) %>% 
+      jsonlite::toJSON()
+    session$sendCustomMessage("add_data", data_new_)
+  })
+  
+  output$data_dynamic <- renderEcharts({
+    echart() %>%
+      ec_title(text = "value") %>% 
+      ec_add_series(
+        data = data, type = 'bar', animation = FALSE,
+        mapping = ecaes(x = date, y = value)) %>% 
+      ec_xAxis(
+        type = 'time',
+        boundaryGap = c('0.1%','0.1%'),
+        min = NULL, max = NULL,
+        interval =  3600 * 24 * 1000,
+        maxInterval = 3600 * 24 * 1000) 
+  })
+  
+  output$data_dynamic2 <- renderEcharts({
+    session$sendCustomMessage("add_data2", paste0("value: ", tail(data$value,1)))
+    
+    echart() %>%
+      ec_title(text = "value") %>% 
+      ec_add_series(
+        data = data_new(), type = 'bar', animation = FALSE,
+        mapping = ecaes(x = date, y = value)) %>% 
+      ec_xAxis(
+        type = 'time', 
+        boundaryGap = c('0.1%','0.1%'),
+        min = NULL, max = NULL,
+        interval =  3600 * 24 * 1000,
+        maxInterval = 3600 * 24 * 1000) 
+  })
+}
+
+shinyApp(ui, server)
+```
+
+## shiny events
+
+在 ECharts 中主要通过 on 方法添加事件处理函数，该文档描述了所有 ECharts 的事件列表。
+
+ECharts 中的事件分为两种，一种是鼠标事件，在鼠标点击某个图形上会触发，还有一种是触发图表行为的事件。
+
+### 鼠标事件
+
+鼠标事件的事件参数是事件对象的数据的各个属性，对于图表的点击事件，基本参数如下，其它图表诸如饼图可能会有部分附加参数。例如饼图会有percent属性表示百分比，具体见各个图表类型的 label formatter 回调函数的 params。
+
+```
+{
+    // 当前点击的图形元素所属的组件名称，
+    // 其值如 'series'、'markLine'、'markPoint'、'timeLine' 等。
+    componentType: string,
+    // 系列类型。值可能为：'line'、'bar'、'pie' 等。当 componentType 为 'series' 时有意义。
+    seriesType: string,
+    // 系列在传入的 option.series 中的 index。当 componentType 为 'series' 时有意义。
+    seriesIndex: number,
+    // 系列名称。当 componentType 为 'series' 时有意义。
+    seriesName: string,
+    // 数据名，类目名
+    name: string,
+    // 数据在传入的 data 数组中的 index
+    dataIndex: number,
+    // 传入的原始数据项
+    data: Object,
+    // sankey、graph 等图表同时含有 nodeData 和 edgeData 两种 data，
+    // dataType 的值会是 'node' 或者 'edge'，表示当前点击在 node 还是 edge 上。
+    // 其他大部分图表中只有一种 data，dataType 无意义。
+    dataType: string,
+    // 传入的数据值
+    value: number|Array,
+    // 数据图形的颜色。当 componentType 为 'series' 时有意义。
+    color: string,
+    // 用户自定义的数据。只在 graphic component 和自定义系列（custom series）
+    // 中生效，如果节点定义上设置了如：{type: 'circle', info: {some: 123}}。
+    info: *
+}
+```
+
+目前支持的有click、mouseover
+
+echarter中可以通过下来参数获取相应数据。
+
+- elementId_events_componentType
+- elementId_events_seriesType
+- elementId_events_seriesIndex
+- elementId_events_seriesName
+- elementId_events_name
+- elementId_events_dataIndex
+- elementId_events_data
+- elementId_events_dataType
+- elementId_events_value
+- elementId_events_color
+- elementId_events_info
+
+### 触发图表行为
+
+目前支持的有
+
+- brushselected
+- legendselectchanged
+- datazoom
+- datarangeselected
+- updateAxisPointer [echarts see slso](http://echarts.baidu.com/examples/editor.html?c=dataset-link)
+
+echarter中可以通过下来参数获取相应数据。
+
+- elementId_brushselected
+- elementId_legendselectchanged
+- elementId_datazoom
+- elementId_datarangeselected
+- elementId_updateAxisPointer
+
+```{r eval=FALSE}
+library(tidyverse)
+library(echarter)
+library(shiny)
+
+dat <- data.frame(
+ saleNum = round(runif(21, 20, 100), 0),
+ fruit = c(rep("Apple", 7), rep("Pear", 7), rep("Banana", 7)),
+ weekDay = c(rep(c('Mon','Tues','Wed','Thurs','Fri','Sat','Sun'),3)),
+ price = round(runif(21, 10, 20), 0),
+ stringsAsFactors = FALSE)
+
+ui <- fluidPage(
+  title = "echarter Shiny",
+  fluidRow(
+    column(width = 6,
+      echartsOutput("scatter")
+    ),
+    column(width = 6, 
+      echartsOutput("pie")
+    ),
+    column(
+      width = 6,
+      "scatter_click_componentType:",
+      verbatimTextOutput("click_componentType"),
+      "scatter_click_seriesType:",
+      verbatimTextOutput("click_seriesType"),
+      "scatter_click_seriesIndex:",
+      verbatimTextOutput("click_seriesIndex"),
+      "scatter_click_seriesName:",
+      verbatimTextOutput("click_seriesName"),
+      "scatter_click_name:",
+      verbatimTextOutput("click_name"),
+      "scatter_click_dataIndex:",
+      verbatimTextOutput("click_dataIndex"),
+      "scatter_click_data:",
+      verbatimTextOutput("click_data"),
+      "scatter_click_dataType:",
+      verbatimTextOutput("click_dataType"),
+      "scatter_click_value:",
+      verbatimTextOutput("click_value"),
+      "scatter_click_color:",
+      verbatimTextOutput("click_color"),
+      "scatter_click_info:",
+      verbatimTextOutput("click_info")
+    ),
+    column(
+      width = 6,
+      "scatter_legendselectchanged:",
+      verbatimTextOutput("legendselectchanged"),
+      "scatter_brushselected:",
+      verbatimTextOutput("brushselected"),
+      "scatter_datazoom:",
+      verbatimTextOutput("datazoom"),
+      "scatter_datarangeselected:",
+      verbatimTextOutput("datarangeselected"),
+      "scatter_updateAxisPointer:",
+      verbatimTextOutput("updateAxisPointer"))
+  )
+)
+
+server <- function(input, output, session){
+  output$scatter <- renderEcharts({
+    echart(theme = 'shine') %>% 
+      ec_title(text = "Fruit Sales") %>% 
+      ec_grid(right = "15%") %>% 
+      ec_legend(
+        show = TRUE, orient = "vertical",
+        left = "right", top = "10%") %>% 
+      ec_tooltip(
+        trigger = 'item', axisPointer = list(type = 'cross')) %>% 
+      ec_toolbox(
+        show = TRUE,
+        orinent = 'horizontal',
+        feature = list(
+          dataView = list(
+            show = TRUE,
+            readOnly = TRUE),
+          magicType = list(
+            show = TRUE,
+            type = c('line', 'bar', 'stack', 'tiled')),
+          restore = list(
+            show = TRUE),
+          brush = list(),
+          saveAsImage = list(
+            show = TRUE))) %>% 
+      ec_brush(xAxisIndex = "all", yAxisIndex = "all") %>% 
+      ec_dataZoom(type = 'slider') %>% 
+      ec_visualMap(
+        type = 'continuous', calculable = TRUE,
+        min = 0, max = 100, 
+        left = 'right', bottom = '10%',
+        color = c('#d94e5d','#eac736','#50a3ba')) %>% 
+      ec_add_series(
+        dat, type = "scatter", 
+        mapping = ecaes(x = weekDay, y = saleNum, group = fruit)) %>% 
+      ec_xAxis(nameLocation = "center", nameGap = 30) %>% 
+      ec_yAxis(nameLocation = "center", nameGap = 30)
+  })
+  
+  output$pie <- renderEcharts({
+    weeks <- c('Mon','Tues','Wed','Thurs','Fri','Sat','Sun')
+    if(!isTruthy(input$scatter_updateAxisPointer)){
+      week_selected <- weeks
+    }else{
+      week_selected <- weeks[input$scatter_updateAxisPointer[["dataIndex"]]+1]
+    }
+    
+    fruits <- c("Apple","Pear","Banana")
+    if(!isTruthy(input$scatter_legendselectchanged)){
+      fruit_selected <- fruits
+    }else{
+      fruit_selected <- names(unlist(input$scatter_legendselectchanged)[unlist(input$scatter_legendselectchanged)])
+    }
+    
+    dat_pie_selected <- dat %>% 
+      filter(weekDay == week_selected, fruit %in% fruit_selected) %>% 
+      group_by(fruit) %>%
+      summarise(
+        saleNum = sum(saleNum),
+        price = round(mean(price),2))
+    
+    echart() %>%
+      ec_title(text = "Data From Left Echarts") %>% 
+      ec_legend(show = TRUE, right = "10%") %>%
+      ec_add_series(
+        data = dat_pie_selected, type = 'pie',
+        mapping = ecaes(name = fruit, value = saleNum))
+      
+  })
+
+  output$legendselectchanged <- renderPrint({
+    input$scatter_legendselectchanged
+  })
+  output$brushselected <- renderPrint({
+    input$scatter_brushselected
+  })
+  output$datazoom <- renderPrint({
+    input$scatter_datazoom
+  })
+  output$datarangeselected <- renderPrint({
+    input$scatter_datarangeselected
+  })
+  output$updateAxisPointer <- renderPrint({
+    input$scatter_updateAxisPointer
+  })
+  
+  ## click
+  output$click_componentType <- renderPrint({
+    input$scatter_click_componentType
+  })
+  output$click_seriesType <- renderPrint({
+    input$scatter_click_seriesType
+  })
+  output$click_seriesIndex <- renderPrint({
+    input$scatter_click_seriesIndex
+  })
+  output$click_seriesName <- renderPrint({
+    input$scatter_click_seriesName
+  })
+  output$click_name <- renderPrint({
+    input$scatter_click_name
+  })
+  output$click_dataIndex <- renderPrint({
+    input$scatter_click_dataIndex
+  })
+  output$click_data <- renderPrint({
+    input$scatter_click_data
+  })
+  output$click_dataType <- renderPrint({
+    input$scatter_click_dataType
+  })
+  output$click_value <- renderPrint({
+    input$scatter_click_value
+  })
+  output$click_color <- renderPrint({
+    input$scatter_click_color
+  })
+  output$click_info <- renderPrint({
+    input$scatter_click_info
+  })
+  
+}
+shinyApp(ui, server)
+```
+
+
+## shiny toolbox拓展
+
+```{r eval=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(tidyverse)
+library(echarter)
+library(shiny)
+
+toolbox_days <- "function(params) {
+  Shiny.setInputValue('toolbox_select', $(this).attr('featureName'));
+}"
+
+toolbox_weeks <- "function(params) {
+  Shiny.setInputValue('toolbox_select', $(this).attr('featureName'));
+}"
+
+toolbox_months <- "function(params) {
+  Shiny.setInputValue('toolbox_select', $(this).attr('featureName'));
+}"
+
+toolbox_years <- "function(params) {
+  Shiny.setInputValue('toolbox_select', $(this).attr('featureName'));
+}"
+
+toolbox_icon_date_days <- "path://M600 1075 l0 -725 515 0 515 0 0 725 0 725 -60 0 -60 0 0 -65 0 -65
+-390 0 -390 0 0 65 0 65 -65 0 -65 0 0 -725z m910 230 l0 -245 -390 0 -390 0
+0 245 0 245 390 0 390 0 0 -245z m0 -600 l0 -235 -390 0 -390 0 0 235 0 235
+390 0 390 0 0 -235z"
+
+toolbox_icon_date_weeks <- "path://M382 1762 l-43 -37 25 -62 c38 -93 73 -219 92 -335 13 -81 18 -194 21 -540 l5 -438 624 0 624 0 0 671 c0 600 -2 675 -16 705 -27 57 -60 68 -216 72 l-137 4 -15 -53 c-9 -29 -16 -56 -16 -61 0 -4 57 -9 127 -10 125 -3 128 -4 140 -28 10 -19 13 -158 13 -607 l0 -583 -504 0 -504 0 -5 407 c-5 444 -13 525 -73 713 -29 92 -83 220 -93 220 -3 0 -25 -17 -49 -38z M754 1547 c-2 -7 -3 -100 -2 -207 l3 -195 338 -3 337 -2 0 210 0 210 -335 0 c-263 0 -337 -3 -341 -13z m556 -197 l0 -100 -215 0 -215 0 0 100 0 100 215 0 215 0 0 -100z M690 965 l0 -55 175 0 175 0 0 -80 0 -80 -150 0 -150 0 0 -50 0 -50 150 0 150 0 0 -70 0 -70 60 0 60 0 0 70 0 70 150 0 150 0 0 50 0 50 -150 0 -150 0 0 80 0 80 175 0 175 0 0 55 0 55 -410 0 -410 0 0 -55z"
+
+toolbox_icon_date_months <- "path://M542 1767 l-42 -43 26 -38 c68 -100 118 -257 134 -424 5 -53 10 -280 10 -504 l0 -408 475 0 475 0 0 675 c0 742 2 718 -60 750 -22 11 -63 15 -163 15 l-134 0 -12 -42 c-7 -24 -15 -51 -18 -61 -5 -17 2 -18 109 -12 161 10 152 22 156 -209 l3 -186 -359 0 -359 0 -6 60 c-10 91 -44 216 -83 300 -37 80 -92 170 -103 170 -4 0 -26 -19 -49 -43z m958 -752 l0 -145 -355 0 -355 0 0 145 0 145 355 0 355 0 0 -145z m0 -405 l0 -140 -355 0 -355 0 0 140 0 140 355 0 355 0 0 -140z"
+
+toolbox_icon_date_years <- "path://M1130 1625 l0 -185 -380 0 -380 0 0 -60 0 -60 135 0 135 0 0 -235 0 -235 245 0 245 0 0 -130 0 -130 -223 0 -223 0 -18 33 c-35 60 -116 155 -178 208 l-61 53 -24 -29 c-62 -76 -63 -69 6 -131 113 -103 218 -266 257 -400 l16 -56 57 7 c31 4 59 10 64 14 6 6 -21 98 -48 164 -7 16 21 17 509 17 l516 0 0 60 0 60 -260 0 -260 0 0 130 0 130 230 0 230 0 0 60 0 60 -230 0 -230 0 0 175 0 175 288 2 287 3 3 58 3 57 -291 0 -290 0 0 185 0 185 -65 0 -65 0 0 -185z m0 -480 l0 -175 -185 0 -185 0 0 175 0 175 185 0 185 0 0 -175z"
+
+dat_date <- data.frame(
+  date = as.Date('2017-04-01') + seq(0,364),
+  value = round(runif(365, 0, 1000), 0),
+  stringsAsFactors = FALSE)
+
+ui <- fluidPage(
+  title = "echarter Shiny",
+  fluidRow(
+    echartsOutput("result"),
+    verbatimTextOutput("select")
+  )
+)
+
+server <- function(input, output, session){
+  ec <- echart() %>%
+    ec_toolbox(
+      orinent = 'horizontal',
+      feature = list(
+        mydays = list(
+          show = TRUE,
+          title = 'Days',
+          icon = toolbox_icon_date_days,
+          onclick = htmlwidgets::JS(toolbox_days) 
+        ),
+        myweeks = list(
+          show = TRUE,
+          title = 'Weeks',
+          icon = toolbox_icon_date_weeks,
+          onclick = htmlwidgets::JS(toolbox_weeks) 
+        ),
+        mymonths = list(
+          show = TRUE,
+          title = 'Months',
+          icon = toolbox_icon_date_months,
+          onclick = htmlwidgets::JS(toolbox_months) 
+        ),
+        myyears = list(
+          show = TRUE,
+          title = 'Years',
+          icon = toolbox_icon_date_years,
+          onclick = htmlwidgets::JS(toolbox_years) 
+        )
+      )
+    )
+  
+  data_toolbox <- reactive({
+    if(isTruthy(input$toolbox_select)){
+      if(input$toolbox_select == "mydays"){
+        dat_date 
+      }else if(input$toolbox_select == "myweeks"){
+        dat_date %>% 
+          group_by(date = ceiling_date(date, "weeks")) %>% 
+          summarise(value = sum(value)) %>% 
+          ungroup()
+      }else if(input$toolbox_select == "mymonths"){
+        dat_date %>% 
+          group_by(date = format(date, "%Y-%m")) %>% 
+          summarise(value = sum(value)) %>% 
+          ungroup()
+      }else if(input$toolbox_select == "myyears"){
+        dat_date %>% 
+          group_by(date = format(date, "%Y")) %>% 
+          summarise(value = sum(value)) %>% 
+          ungroup()
+      }
+    }else{
+      dat_date
+    }
+  })
+  
+  output$result <- renderEcharts({
+    ec %>%
+      ec_add_series(
+        data = data_toolbox(), type = 'line', name = "date",
+        animation = FALSE,
+        mapping = ecaes(x = date, y = value))
+  })
+  
+    
+  output$select <- renderPrint({
+    if(isTruthy(input$toolbox_select)){
+      input$toolbox_select
+    }else{
+      NULL
+    }
+  })
+}
+shinyApp(ui, server)
+```
+
+

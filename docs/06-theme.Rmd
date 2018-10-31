@@ -1,0 +1,198 @@
+# theme {#theme}
+
+## 演示数据
+
+```{r}
+library(tidyverse)
+library(echarter)
+
+dat <- data.frame(
+ saleNum = round(runif(21, 20, 100), 0),
+ fruit = c(rep("Apple", 7), rep("Pear", 7), rep("Banana", 7)),
+ weekDay = c(rep(c('Mon','Tues','Wed','Thurs','Fri','Sat','Sun'),3)),
+ price = round(runif(21, 10, 20), 0),
+ stringsAsFactors = FALSE)
+```
+
+自带的theme: dark, infographic, macarons, roma, shine, vintage.
+
+## dark
+
+```{r}
+echart(theme = 'dark') %>%
+  ec_add_series(
+    data = dat, type = "bar",
+    mapping = ecaes(x = weekDay, y = saleNum, group = fruit))
+```
+
+## infographic
+
+```{r}
+echart(theme = 'infographic') %>%
+  ec_add_series(
+    data = dat, type = "bar",
+    mapping = ecaes(x = weekDay, y = saleNum, group = fruit))
+```
+
+## macarons
+
+```{r}
+echart(theme = 'macarons') %>%
+  ec_add_series(
+    data = dat, type = "bar",
+    mapping = ecaes(x = weekDay, y = saleNum, group = fruit))
+```
+
+## roma
+
+```{r}
+echart(theme = 'roma') %>%
+  ec_add_series(
+    data = dat, type = "bar",
+    mapping = ecaes(x = weekDay, y = saleNum, group = fruit))
+```
+
+## shine 
+
+```{r}
+echart(theme = 'shine') %>%
+  ec_add_series(
+    data = dat, type = "bar",
+    mapping = ecaes(x = weekDay, y = saleNum, group = fruit))
+```
+
+## vintage
+
+```{r}
+echart(theme = 'vintage') %>%
+  ec_add_series(
+    data = dat, type = "bar",
+    mapping = ecaes(x = weekDay, y = saleNum, group = fruit))
+```
+
+## 自定义js主题
+
+echarts theme 构建工具: http://echarts.baidu.com/theme-builder/
+
+支持绝对路径和相对路径
+
+```{r}
+echart(theme = 'data/star.js') %>%
+  ec_add_series(
+    data = dat, type = "bar",
+    mapping = ecaes(x = weekDay, y = saleNum, group = fruit))
+```
+
+## 自定义ec_theme
+
+ec_theme主题可以通过两种方式导入，分别是`echart(theme = thm)`和`ec_add_theme(thm)`。
+
+```{r}
+thm_ <- list(
+  color = c('#247BA0','#70C1B3','#B2DBBF','#F3FFBD','#FF1654'),
+  backgroundColor = '#24273e',
+  title = list(
+    textStyle = list(
+      color = '#ffffff'
+    ),
+    subtextStyle = list(
+      color = '#dddddd'
+    )
+  ),
+  legend = list(
+    textStyle = list(
+      color = '#dddddd'
+    )
+  ),
+  xAxis = list(
+    splitLine = list(
+      show = FALSE
+    ),
+    axisLine = list(
+      lineStyle = list(
+        color = '#dddddd'
+      )
+    ),
+    axisTick = list(
+      lineStyle = list(
+        color = '#dddddd'
+      )
+    ),
+    axisLabel = list(
+      lineStyle = list(
+        color = '#dddddd'
+      )
+    )
+  ),
+  yAxis = list(
+    splitLine = list(
+      show = FALSE
+    ),
+    axisLine = list(
+      lineStyle = list(
+        color = '#dddddd'
+      )
+    ),
+    axisTick = list(
+      lineStyle = list(
+        color = '#dddddd'
+      )
+    ),
+    axisLabel = list(
+      lineStyle = list(
+        color = '#dddddd'
+      )
+    )
+  ),
+  toolbox = list(
+    iconStyle = list(
+      borderColor = '#dddddd'
+    )
+  )
+)
+thm <- ec_theme(thm_)
+```
+
+``echart(theme)``
+
+```{r}
+echart(theme = thm) %>%
+  ec_xAxis(
+    type = 'category') %>%
+  ec_yAxis(type = 'value') %>%
+  ec_add_series(
+    data = dat, type = "bar",
+    mapping = ecaes(x = weekDay, y = saleNum, group = fruit)) 
+```
+
+``ec_add_theme(theme)``
+
+```{r}
+echart() %>%
+  ec_add_theme(thm) %>%
+  ec_xAxis(
+    type = 'category') %>%
+  ec_yAxis(type = 'value') %>%
+  ec_add_series(
+    data = dat, type = "bar",
+    mapping = ecaes(x = weekDay, y = saleNum, group = fruit))
+```
+
+
+## 自定义echarter.option
+
+```{r}
+ec_opt_default <- getOption("echarter.option")
+options(echarter.option = thm_)
+echart() %>%
+  ec_xAxis(
+    type = 'category',
+    data = c('周一','周二','周三','周四','周五','周六','周日')) %>%
+  ec_yAxis(type = 'value') %>%
+  ec_add_series(
+    data = dat, type = "bar",
+    mapping = ecaes(name = weekDay, value = saleNum, group = fruit))
+## 还原
+options(echarter.option = ec_opt_default)
+```
+

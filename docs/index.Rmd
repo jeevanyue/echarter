@@ -1,0 +1,54 @@
+--- 
+title: "echarter: ECharts的R语言接口"
+author: "JeevanYue"
+date: "`r Sys.Date()`"
+documentclass: ctexbook
+bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+colorlinks: yes
+lot: yes
+lof: yes
+geometry: [b5paper, tmargin=2.5cm, bmargin=2.5cm, lmargin=3.5cm, rmargin=2.5cm]
+site: bookdown::bookdown_site
+description: "echarter: ECharts的R语言接口。"
+github-repo: yihui/bookdown-chinese
+#cover-image: images/cover.jpg
+---
+
+```{r setup, include=FALSE}
+options(
+  htmltools.dir.version = FALSE, formatR.indent = 2, width = 55, digits = 4
+)
+
+# 填上你需要用到的包，如 c('ggplot2', 'dplyr')
+lapply(c(), function(pkg) {
+  if (system.file(package = pkg) == '') install.packages(pkg)
+})
+```
+
+# 前言 {-}
+
+我之前主要使用[Joshua Kunst](http://jkunst.com) 的[highcharter](http://jkunst.com/highcharter/)做交互式数据可视化，highcharter是[highcharts](https://www.highcharts.com)的R语言接口，但highcharter不对highcharts的配置项做重新的定义，基本根据highcharts的API来实现，可以很方便 的使用highcharts官方丰富的教程和案例，以及各种社区帮助，用起来真的非常方便的。
+
+最近我们公司将为客户提供Dashboard数据展示，我是用highcharter做了可视化Demo，但是因为highcharts商用收费，所以开发团队使用了百度的[ECharts](http://echarts.baidu.com)来实现。
+
+为了跟开发同事更好交流沟通，让生产实现与Demo更贴近，所以我想到ECharts也有R语言接口，最后在Github找到下面这么多实现ECharts的R语言接口。
+
+- [cosname/recharts](https://github.com/cosname/recharts) - ECharts4
+- [JohnCoene/echarts4r](https://github.com/JohnCoene/echarts4r) - ECharts4
+- [yihui/recharts](https://github.com/yihui/recharts) - ECharts2
+- [madlogos/recharts](https://github.com/madlogos/recharts) - ECharts2 forked from yihui/recharts
+- [madlogos/recharts2](https://github.com/madlogos/recharts2) - ECharts3
+- [ChanningWong/REcharts3](https://github.com/ChanningWong/REcharts3) - ECharts3
+- [XD-DENG/ECharts2Shiny](https://github.com/XD-DENG/ECharts2Shiny) - ECharts3
+
+ECharts的R语言接口真的挺多的，我重点看了前两个包，因为都是基于最新的ECharts4，作者没有弃坑，最近也有更新维护。但是在学习应用这两个包的过程中发现，为了实现某个案例，自己要学习两个接口，ECharts的R语言接口和ECharts的API配置项，并且要不停相互比对。并且在ECharts社区中找到的帮助，常常在R语言接口无法实现。
+
+弄到最后，我已经对ECharts的API配置项比较熟悉了，后来我就决定尝试开发一个ECharts的R语言接口，毕竟我也用了挺多htmlwidgets，但从来没有自己动手开发过一个。所以主要参考[highcharter](http://jkunst.com/highcharter/)对[highcharts](https://www.highcharts.com)的实现方式，开始着手开发`echarter`。取名为`echarter`，也是为了向`highcharter`致敬。
+
+并且还参考学习了[cosname/recharts](https://github.com/cosname/recharts)和[JohnCoene/echarts4r](https://github.com/JohnCoene/echarts4r)的ECharts实现方式。
+
+欢迎大家指正。
+
+

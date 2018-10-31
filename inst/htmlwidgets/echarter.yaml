@@ -1,0 +1,6 @@
+dependencies:
+  - name: echarter
+    version: 4.2.0
+    src: htmlwidgets/lib/echarts-4.2.0
+    script: 
+      - echarts.min.js

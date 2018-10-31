@@ -1,0 +1,1179 @@
+# 基本图表 {#basic}
+
+## 基本图表类型
+
+ECharts 提供了常规的折线图line、柱状图bar、散点图scatter、饼图pie、雷达图radar、热力图heatmap用于统计的箱线图boxplot，用于多个状态直接流转分析的桑基图sankey，，用于地理数据可视化的地图map、热力地图heatmap、线图lines，用于金融市场分析的K线图candlestick，用于关系数据可视化的关系图graph、树图tree、树状图treemap、旭日图sunburst，多维数据可视化的平行坐标图parallel，还有用于BI的漏斗图funnel，仪表盘guage，并且支持图与图之间的混搭。
+
+## 坐标系coordinateSystem
+
+* 二维的直角坐标系cartesian2d，默认为空
+* 极坐标系polar
+* 平行坐标系parallel
+* 单轴坐标系singleAxis
+* 地理坐标系geo
+* 日历坐标系calendar
+* 雷达坐标系radar
+* 不使用坐标系none
+
+## 演示数据
+
+```{r message=FALSE, warning=FALSE}
+library(echarter)
+library(lubridate)
+library(tidyverse)
+
+weekDays <- c('Mon','Tues','Wed','Thurs','Fri','Sat','Sun')
+dat <- data.frame(
+ saleNum = round(runif(21, 20, 100), 0),
+ fruit = c(rep("Apple", 7), rep("Pear", 7), rep("Banana", 7)),
+ weekDay = c(rep(weekDays, 3)),
+ price = round(runif(21, 10, 20), 0),
+ stringsAsFactors = FALSE)
+
+dat_groupby_weekDay <- dat %>% 
+  group_by(weekDay) %>%
+  summarise(
+    saleNum = sum(saleNum), 
+    price = round(mean(price),2))
+
+dat_groupby_fruit <- dat %>% 
+  group_by(fruit) %>%
+  summarise(
+    saleNum = sum(saleNum), 
+    price = round(mean(price),2))
+
+dat_date <- data.frame(
+  date = as.Date('2017-01-01') + seq(0,364),
+  value = round(runif(365, 0, 1000), 0),
+  stringsAsFactors = FALSE)
+
+AQI <- read.csv("data/AQI.csv", stringsAsFactors = FALSE)
+dat_geo <- AQI %>%
+  select(城市, lng, lat, AQI) 
+
+dat_geo_lines <- dat_geo %>% 
+  select(start = 城市, start.lng = lng, start.lat = lat, value = AQI) %>% 
+  filter(start != "北京") %>% 
+  filter(start != "上海")
+dat_geo_lines$end <- rep(c("北京", "上海"), 50)[1:nrow(dat_geo_lines)]
+dat_geo_lines <- dat_geo_lines %>% 
+  left_join(
+    select(dat_geo, end = 城市, end.lng = lng, end.lat = lat), 
+    by = c("end" = "end"))
+
+dat_boxplot <- data.frame(
+  Uni05 = (1:100)/21, Norm = rnorm(100),
+  Rt = rt(100, df = 5), Gam2 = rgamma(100, shape = 2), 
+  Runif = runif(100, -5, 5))
+
+dat_tree <- data.frame(
+  parent = c("a","a","b","b","c","c","c","c","m","n","p","q","r"), 
+  child = c("b","c","d","e","f","g","h","i","o","p","q","r","s"), 
+  value = c(20,10,3,7,1,2,3,4,15,5,5,5,5),
+  stringsAsFactors = FALSE)
+
+opt <- list(
+  xAxis = list(type = 'category', 
+    data = c('Mon','Tues','Wed','Thurs','Fri','Sat','Sun')),
+  yAxis = list(type = 'value'))
+
+```
+
+## 折线图line
+
+* 基础折线图
+* 堆叠折线图
+* 光滑曲线图
+* 区域图
+* 堆叠区域图
+* 阶梯线图
+* 极坐标双数值轴
+
+### 基础折线图
+
+```{r}
+echart() %>%
+  ec_legend(show = TRUE) %>% 
+  ec_add_series(
+    data = dat, type = "line", 
+    mapping = ecaes(x = weekDay, y = saleNum, group = fruit))
+```
+
+**需要注意的是，即使提前设置 xAxis.data，echarts在绘制line图时，是根据series.data或者dataset.source的序列绘制的，而不是根据xAxis.data的序列。两者序列不一致，则会出现下列情况。**
+
+```{r}
+dat_chaos <- arrange(dat, weekDay)
+
+echart() %>%
+  ec_xAxis(data = weekDays) %>% 
+  ec_add_series(
+    data = dat_chaos, type = "line", 
+    mapping = ecaes(x = weekDay, y = saleNum, group = fruit))
+```
+
+
+日期格式的数据，建议使用Axis.time，可以自动处理空数据和坐标长度
+
+```{r}
+## 建议目前版本设置Axis.interval，否则坐标轴线与图之间有错位
+## Axis.time的boundaryGap设置问题，需要设置min=NULL,max=NUL
+## 参考：https://github.com/ecomfe/echarts/issues/4532#issuecomment-267804213
+echart() %>%
+  ec_add_series(
+    data = head(dat_date, 10), type = 'line',
+    mapping = ecaes(x = date, y = value)) %>% 
+  ec_xAxis(
+    type = 'time',
+    boundaryGap = c('0.1%','0.1%'),
+    min = NULL, max = NULL,
+    interval =  3600 * 24 * 1000,
+    maxInterval = 3600 * 24 * 1000) 
+```
+
+
+### 堆叠折线图
+
+详见：[series-line.stack](http://echarts.baidu.com/option.html#series-line.stack)
+
+```{r}
+echart() %>%
+  ec_add_series(
+    data = dat, type = "line", stack = '水果',
+    mapping = ecaes(x = weekDay, y = saleNum, group = fruit))
+```
+
+### 光滑曲线图
+
+详见：[series-line.smooth](http://echarts.baidu.com/option.html#series-line.smooth)
+
+```{r}
+echart() %>%
+  ec_add_series(
+    data = dat, type = "line", smooth = TRUE,
+    mapping = ecaes(x = weekDay, y = saleNum, group = fruit))
+```
+
+### 区域图
+
+详见：[series-line.areaStyle](http://echarts.baidu.com/option.html#series-line.areaStyle)
+
+```{r}
+echart() %>%
+  ec_add_series(
+    data = dat, type = "line", areaStyle = list(), 
+    mapping = ecaes(x = weekDay, y = saleNum, group = fruit))
+```
+
+### 堆叠区域图
+
+```{r}
+echart() %>%
+  ec_add_series(
+    data = dat, type = "line", stack = '水果', areaStyle = list(),
+    mapping = ecaes(x = weekDay, y = saleNum, group = fruit))
+```
+
+### 阶梯线图
+
+详见：[series-line.step](http://echarts.baidu.com/option.html#series-line.step)
+
+```{r}
+echart() %>%
+  ec_add_series(
+    data = dat, type = "line", step = 'end',
+    mapping = ecaes(x = weekDay, y = saleNum, group = fruit))
+```
+
+### 极坐标双数值轴
+
+```{r}
+echart() %>%
+  ec_tooltip(
+    trigger = 'item', formatter = '{b}: {c}') %>%
+  ec_polar(
+    center = c('50%', '50%')) %>%
+  ec_angleAxis(
+    type = 'category',
+    data = c('Mon','Tues','Wed','Thurs','Fri','Sat','Sun'),
+    boundaryGap = FALSE,
+    splitLine = list(
+      show = TRUE,
+      lineStyle = list(
+        color = '#999', type = 'dashed'
+      )),
+    axisLine =list(show = FALSE)) %>%
+  ec_radiusAxis(type = 'value') %>%
+  ec_add_series(
+    type = "line", 
+    coordinateSystem = 'polar',
+    data = dat, 
+    mapping = ecaes(name = weekDay, value = saleNum, group = fruit))
+```
+
+## 柱状图bar
+
+### 基础柱状图
+```{r}
+echart() %>% 
+  ec_add_series(
+    data = dat, type = "bar",
+    mapping = ecaes(x = weekDay, y = saleNum, group = fruit))
+```
+
+### 堆叠柱状图
+```{r}
+echart() %>%
+  ec_add_series(
+    data = dat, type = "bar", stack = '水果',
+    mapping = ecaes(x = weekDay, y = saleNum, group = fruit))
+```
+
+### 条形图
+```{r}
+echart() %>%
+  ec_add_series(
+    data = dat, type = "bar", 
+    mapping = ecaes(y = weekDay, x = saleNum, group = fruit))
+```
+
+### 堆叠条形图
+```{r}
+echart() %>%
+  ec_add_series(
+    data = dat, type = "bar", stack = '水果',
+    mapping = ecaes(y = weekDay, x = saleNum, group = fruit))
+```
+
+### 极坐标柱状图
+
+```{r}
+echart() %>%
+  ec_tooltip(
+    trigger = 'item', formatter = '{b}: {c}') %>%
+  ec_polar(
+    center = c('50%', '50%')) %>%
+  ec_angleAxis(
+    type = 'category',
+    data = c('Mon','Tues','Wed','Thurs','Fri','Sat','Sun'),
+    boundaryGap = FALSE,
+    splitLine = list(
+      show = TRUE,
+      lineStyle = list(
+        color = '#999', type = 'dashed'
+      )),
+    axisLine =list(show = FALSE)
+  ) %>%
+  ec_radiusAxis(type = 'value') %>%
+  ec_add_series(
+    type = "bar", stack = '水果',
+    coordinateSystem = 'polar',
+    data = dat, 
+    mapping = ecaes(name = weekDay, value = saleNum, group = fruit))
+```
+
+## 饼图pie
+
+```
+data: [{
+  name: '数据1',
+  value: 10
+}, {
+  // 数据项名称
+  name: '数据2',
+  value : 56,
+  //自定义特殊 tooltip，仅对该数据项有效
+  tooltip:{},
+  //自定义特殊itemStyle，仅对该item有效
+  itemStyle:{}
+}]
+```
+
+对应mapping的设置为：``ecaes(name,value)``
+
+### 基础饼图
+
+```{r}
+echart() %>%
+  ec_add_series(
+    data = dat_groupby_weekDay, type = 'pie', 
+    mapping = ecaes(name = weekDay, value = saleNum))
+```
+
+### 环行图
+
+```{r}
+echart() %>%
+  ec_add_series(
+    data = dat_groupby_weekDay, type = 'pie', 
+    radius = list('20%', '40%'),
+    center = list('25%', '50%'),
+    mapping = ecaes(name=weekDay, value=saleNum)) %>%
+  ec_add_series(
+    data = dat_groupby_weekDay, type = 'pie', 
+    radius = list(40, 60),
+    center = list('75%', '50%'),
+    mapping = ecaes(name=weekDay, value=saleNum))
+```
+
+### 嵌套环形图
+
+```{r}
+echart() %>%
+  ec_add_series(
+    data = dat_groupby_weekDay, type = 'pie', 
+    radius = list('0%', '40%'),
+    label = list(normal = list(position='inner')),
+    mapping = ecaes(name=weekDay, value=price)) %>%
+  ec_add_series(
+    data = dat_groupby_weekDay, type = 'pie', 
+    radius = list('50%', '70%'),
+    mapping = ecaes(name=weekDay, value=saleNum))
+```
+
+### 玫瑰图
+
+```{r}
+echart() %>%
+  ec_add_series(
+    data = dat_groupby_weekDay, type = 'pie', roseType = 'radius',
+    center = list('25%', '50%'), radius = list(0,'45%'),
+    mapping = ecaes(name=weekDay, value=saleNum)) %>%
+  ec_add_series(
+    data = dat_groupby_weekDay, type = 'pie', roseType = 'area',
+    center = list('75%', '50%'), radius = list(0,'45%'),
+    mapping = ecaes(name=weekDay, value=saleNum))
+```
+
+## 散点图scatter
+
+### 基本散点图
+
+```{r}
+echart() %>%
+  ec_add_series(
+    data = dat, type = "scatter",
+    mapping = ecaes(x = weekDay, y = saleNum, group = fruit))
+```
+
+### 气泡图Bubble
+
+```{r}
+echart() %>%
+  ec_add_series(
+    data = dat, type = "scatter",
+    mapping = ecaes(x = weekDay, y = saleNum, group = fruit, size = price))
+```
+
+### 地理散点图
+
+```{r}
+echart() %>%
+  ec_backgroundColor(c('#404a59')) %>% 
+  ec_legend(
+    show = TRUE,
+    left = 'right', top = 'bottom',
+    textStyle = list(color = '#fff')) %>% 
+  ec_title(
+    text = "全国主要城市空气质量",
+    subtext = "data from 真气网",
+    left = 'center', textStyle = list(color = '#fff')) %>% 
+  ec_tooltip(
+    trigger = 'item', 
+    formatter = htmlwidgets::JS("function (params) {return params.name + ' : ' + params.value[2];}")) %>% 
+  ec_visualMap(
+    min = 0, max = 200,
+    calculable = TRUE,
+    color = c('#d94e5d','#eac736','#50a3ba'),
+    textStyle = list(color = '#fff')) %>% 
+  ec_geo(
+    map = 'china',
+    label = list(
+        emphasis = list(show = FALSE)),
+    itemStyle = list(
+      normal = list(
+        areaColor = '#323c48',
+        borderColor = '#111'),
+      emphasis = list(areaColor = '#2a333d'))) %>% 
+  ec_add_series(
+    type = 'scatter', coordinateSystem = 'geo',
+    data = dat_geo, name = 'AQI',
+    mapping = ecaes(x = lng, y = lat, value = AQI))
+```
+
+## 带特效散点图effectScatter
+
+```{r}
+echart() %>%
+  ec_add_series(
+    data = dat, type = "effectScatter",
+    mapping = ecaes(x = weekDay, y = saleNum, group = fruit))
+```
+
+## 盒须图/箱线图boxplot
+
+ECharts并不内置对原始数据的处理，输入给boxplot的数据须是五个统计结果量值，五个量值依次是：[min, Q1, median (or Q2), Q3, max]。
+
+``mapping = ecaes(min, Q1, median (or Q2), Q3, max)``。
+
+若`mapping`不为空，这根据mapping指定的五个量值绘制boxplot。
+
+若`mapping`为空，则根据`graphics::boxplot`统计出五个量值后绘制boxplot，并且根据`outline`判断是否绘制outline，若`outline == TRUE`则绘制outline，若`outline == FALSE`则绘制不绘制outline，默认为TRUE。
+
+```{r}
+# boxplot(dat_boxplot)
+dat_bp <- boxplot(dat_boxplot, plot = FALSE)
+
+dat_stats <- dat_bp$stats
+dat_stats_t <- t(dat_stats)
+
+dat_stats_t_df <- data.frame(dat_stats_t)
+names(dat_stats_t_df) <- c("min", "Q1", "median", "Q3", "max")
+
+dat_out <- data.frame(
+  group = dat_bp$group - 1, out = dat_bp$out,
+  stringsAsFactors = FALSE)
+```
+
+```{r eval=FALSE}
+# matrix
+echart() %>%
+  ec_tooltip(trigger = 'item') %>%
+  ec_xAxis(type = "category", data = names(dat_boxplot)) %>% 
+  ec_yAxis(type = "value") %>% 
+  ec_add_series(
+    data = dat_stats_t, type = "boxplot") 
+# data.frame
+echart() %>%
+  ec_tooltip(trigger = 'item') %>%
+  ec_xAxis(type = "category", data = names(dat_boxplot)) %>% 
+  ec_yAxis(type = "value") %>% 
+  ec_add_series(
+    data = dat_stats_t_df, type = "boxplot", mapping = ecaes(min = min, Q1 = Q1, median = median, Q3 = Q3, max = max)) 
+```
+
+
+layout布局方式，可选值：
+
+- horizontal：水平排布各个 box
+- vertical：竖直排布各个 box
+
+默认值根据当前坐标系状况决定：如果category轴为横轴，则水平排布；否则竖直排布；如果没有category轴则水平排布。
+
+```{r}
+echart() %>%
+  ec_tooltip(trigger = 'item') %>%
+  ec_xAxis(type = "category", data = names(dat_boxplot)) %>% 
+  ec_yAxis(type = "value") %>% 
+  ec_add_series(
+    name = "boxplot",
+    data = dat_stats_t_df, type = "boxplot", mapping = ecaes(min = min, Q1 = Q1, median = median, Q3 = Q3, max = max)) %>% 
+  ec_add_series(
+    name = "boxplot",
+    data = dat_out, type = "scatter", mapping = ecaes(x = group, y = out))
+```
+
+```{r}
+echart() %>%
+  ec_tooltip(trigger = 'item') %>%
+  ec_yAxis(type = "category", data = names(dat_boxplot)) %>% 
+  ec_xAxis(type = "value") %>% 
+  ec_add_series(
+    name = "boxplot",
+    data = dat_stats_t_df, type = "boxplot", mapping = ecaes(min = min, Q1 = Q1, median = median, Q3 = Q3, max = max)) %>% 
+  ec_add_series(
+    name = "boxplot",
+    data = dat_out, type = "scatter", mapping = ecaes(y = group, x = out))
+```
+
+horizontal和vertical
+
+```{r}
+echart() %>%
+  ec_tooltip(trigger = 'item') %>%
+  ec_xAxis(type = "category", data = names(dat_boxplot)) %>% 
+  ec_yAxis(type = "value") %>% 
+  ec_legend(show = TRUE) %>% 
+  ec_add_series(
+    name = "boxplot",
+    data = dat_boxplot, type = "boxplot", outline = TRUE, layout = 'horizontal') 
+
+echart() %>%
+  ec_tooltip(trigger = 'item') %>%
+  ec_yAxis(type = "category", data = names(dat_boxplot)) %>% 
+  ec_xAxis(type = "value") %>% 
+  ec_add_series(
+    name = "boxplot",
+    data = dat_boxplot, type = "boxplot", outline = TRUE, layout = 'vertical')
+```
+
+```{r}
+dat_boxplot_ <- data.frame(
+  Uni05 = (1:100)/21, Norm = rnorm(100),
+  Rt = rt(100, df = 5), Gam2 = rgamma(100, shape = 2), 
+  Runif = runif(100, -5, 5))
+
+dat_boxplot2 <- rbind(mutate(dat_boxplot, index = "data1"), mutate(dat_boxplot_, index = "data2"))
+
+dat_boxplot_ <- data.frame(
+  Uni05 = (1:100)/21, Norm = rnorm(100),
+  Rt = rt(100, df = 5), Gam2 = rgamma(100, shape = 2), 
+  Runif = runif(100, -5, 5))
+dat_boxplot3 <- rbind(dat_boxplot2, mutate(dat_boxplot_, index = "data3"))
+
+echart() %>%
+  ec_tooltip(trigger = 'item') %>%
+  ec_xAxis(type = "category", data = names(dat_boxplot)) %>% 
+  ec_yAxis(type = "value") %>% 
+  ec_legend(show = TRUE) %>% 
+  ec_add_series(
+    data = dat_boxplot3, 
+    group = "index", type = "boxplot", outline = TRUE, layout = 'horizontal')
+
+```
+
+## k线图candlestick
+
+四个量值依次是：[open, close, lowest, highest] （即：[开盘值, 收盘值, 最低值, 最高值]）
+
+对应mapping的设置为：``ecaes(open, close, lowest, highest)``
+
+
+```{r eval=FALSE}
+getstockdata <- function(code, start, end){
+  html <- "http://q.stock.sohu.com/hisHq?"
+  url <- paste(html, "code=", code, "&start=", start, "&end=", end, sep="")
+  data <- rjson::fromJSON(RCurl::getURL(url, .encoding = 'utf-8'))[[1]]$hq
+  result <- data.frame(t(sapply(data, `[`)), stringsAsFactors = FALSE)
+  result_name <- c('date','open','close','increase','increPer','low','high','volume','amount','other')
+  names(result) <- result_name
+  result[result_name[c(2:4,6:9)]] <- sapply(result[result_name[c(2:4,6:9)]],as.numeric)
+
+  return(result)
+}
+
+dat_stock_zs_000001 <- getstockdata(code = "zs_000001", start = "20150101", end = format(Sys.Date(),"%Y%m%d")) %>% 
+  arrange(date) %>% 
+  mutate(MA5 = round(TTR::SMA(close, 5), 2)) %>% 
+  mutate(MA10 = round(TTR::SMA(close, 10), 2)) %>% 
+  mutate(MA20 = round(TTR::SMA(close, 20), 2)) %>% 
+  mutate(MA30 = round(TTR::SMA(close, 30), 2)) %>% 
+  mutate(MA40 = round(TTR::SMA(close, 40), 2)) %>% 
+  mutate(MA50 = round(TTR::SMA(close, 50), 2)) %>% 
+  mutate(MA6 = round(TTR::SMA(close, 60), 2))
+
+dat_stock_zs_399001 <- getstockdata(code = "zs_399001", start = "20150101", end = format(Sys.Date(),"%Y%m%d")) %>% 
+  arrange(date) %>% 
+  mutate(MA5 = round(TTR::SMA(close, 5), 2)) %>% 
+  mutate(MA10 = round(TTR::SMA(close, 10), 2)) %>% 
+  mutate(MA20 = round(TTR::SMA(close, 20), 2)) %>% 
+  mutate(MA30 = round(TTR::SMA(close, 30), 2)) %>% 
+  mutate(MA40 = round(TTR::SMA(close, 40), 2)) %>% 
+  mutate(MA50 = round(TTR::SMA(close, 50), 2)) %>% 
+  mutate(MA6 = round(TTR::SMA(close, 60), 2))
+# write.csv(dat_stock_zs_000001,"data/dat_stock_zs_000001.csv", row.names = FALSE)
+# write.csv(dat_stock_zs_399001,"data/dat_stock_zs_399001.csv", row.names = FALSE)
+```
+
+```{r}
+dat_stock_zs_000001 <- read.csv("data/dat_stock_zs_000001.csv", stringsAsFactors = FALSE) %>% 
+  tail(100) %>% 
+  mutate(code = "上证指数")
+dat_stock_zs_399001 <- read.csv("data/dat_stock_zs_399001.csv", stringsAsFactors = FALSE) %>% 
+  tail(100) %>% 
+  mutate(code = "深圳指数")
+
+dat_stock <- rbind(dat_stock_zs_399001, dat_stock_zs_000001)
+
+dat_stock_date <- unique(dat_stock$date)
+
+dat_stock_v <- dat_stock %>% 
+  mutate(increase = ifelse(close >= open, 1, -1)) %>% 
+  select(date, volume, increase, code) 
+
+dat_stock_ <- dat_stock %>% 
+  select(open, close, low, high, volume, increase, date) %>% 
+  setNames(NULL) %>% 
+  as.matrix()
+
+upColor <- '#00da3c';
+downColor <- '#ec0000';
+
+itemStyle <- list(
+  normal = list(
+    color = downColor,
+    color0 = upColor,
+    borderColor = "#8A0000",
+    borderColor0 = "#008F28"))
+
+MA_lineStyle = list(normal = list(opacity = 0.5))
+```
+
+```{r}
+echart() %>%
+  ec_title(text = "上证指数") %>% 
+  ec_tooltip(trigger = 'axis', axisPointer = list(type = "cross")) %>%
+  ec_axisPointer(link = list(xAxisIndex= 'all')) %>% 
+  ec_grid(
+    list(left='10%',right='8%',height='50%'),
+    list(left='10%',right='8%',top='68%',height='16%')) %>% 
+  ec_xAxis(
+    list(
+      gridIndex = 0,type = "category", 
+      data = dat_stock_date, scale = TRUE,
+      boundaryGap= FALSE,
+      axisLine=list(onZero=FALSE),
+      splitLine=list(show=FALSE),
+      splitNumber= 20,
+      min='dataMin',
+      max= 'dataMax',
+      axisPointer=list(z=100)),
+    list(
+      gridIndex = 1,type = "category", 
+      data = dat_stock_date, scale = TRUE,
+      boundaryGap= FALSE,
+      axisLine=list(onZero=FALSE),
+      splitLine=list(show=FALSE),
+      axisTick=list(show=FALSE),
+      axisLabel=list(show=FALSE),
+      splitNumber= 20,
+      min='dataMin',
+      max= 'dataMax',
+      axisPointer=list(z=100))) %>%
+  ec_yAxis(
+    list(
+      gridIndex = 0, type = "value", scale = TRUE, splitArea = list(show = TRUE)),
+    list(
+      gridIndex = 1, scale = TRUE,
+      gridIndex = 1, splitNumber = 2,
+      axisLabel = list(show = FALSE),
+      axisLine = list(show = FALSE),
+      axisTick = list(show = FALSE),
+      splitLine = list(show = FALSE))) %>%
+  ec_dataZoom(
+    list(type = 'inside',xAxisIndex= c(0,1)),
+    list(
+      type = 'slider',xAxisIndex=c(0,1),
+      show = TRUE, top = '85%')) %>% 
+  ec_legend(show = TRUE) %>% 
+  ec_add_series(
+    name = "上证指数",
+    type = "candlestick", itemStyle = itemStyle,
+    data = dat_stock_zs_000001, mapping = ecaes(open = open, close = close, lowest = low, highest = high)) %>%
+  ec_add_series(
+    name = "MA10", type = "line", lineStyle = MA_lineStyle,
+    symbol = 'none',
+    smooth = TRUE, data = dat_stock_zs_000001$MA10) %>% 
+  ec_add_series(
+    name = "MA20", type = "line", lineStyle = MA_lineStyle,
+    symbol = 'none',
+    smooth = TRUE, data = dat_stock_zs_000001$MA20) %>% 
+  ec_add_series(
+    name = "MA30", type = "line", lineStyle = MA_lineStyle,
+    symbol = 'none',
+    smooth = TRUE, data = dat_stock_zs_000001$MA30) %>% 
+  # ec_add_series(
+  #   xAxisIndex = 1, yAxisIndex = 1,
+  #   name = "Volume", type = "bar",
+  #   data = jsonlite::toJSON(setNames(dat_stock_v, NULL))) %>% 
+  ec_add_series(
+    xAxisIndex = 1, yAxisIndex = 1,
+    name = "Volume", type = "bar",
+    data = filter(dat_stock_v, code == "上证指数"),
+    mapping = ecaes(x = date, y = volume, increase = increase)) %>%
+  ec_visualMap(
+    type = "piecewise",
+    show = FALSE,
+    seriesIndex = 4, dimension = 2,
+    pieces = list(
+      list(value = 1, color = downColor), 
+      list(value = -1, color = upColor))) %>% 
+  ec_mark(
+    markname = "markLine", symbol = c('none', 'none'),
+    data = list(
+      list(type = "max", name = "最大值", valueDim = "highest"),
+      list(type = "min", name = "最小值", valueDim = "lowest"))) 
+```
+
+
+```{r}
+echart() %>%
+  ec_title(text = "指数对比") %>% 
+  ec_tooltip(trigger = 'axis', axisPointer = list(type = "cross")) %>%
+  ec_axisPointer(link = list(xAxisIndex= 'all')) %>% 
+  ec_xAxis(
+    type = "category", 
+    data = dat_stock_date, scale = TRUE,
+    boundaryGap= FALSE,
+    axisLine=list(onZero=FALSE),
+    splitLine=list(show=FALSE),
+    splitNumber= 20,
+    min='dataMin',
+    max= 'dataMax',
+    axisPointer=list(z=100)) %>%
+  ec_yAxis(
+    type = "value", scale = TRUE, splitArea = list(show = TRUE)) %>%
+  ec_dataZoom(type = 'inside') %>% 
+  ec_add_series(
+    type = "candlestick", itemStyle = itemStyle,
+    data = dat_stock, mapping = ecaes(open = open, close = close, lowest = low, highest = high, group = code))
+```
+
+### 瀑布图waterfall
+
+瀑布图类似于k线图，只是开盘值就是最低值，收盘值就是最高值。形态似瀑布
+
+```{r}
+dat_wf <- data.frame(
+  first = c(0,-21,-10,138,232,222,242),
+  end = c(-21,-10,138,232,222,242,406), stringsAsFactors = FALSE)
+dat_wf_name <- c("Mon","Tues","Wed","Thurs","Fri","Sat","Sun")
+
+echart() %>%
+  ec_tooltip(trigger = 'item') %>%
+  ec_xAxis(type = "category", data = dat_wf_name) %>% 
+  ec_yAxis(type = "value") %>% 
+  ec_add_series(
+    data = dat_wf, type = "candlestick", mapping = ecaes(open = first, close = end, lowest = first, highest = end))
+```
+
+## 象形柱图pictorialBar
+
+```{r}
+echart() %>%
+  ec_add_series(
+    data = dat_groupby_weekDay, type = "pictorialBar",
+    symbol = "rect", symbolRepeat = TRUE, barWidth = 10,
+    symbolMargin = 2, symbolSize = 10, 
+    mapping = ecaes(x = weekDay, y = saleNum))
+```
+
+## 线图lines
+
+对应mapping的设置为：``ecaes(start.lng, start.lat, end.lng, end.lat)``
+
+```{r}
+echart() %>%
+  ec_backgroundColor(c('#404a59')) %>% 
+  ec_geo(
+    map = 'china',
+    label = list(
+        emphasis = list(show = FALSE)),
+    itemStyle = list(
+      normal = list(
+        areaColor = '#323c48',
+        borderColor = '#111'),
+      emphasis = list(areaColor = '#2a333d'))) %>% 
+  ec_add_series(
+    data = dat_geo_lines, mapping = ecaes(start.lng = start.lng, start.lat = start.lat, end.lng = end.lng, end.lat = end.lat),
+    type = "lines", coordinateSystem = 'geo', 
+    effect = list(
+      show = TRUE,
+      constantSpeed = 30,
+      symbol = 'pin',
+      symbolSize = 3,
+      trailLength = 0),
+    lineStyle = list(
+      normal = list(width = 1, opacity = 0.6, curveness = 0.2)))
+```
+
+
+## 热力图heatmap
+
+[coordinateSystem](http://echarts.baidu.com/option.html#series-heatmap.coordinateSystem)，heatmap可使用的坐标系，可选：二维的直角坐标系cartesian2d、地理坐标系geo、日历坐标系calendar
+
+### 直角坐标系
+
+```{r}
+echart() %>%
+  ec_add_series(
+    data = dat, type = "heatmap",
+    mapping = ecaes(x = weekDay, y = fruit, value = saleNum)) %>%
+  ec_tooltip(
+    trigger = 'item',
+    formatter = '{b}:{c}') %>%
+  ec_visualMap(
+    min = 20, max = 100, type = 'piecewise',
+    left = 'center', orient = 'horizontal') 
+```
+
+### 日历坐标系
+
+```{r}
+echart() %>%
+  ec_tooltip(trigger = 'item') %>%
+  ec_visualMap(
+    min = 0, max = 1000, type = 'piecewise',
+    left = 'center', top = 30, orient = 'horizontal'
+  ) %>%
+  ec_calendar(
+    top = 120, left = 30, right = 30, 
+    cellSize = c('auto', 20),
+    range = c('2017')
+    # range = c('2017-01-01', '2017-06-10')
+  ) %>%
+  ec_add_series(
+    type = 'heatmap', coordinateSystem = 'calendar',
+    data = dat_date, mapping = ecaes(x = date, y = value))
+```
+
+### 地理坐标系
+
+```{r}
+AQI <- read.csv("data/AQI.csv")
+dat_geo <- AQI %>%
+  select(城市, lng, lat, AQI) 
+
+echart() %>%
+  ec_backgroundColor(c('#404a59')) %>% 
+  ec_legend(
+    show = TRUE,
+    left = 'right', top = 'bottom',
+    textStyle = list(color = '#fff')) %>% 
+  ec_title(
+    text = "全国主要城市空气质量",
+    subtext = "data from 真气网",
+    left = 'center', textStyle = list(color = '#fff')) %>% 
+  ec_tooltip(
+    trigger = 'item', 
+    formatter = htmlwidgets::JS("function (params) {return params.name + ' : ' + params.value[2];}")) %>% 
+  ec_visualMap(
+    min = 0, max = 200,
+    calculable = TRUE,
+    color = c('#d94e5d','#eac736','#50a3ba'),
+    textStyle = list(color = '#fff')) %>% 
+  ec_geo(
+    map = 'china',
+    label = list(
+        emphasis = list(show = FALSE)),
+    itemStyle = list(
+      normal = list(
+        areaColor = '#323c48',
+        borderColor = '#111'),
+      emphasis = list(areaColor = '#2a333d'))) %>% 
+  ec_add_series(
+    type = 'heatmap', coordinateSystem = 'geo',
+    data = dat_geo, name = 'AQI',
+    mapping = ecaes(name = 城市, x = lng, y = lat, value = AQI))
+```
+
+## 主题河流图themeRiver
+
+[series-themeRiver.data](http://echarts.baidu.com/option.html#series-themeRiver.data)
+
+对应mapping的设置为：``mapping = ecaes(x, y, group)``
+
+
+```{r}
+dat_ <- dat %>% 
+  mutate(date = rep(0:6,3)) %>% 
+  select(date, saleNum, fruit)
+echart() %>%
+  ec_tooltip(trigger = 'item') %>%
+  ec_singleAxis(
+    left = 80, type = 'category',
+    boundaryGap = FALSE,
+    data = c('Mon','Tues','Wed','Thurs','Fri','Sat','Sun'), 
+    top = 60, bottom = 60) %>%
+  ec_add_series(
+    data = dat_, type = 'themeRiver',
+    mapping = ecaes(x = date, y = saleNum, group = fruit))
+```
+
+```{r}
+dat_ <- dat %>% 
+  mutate(date = rep(Sys.Date()+1:7,3)) %>% 
+  select(date, saleNum, fruit)
+echart() %>%
+  ec_tooltip(trigger = 'item') %>%
+  ec_singleAxis(
+    left = 80, type = 'time',
+    boundaryGap = FALSE,
+    top = 60, bottom = 60) %>%
+  ec_add_series(
+    data = dat_, type = 'themeRiver',
+    mapping = ecaes(x = date, y = saleNum, group = fruit))
+```
+
+
+## 雷达图radar
+
+series-radar.data.value项数组是具体的数据，每个值跟radar.indicator 一一对应。所以需要提前配置ec_radar.indicator
+
+对应mapping的设置为：``ecaes(name, value)``
+
+```{r}
+echart() %>% 
+  ec_radar(
+    indicator = list(
+      list(name = 'Mon', max = 100),
+      list(name = 'Tues', max = 100),
+      list(name = 'Wed', max = 100),
+      list(name = 'Thurs', max = 100),
+      list(name = 'Fri', max = 100),
+      list(name = 'Sat', max = 100),
+      list(name = 'Sun', max = 100))) %>%
+  ec_legend(show = TRUE) %>% 
+  ec_tooltip(
+    trigger = 'item', formatter = '{b}: {c}') %>% 
+  ec_add_series(
+    type = "radar",
+    data = list(
+      list(name = "Fruit", value = c(100,80,30,40,20,60,70))))
+```
+
+```{r}
+echart() %>% 
+  ec_radar(
+    indicator = list(
+      list(name = 'Mon', max = 100),
+      list(name = 'Tues', max = 100),
+      list(name = 'Wed', max = 100),
+      list(name = 'Thurs', max = 100),
+      list(name = 'Fri', max = 100),
+      list(name = 'Sat', max = 100),
+      list(name = 'Sun', max = 100))) %>%
+  ec_legend(show = TRUE) %>% 
+  ec_tooltip(
+    trigger = 'item', formatter = '{b}: {c}') %>%
+  ec_add_series(
+    data = dat, type = "radar",
+    mapping = ecaes(x = weekDay, y = saleNum, group = fruit))
+```
+
+## 平行坐标系parallel
+
+series-parallel.data.value项数组是具体的数据，每个值跟parallelAxis.dim 一一对应。所以需要提前配置ec_parallelAxis
+
+对应mapping的设置为：``ecaes(name, value)``
+
+```{r}
+echart() %>%
+  ec_parallel(
+    left = '5%', right = '13%', bottom = '10%', top = '20%',
+    parallelAxisDefault = list(
+      type = 'value',
+      nameLocation = 'end',
+      nameGap = 20)) %>%
+  ec_parallelAxis(
+    list(dim = 0, name = 'Mon'),
+    list(dim = 1, name = 'Tues'),
+    list(dim = 2, name = 'Wed'),
+    list(dim = 3, name = 'Thurs'),
+    list(dim = 4, name = 'Fri'),
+    list(dim = 5, name = 'Sat'),
+    list(dim = 6, name = 'Sun')) %>%
+  ec_add_series(
+    data = dat, type = "parallel",
+    mapping = ecaes(x = weekDay, y = saleNum, group = fruit))
+```
+
+## 地图map
+
+* 基础地理分布图：type='map'
+* 地理散点图：type='scatter'，coordinateSystem='geo'，详见散点图scatter
+* 地理流向图：type='lines'，coordinateSystem='geo'，详见线图lines
+
+### 基础地理分布图
+
+对应mapping的设置为：``ecaes(name, value)``
+
+```{r}
+province <- c('北京', '天津', '上海', '重庆', '河北', '山西', '辽宁', '吉林', '黑龙江', '江苏', '浙江', '安徽', '福建', '江西', '山东', '河南', '湖北', '湖南', '广东', '海南', '四川', '贵州', '云南', '陕西', '甘肃', '青海', '台湾', '内蒙古', '广西', '西藏', '宁夏', '新疆', '香港', '澳门')
+dat_map <- data.frame(
+  name = province,
+  value = round(runif(34, 0, 100), 0), 
+  stringsAsFactors = FALSE
+)
+
+echart() %>%
+  ec_add_series(
+    type = 'map', mapType = 'china',
+    data = dat_map, 
+    mapping = ecaes(name = name, value = value), 
+    label = list(
+      normal = list(show = FALSE),
+      emphasis = list(show = FALSE))) %>%
+  ec_visualMap(
+    calculable = TRUE,
+    min = 0, max = 100, text = c("高", "低"),
+    color = c('#d94e5d','#eac736')) %>%
+  ec_tooltip(trigger = 'item',formatter = '{b}: {c}')
+```
+
+
+### 地理散点图
+
+type='scatter'，coordinateSystem='geo'，详见散点图scatter
+
+### 地理流向图
+
+type='lines'，coordinateSystem='geo'，详见线图lines
+
+
+## 漏斗图funnel
+
+对应mapping的设置为：``ecaes(name,value)``
+
+```{r}
+echart() %>%
+  ec_add_series(
+    data = dat_groupby_weekDay, type = 'funnel', 
+    mapping = ecaes(name = weekDay, value = saleNum))
+```
+
+## 仪表盘gauge
+
+对应mapping的设置为：``ecaes(value)``或``ecaes(name,value)``
+
+```{r}
+echart() %>%
+  ec_add_series(
+    data = list(list(name = '完成率', value = 60)), type = 'gauge')
+```
+
+```{r}
+# echart() %>%
+#   ec_add_series(
+#     data = dat_groupby_weekDay, type = 'gauge',
+#     max = max(dat_groupby_weekDay$saleNum),
+#     mapping = ecaes(value = saleNum))
+
+## 只显示第一个name
+echart() %>%
+  ec_add_series(
+    data = dat_groupby_weekDay, type = 'gauge', 
+    max = max(dat_groupby_weekDay$saleNum),
+    mapping = ecaes(name = weekDay, value = saleNum))
+```
+
+## 树图tree
+
+series-tree.data.value只在 tooltip 中显示。
+
+树图tree只支持一个顶层parent，如果数据有两个（含）以上的顶层parent，只展示第一个parent，若想展示数据中的多个顶层parent，则需要主动添加一个顶层parent。
+
+```{r}
+echart() %>%
+  ec_add_series(
+    data = dat_tree, type = "tree", symbolSize = 20, 
+    mapping = ecaes(parent = parent, children = child))
+```
+
+
+```{r}
+rootparent <- function(df){
+  parents <- unique(df[, 1])
+  children <- df[, 2]
+  parents_name <- unique(parents)
+  children_name <- unique(children)
+  root_child <- unique(parents[!(parents %in% children)])
+}
+root <- rootparent(dat_tree)
+dat_tree_ <- data.frame(
+  parent = "Z", child = root, value = NA) %>%
+  rbind(., dat_tree)
+echart() %>%
+  ec_add_series(
+    data = dat_tree_, type = "tree", symbolSize = 20, 
+    mapping = ecaes(parent = parent, children = child))
+```
+
+## 矩形树图treemap
+
+```{r}
+echart() %>%
+  ec_add_series(
+    data = dat_tree, type = "treemap",
+    mapping = ecaes(parent = parent, children = child, value = value))
+```
+
+
+```{r}
+echart() %>%
+  ec_add_series(
+    data = dat_tree_, type = "treemap",
+    mapping = ecaes(parent = parent, children = child, value = value))
+```
+
+## 旭日图sunburst
+
+```{r}
+echart() %>%
+  ec_add_series(
+    data = dat_tree, type = "sunburst",
+    mapping = ecaes(parent = parent, children = child, value = value))
+```
+
+```{r}
+echart() %>%
+  ec_tooltip(trigger = 'item') %>%
+  ec_add_series(
+    data = dat_tree_, type = "sunburst",
+    mapping = ecaes(parent = parent, children = child, value = value))
+```
+
+
+## - 桑基图sankey
+
+```{r}
+dat_nodes <- jsonlite::fromJSON("http://www.echartsjs.com/gallery/data/asset/data/energy.json")
+
+dat_nodes_nodes <- ec_list_parse(dat_nodes$nodes)
+dat_nodes_links <- ec_list_parse(dat_nodes$links)
+
+echart() %>%
+  ec_add_series(
+    list(data = dat_nodes_nodes, links = dat_nodes_links, type = "sankey"))
+```
+
+## - 关系图graph
+
+```{r}
+dat_gexf <- rgexf::read.gexf("http://www.echartsjs.com/gallery/data/asset/data/les-miserables.gexf")
+
+dat_gexf_nodes <- dat_gexf$nodes %>% 
+  select(id, name = label) %>% 
+  mutate(category = rep(c(0:9), each = 8)[1:77]) %>% 
+  # mutate(category = rep(c(paste0("类目", 0:9)), 100)[1:77]) %>% 
+  mutate(symbolSize = c(runif(60, 1, 10), runif(17, 10, 20))) %>% 
+  ec_list_parse()
+dat_gexf_edges <- dat_gexf$edges %>% 
+  select(id, source, target, value = weight) %>% 
+  ec_list_parse()
+
+categories <- data.frame(name = paste0("类目", 0:9))
+categories_ <- ec_list_parse(categories)
+echart() %>%
+  ec_legend(show = TRUE) %>%
+  # ec_legend(data = categories_) %>% 
+  ec_add_series(
+    list(data = dat_gexf_nodes, links = dat_gexf_edges, type = "graph", layout = 'force', categories = categories_))
+```
+
+## 组合
+
+提前设置好坐标系和坐标轴
+
+```{r}
+echart() %>%
+  ec_legend(show = TRUE) %>%
+  ec_grid(top = '55%', id = 0) %>%
+  ec_grid(bottom = '55%', id = 1) %>%
+  ec_xAxis(
+    type = 'category', gridIndex = 0, 
+    data = c('Mon','Tues','Wed','Thurs','Fri','Sat','Sun')) %>%
+  ec_xAxis(
+    type = 'category', gridIndex = 1, id = 1,
+    data = c('Mon','Tues','Wed','Thurs','Fri','Sat','Sun')) %>%
+  ec_yAxis(type = 'value', gridIndex = 0, id = 0) %>%
+  ec_yAxis(type = 'value', gridIndex = 1, id = 1) %>%
+  ec_add_series(
+    data = filter(dat, fruit == 'Pear'), type = "line",
+    xAxisIndex = 0, yAxisIndex = 0, id = 1,
+    mapping = ecaes(x = weekDay, y = saleNum, group = fruit)) %>%
+  ec_add_series(
+    data = filter(dat, fruit != 'Pear'), type = "bar",
+    xAxisIndex = 1, yAxisIndex = 1, 
+    mapping = ecaes(x = weekDay, y = saleNum, group = fruit))
+```
+
