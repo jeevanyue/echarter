@@ -100,6 +100,12 @@ devtools::install_github("jeevanyue/echarter")
 - 导入``ec_theme``构建的主题，`echart(theme = thm)`或`ec_add_theme(thm)`
 - 修改全局主题``getOption("echarter.option")``
 
+## shiny案例
+
+- 实时数据，[code](https://github.com/jeevanyue/echarter/demo/realtime)，[demo](http://shiny.jeevanyue.com/actions/)
+- 鼠标事件和触发图表行为，及图表联动实例，[code](https://github.com/jeevanyue/echarter/demo/actions)，[demo](http://shiny.jeevanyue.com/actions/)
+- toolbox拓展，[code](https://github.com/jeevanyue/echarter/demo/toolbox)，[demo](http://shiny.jeevanyue.com/toolbox/)
+
 ## 其他echarts包
 
 - [cosname/recharts](https://github.com/cosname/recharts) - ECharts4

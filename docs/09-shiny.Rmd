@@ -529,7 +529,7 @@ server <- function(input, output, session){
         dat_date 
       }else if(input$toolbox_select == "myweeks"){
         dat_date %>% 
-          group_by(date = ceiling_date(date, "weeks")) %>% 
+          group_by(date = lubridate::ceiling_date(date, "weeks")) %>% 
           summarise(value = sum(value)) %>% 
           ungroup()
       }else if(input$toolbox_select == "mymonths"){
