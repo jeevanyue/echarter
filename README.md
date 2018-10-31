@@ -102,9 +102,9 @@ devtools::install_github("jeevanyue/echarter")
 
 ## shiny案例
 
-- 实时数据，[code](https://github.com/jeevanyue/echarter/demo/realtime)，[demo](http://shiny.jeevanyue.com/actions/)
-- 鼠标事件和触发图表行为，及图表联动实例，[code](https://github.com/jeevanyue/echarter/demo/actions)，[demo](http://shiny.jeevanyue.com/actions/)
-- toolbox拓展，[code](https://github.com/jeevanyue/echarter/demo/toolbox)，[demo](http://shiny.jeevanyue.com/toolbox/)
+- 实时数据，[code](https://github.com/jeevanyue/echarter/tree/master/demo/realtime)，[demo](http://shiny.jeevanyue.com/actions/)
+- 鼠标事件和触发图表行为，及图表联动实例，[code](https://github.com/jeevanyue/echarter/tree/master/demo/actions)，[demo](http://shiny.jeevanyue.com/actions/)
+- toolbox拓展，[code](https://github.com/jeevanyue/echarter/tree/master/demo/toolbox)，[demo](http://shiny.jeevanyue.com/toolbox/)
 
 ## 其他echarts包
 
