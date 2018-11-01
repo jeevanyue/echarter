@@ -472,7 +472,7 @@ echart(opt) %>%
 ```
 
 
-## 极坐标系: ec_polar
+## 极坐标系ec_polar
 
 
 支持极坐标系的有：line、bar、scatter、effectScatter。
@@ -576,7 +576,7 @@ echart() %>%
     mapping = ecaes(x = weekDay, y = saleNum))
 ```
 
-## 平行坐标系: ec_parallel
+## 平行坐标系ec_parallel
 
 仅用于series.type为parallel，平行坐标系中的坐标轴为ec_parallelAxis。
 
@@ -622,7 +622,7 @@ echart() %>%
     mapping = ecaes(x = weekDay, y = saleNum, group = fruit))
 ```
 
-## 单轴坐标系: ec_singleAxis
+## 单轴坐标系ec_singleAxis
 
 ```{r}
 echart() %>%
@@ -693,7 +693,7 @@ echart() %>%
 
 ```
 
-## 日历坐标系: ec_calendar
+## 日历坐标系ec_calendar
 
 ```{r}
 echart() %>%
@@ -713,7 +713,7 @@ echart() %>%
     data = dat_date, mapping = ecaes(x = date, y = value))
 ```
 
-## 地理坐标系: ec_geo
+## 地理坐标系ec_geo
 
 ```{r eval=FALSE}
 # 获取空气质量数据

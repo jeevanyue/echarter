@@ -23,44 +23,44 @@ devtools::install_github("jeevanyue/echarter")
 
 支持官方配置项的所有组件，详细可以查看官方文档[option](http://echarts.baidu.com/option.html)和[案例](http://echarts.baidu.com/examples/)。
 
-- ec_title
-- ec_legend
-- ec_backgroundColor
-- ec_colors
-- ec_tooltip
-- ec_graphic
-- ec_axisPointer
-- ec_toolbox
-- ec_visualMap
-- ec_dataZoom
-- ec_timeline
-- ec_brush
-- ec_mark
-	* ec_markPoint
-	* ec_markLine
-	* ec_markArea
+- [ec_title](http://echarter.jeevanyue.com/api-ec.html#ec_title)
+- [ec_legend](http://echarter.jeevanyue.com/api-ec.html#ec_legend)
+- [ec_backgroundColor](http://echarter.jeevanyue.com/api-ec.html#ec_backgroundColor)
+- [ec_colors](http://echarter.jeevanyue.com/api-ec.html#ec_colors)
+- [ec_tooltip](http://echarter.jeevanyue.com/api-ec.html#ec_tooltip)
+- [ec_graphic](http://echarter.jeevanyue.com/api-ec.html#ec_graphic)
+- [ec_axisPointer](http://echarter.jeevanyue.com/api-ec.html#ec_axisPointer)
+- [ec_toolbox](http://echarter.jeevanyue.com/api-ec.html#ec_toolbox)
+- [ec_visualMap](http://echarter.jeevanyue.com/api-ec.html#ec_visualMap)
+- [ec_dataZoom](http://echarter.jeevanyue.com/api-ec.html#ec_dataZoom)
+- [ec_timeline](http://echarter.jeevanyue.com/api-ec.html#ec_timeline)
+- [ec_brush](http://echarter.jeevanyue.com/api-ec.html#ec_brush)
+- [ec_mark](http://echarter.jeevanyue.com/api-ec.html#ec_mark)
+	* [ec_markPoint](http://echarter.jeevanyue.com/api-ec.html#ec_mark)
+	* [ec_markLine](http://echarter.jeevanyue.com/api-ec.html#ec_mark)
+	* [ec_markArea](http://echarter.jeevanyue.com/api-ec.html#ec_mark)
 
 ## 坐标系组件
 
 - 二维的直角坐标系grid/cartesian2d，默认为空
-	* grid
-	* xAxis
-	* yAxis
+	* [ec_grid](http://echarter.jeevanyue.com/api-ec.html#ec_grid)
+	* [ec_xAxis](http://echarter.jeevanyue.com/api-ec.html#ec_grid)
+	* [ec_yAxis](http://echarter.jeevanyue.com/api-ec.html#ec_grid)
 - 极坐标系polar
-	* polar
-	* angleAxis
-	* radiusAxis
+	* [ec_polar](http://echarter.jeevanyue.com/api-ec.html#ec_polar)
+	* [ec_angleAxis](http://echarter.jeevanyue.com/api-ec.html#ec_polar)
+	* [ec_radiusAxis](http://echarter.jeevanyue.com/api-ec.html#ec_polar)
 - 平行坐标系parallel，只限于series.parallel
-	* parallel
-	* parallelAxis
+	* [ec_parallel](http://echarter.jeevanyue.com/api-ec.html#ec_parallel)
+	* [ec_parallelAxis](http://echarter.jeevanyue.com/api-ec.html#ec_parallel)
 - 单轴坐标系singleAxis
-	* singleAxis
+	* [ec_singleAxis](http://echarter.jeevanyue.com/api-ec.html#ec_singleAxis)
 - 地理坐标系geo
-	* geo
+	* [ec_geo](http://echarter.jeevanyue.com/api-ec.html#ec_geo)
 - 日历坐标系calendar
-	* calendar
+	* [ec_calendar](http://echarter.jeevanyue.com/api-ec.html#ec_calendar)
 - 雷达坐标系radar，只限于series.radar
-	* radar
+	* [ec_radar](http://echarter.jeevanyue.com/api-ec.html#ec_radar)
 - 不使用坐标系none
 
 ## 数据组件ec_dataset
@@ -89,11 +89,15 @@ devtools::install_github("jeevanyue/echarter")
 
 ## 图表类型
 
-支持除了GL的所有图表类型，包括水球图liquidfill和字符云wordcloud
+支持除了GL的所有图表类型，包括水球图liquidfill和字符云wordcloud，详见[基本图表](http://echarter.jeevanyue.com/basic.html)和[高级图表](http://echarter.jeevanyue.com/advanced.html)。
+
+## echarter
+
+支持[echarter](http://echarter.jeevanyue.com/echarter.html)来快速绘图。
 
 ## 主题theme
 
-可以通过下列四种方式设置主题。
+可以通过下列四种方式设置主题，详见[echarter.theme](http://echarter.jeevanyue.com/theme.html)。
 
 - 支持自带的theme: dark, infographic, macarons, roma, shine, vintage，``echart(theme = 'dark')``
 - 导入[echarts theme 构建工具](http://echarts.baidu.com/theme-builder/)的js主题文件，``echart(theme = '**.js')``
@@ -102,7 +106,9 @@ devtools::install_github("jeevanyue/echarter")
 
 ## shiny案例
 
-- 实时数据，[code](https://github.com/jeevanyue/echarter/tree/master/demo/realtime)，[demo](http://shiny.jeevanyue.com/actions/)
+shiny通过``renderEcharts``和``echartsOutput``实现。
+
+- 实时数据，[code](https://github.com/jeevanyue/echarter/tree/master/demo/realtime)，[demo](http://shiny.jeevanyue.com/realtime/)
 - 鼠标事件和触发图表行为，及图表联动实例，[code](https://github.com/jeevanyue/echarter/tree/master/demo/actions)，[demo](http://shiny.jeevanyue.com/actions/)
 - toolbox拓展，[code](https://github.com/jeevanyue/echarter/tree/master/demo/toolbox)，[demo](http://shiny.jeevanyue.com/toolbox/)
 
