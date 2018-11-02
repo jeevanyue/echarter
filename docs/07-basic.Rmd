@@ -1160,7 +1160,7 @@ echart() %>%
   ec_grid(top = '55%', id = 0) %>%
   ec_grid(bottom = '55%', id = 1) %>%
   ec_xAxis(
-    type = 'category', gridIndex = 0, 
+    type = 'category', gridIndex = 0,  id = 0,
     data = c('Mon','Tues','Wed','Thurs','Fri','Sat','Sun')) %>%
   ec_xAxis(
     type = 'category', gridIndex = 1, id = 1,

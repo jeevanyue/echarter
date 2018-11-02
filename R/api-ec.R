@@ -595,7 +595,7 @@ ec_dataset <- function (ec, data, ..., baseoption = FALSE, add = FALSE) {
 #'    markPoint see (\url{http://www.echartsjs.com/option.html#series-line.markPoint}).
 #'    markLine see (\url{http://www.echartsjs.com/option.html#series-line.markLine}).
 #'    markArea see (\url{http://www.echartsjs.com/option.html#series-line.markArea}).
-#' @param serie The serie of ec
+#' @param serie The serie index of ec
 #'
 #' @rdname ec_mark
 #'

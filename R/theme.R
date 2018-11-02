@@ -2,7 +2,7 @@
 themeSet <- function(theme = "default"){
   themeArray <- c("dark", "infographic", "macarons", "roma", "shine", "vintage")
   if(.is_ec_theme(theme)){
-    return_theme = 'customed'
+    return_theme = 'ec_theme'
   }else{
     if(grepl(".js", basename(theme))){
       return_theme <- 'customed'
@@ -18,27 +18,29 @@ themeSet <- function(theme = "default"){
   return(return_theme)
 }
 
-addThemeDependencies <- function(chart, theme){
+addThemeDependencies <- function(ec, theme){
   if(.is_ec_theme(theme)){
 
-    if(is.null(names(chart$x$opt))){
-      class(theme) <- "list"
-      chart$x$opt <- theme
-    }else{
-      chart$x$opt <- rlist::list.merge(chart$x$opt, theme)
-    }
+    # if(is.null(names(ec$x$opt))){
+    #   class(theme) <- "list"
+    #   ec$x$opt <- theme
+    # }else{
+    #   ec$x$opt <- rlist::list.merge(ec$x$opt, theme)
+    # }
+    class(theme) <- "list"
+    ec$x[["ec_theme"]] <- jsonlite::toJSON(theme)
 
   }else{
-    if(chart$x$theme != "default"){
-      chart$dependencies <- c(chart$dependencies, themeDependencies(theme))
-      # if(chart$x$theme != 'customed'){
-      #   chart$dependencies <- c(chart$dependencies, themeDependencies(chart$x$theme))
+    if(ec$x$theme != "default"){
+      ec$dependencies <- c(ec$dependencies, themeDependencies(theme))
+      # if(ec$x$theme != 'customed'){
+      #   ec$dependencies <- c(ec$dependencies, themeDependencies(ec$x$theme))
       # }else{
-      #   chart$dependencies <- c(chart$dependencies, themeDependencies(theme))
+      #   ec$dependencies <- c(ec$dependencies, themeDependencies(theme))
       # }
     }
   }
-  return(chart)
+  return(ec)
 }
 
 themeDependencies <- function(themeName){
@@ -96,30 +98,3 @@ ec_theme <- function(...){
   }
 }
 
-#' Add echarts theme
-#'
-#' @param theme A `ec_theme` object containing options defined as
-#'    \url{http://echarts.baidu.com/option.html}.
-#'
-#' @export
-#'
-ec_add_theme <- function(ec, theme, series = TRUE){
-
-  assertthat::assert_that(is.echart(ec), .is_ec_theme(theme))
-
-  # some echarts havn't series
-  if(series == FALSE){
-    names <- names(theme)[!grepl("xAxis|yAxis", names(theme))]
-    theme <- theme[names]
-  }
-
-  if(is.null(names(ec$x$opt))){
-    class(theme) <- "list"
-    ec$x$opt <- theme
-  }else{
-    ec$x$opt <- rlist::list.merge(ec$x$opt, theme)
-  }
-
-  ec
-
-}

@@ -85,7 +85,7 @@ echart(theme = 'data/star.js') %>%
 
 ## 自定义ec_theme
 
-ec_theme主题可以通过两种方式导入，分别是`echart(theme = thm)`和`ec_add_theme(thm)`。
+现通过`ec_theme`构建主题，再通过`echart(theme = thm)`导入。
 
 ```{r}
 thm_ <- list(
@@ -164,20 +164,6 @@ echart(theme = thm) %>%
     data = dat, type = "bar",
     mapping = ecaes(x = weekDay, y = saleNum, group = fruit)) 
 ```
-
-``ec_add_theme(theme)``
-
-```{r}
-echart() %>%
-  ec_add_theme(thm) %>%
-  ec_xAxis(
-    type = 'category') %>%
-  ec_yAxis(type = 'value') %>%
-  ec_add_series(
-    data = dat, type = "bar",
-    mapping = ecaes(x = weekDay, y = saleNum, group = fruit))
-```
-
 
 ## 自定义echarter.option
 

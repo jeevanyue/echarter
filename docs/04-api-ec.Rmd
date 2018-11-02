@@ -314,6 +314,13 @@ echart() %>%
 
 ### ec_timeline
 
+`timeline`组件，提供了在多个ECharts option间进行切换、播放等操作的功能。`timeline`涉及到另外两个组件`baseOption`和`options`，`baseOption`用来配置`timeline`组件，`options`用来配置多个ECharts。
+
+在echarter中使用`timeline`，可以通过下列两种方式：
+
+- `ec_timeline`和`ec_options`，`ec_timeline(ec, ...)`配置`timeline`组件信息，`ec_options(ec, ecs)`中`ecs`为多个echarter的list
+- `ec_timeline(ec, ecs, ...)`，`ecs`为多个echarter的list，`...`为`timeline`组件信信息
+
 ```{r ec_timeline}
 ec1 <- echart() %>%
   ec_add_series(
@@ -402,6 +409,12 @@ echart() %>%
 ```
 
 ### ec_mark
+
+`ec_mark(ec, ..., markname = 'markPoint', serie = NULL)`，`serie`为所要添加series的序列数
+
+- ec_markPoint，即ec_markLine(ec, ..., markname = 'markPoint', serie = NULL)
+- ec_markLine，即ec_markLine(ec, ..., markname = 'ec_markLine', serie = NULL)
+- ec_markArea，即ec_markLine(ec, ..., markname = 'ec_markArea', serie = NULL)
 
 #### ec_markPoint
 ```{r}

@@ -25,7 +25,7 @@ markArea see (\url{http://www.echartsjs.com/option.html#series-line.markArea}).}
 
 \item{markname}{The mark name, markPoint, markLine, markArea}
 
-\item{serie}{The serie of ec}
+\item{serie}{The serie index of ec}
 }
 \description{
 Mark an point, line, area in echarts

@@ -22,6 +22,10 @@ HTMLWidgets.widget({
         if (!initialized) {
           initialized = true;
           // alert('timeline is initialized!');
+          if(x.theme === 'ec_theme'){
+            // var thm = JSON.parse(x.ec_theme);
+            echarts.registerTheme(x.theme, x.ec_theme);
+          }
 
           if(x.registerMap === true){
             echarts.registerMap(x.mapName, x.geoJSON);

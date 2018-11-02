@@ -101,7 +101,7 @@ devtools::install_github("jeevanyue/echarter")
 
 - 支持自带的theme: dark, infographic, macarons, roma, shine, vintage，``echart(theme = 'dark')``
 - 导入[echarts theme 构建工具](http://echarts.baidu.com/theme-builder/)的js主题文件，``echart(theme = '**.js')``
-- 导入``ec_theme``构建的主题，`echart(theme = thm)`或`ec_add_theme(thm)`
+- 导入``ec_theme``构建的主题，`echart(theme = thm)`导入
 - 修改全局主题``getOption("echarter.option")``
 
 ## shiny案例
