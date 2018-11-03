@@ -18,14 +18,18 @@ echarter(data, ...)
 
 \method{echarter}{default}(data, ...)
 
-\method{echarter}{numeric}(data, ...)
+\method{echarter}{numeric}(data, ..., theme = "default", width = NULL,
+  height = NULL, elementId = NULL, dispose = TRUE, renderer = "canvas")
 
-\method{echarter}{character}(data, ...)
+\method{echarter}{character}(data, ..., theme = "default", width = NULL,
+  height = NULL, elementId = NULL, dispose = TRUE, renderer = "canvas")
 
-\method{echarter}{ts}(data, ...)
+\method{echarter}{ts}(data, ..., theme = "default", width = NULL,
+  height = NULL, elementId = NULL, dispose = TRUE, renderer = "canvas")
 
 \method{echarter}{forecast}(data, addOriginal = TRUE, addLevels = TRUE,
-  fillOpacity = 0.1, name = NULL, ...)
+  fillOpacity = 0.1, name = NULL, ..., theme = "default", width = NULL,
+  height = NULL, elementId = NULL, dispose = TRUE, renderer = "canvas")
 }
 \arguments{
 \item{data}{A data object.}

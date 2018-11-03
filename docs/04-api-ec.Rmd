@@ -1072,6 +1072,17 @@ echart() %>%
     mapping = ecaes(x = date, y = value))
 ```
 
+### ec_add_series.matrix
+
+```{r}
+echart() %>% 
+  ec_xAxis(type = 'category',
+    data = weekDays) %>%
+  ec_yAxis(type = 'value') %>% 
+  ec_add_series(
+    data = dat_matrix[,c(2,3)], type = "scatter")
+```
+
 ### ec_add_series.numeric
 
 不需要设置mapping

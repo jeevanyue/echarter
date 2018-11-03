@@ -20,24 +20,12 @@ themeSet <- function(theme = "default"){
 
 addThemeDependencies <- function(ec, theme){
   if(.is_ec_theme(theme)){
-
-    # if(is.null(names(ec$x$opt))){
-    #   class(theme) <- "list"
-    #   ec$x$opt <- theme
-    # }else{
-    #   ec$x$opt <- rlist::list.merge(ec$x$opt, theme)
-    # }
     class(theme) <- "list"
     ec$x[["ec_theme"]] <- jsonlite::toJSON(theme)
 
   }else{
     if(ec$x$theme != "default"){
       ec$dependencies <- c(ec$dependencies, themeDependencies(theme))
-      # if(ec$x$theme != 'customed'){
-      #   ec$dependencies <- c(ec$dependencies, themeDependencies(ec$x$theme))
-      # }else{
-      #   ec$dependencies <- c(ec$dependencies, themeDependencies(theme))
-      # }
     }
   }
   return(ec)

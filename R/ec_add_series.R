@@ -125,12 +125,13 @@ ec_add_series.default <- function(ec, ...) {
 #' @name ec_add_series
 #'
 #' @examples
+#' weekDays <- c('Mon','Tues','Wed','Thurs','Fri','Sat','Sun')
 #' dat <- data.frame(
-#' saleNum = round(runif(21,20,100), 0),
-#' fruit = c(rep("苹果",7), rep("梨",7), rep("香蕉",7)),
-#' weekDay = c(rep(c('周一','周二','周三','周四','周五','周六','周日'),3)),
-#' price = round(runif(21,10,20),0),
-#' stringsAsFactors = FALSE)
+#'   saleNum = round(runif(21, 20, 100), 0),
+#'   fruit = c(rep("Apple", 7), rep("Pear", 7), rep("Banana", 7)),
+#'   weekDay = c(rep(weekDays,3)),
+#'   price = round(runif(21, 10, 20), 0),
+#'   stringsAsFactors = FALSE)
 #'
 #' mapping = ecaes(x = weekDay, y = saleNum, group = fruit)
 #'

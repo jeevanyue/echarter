@@ -37,7 +37,9 @@ ec_add_series(ec, data = NULL, ...)
 \method{ec_add_series}{forecast}(ec, data, addOriginal = TRUE,
   addLevels = TRUE, fillOpacity = 0.1, name = NULL, ...)
 
-\method{echarter}{data.frame}(data, mapping = ecaes(), ...)
+\method{echarter}{data.frame}(data, mapping = ecaes(), ...,
+  theme = "default", width = NULL, height = NULL, elementId = NULL,
+  dispose = TRUE, renderer = "canvas")
 }
 \arguments{
 \item{ec}{A `echarter` object.}
@@ -77,12 +79,13 @@ Adding series from echarts objects
 }
 \examples{
 
+weekDays <- c('Mon','Tues','Wed','Thurs','Fri','Sat','Sun')
 dat <- data.frame(
-saleNum = round(runif(21,20,100), 0),
-fruit = c(rep("苹果",7), rep("梨",7), rep("香蕉",7)),
-weekDay = c(rep(c('周一','周二','周三','周四','周五','周六','周日'),3)),
-price = round(runif(21,10,20),0),
-stringsAsFactors = FALSE)
+  saleNum = round(runif(21, 20, 100), 0),
+  fruit = c(rep("Apple", 7), rep("Pear", 7), rep("Banana", 7)),
+  weekDay = c(rep(weekDays,3)),
+  price = round(runif(21, 10, 20), 0),
+  stringsAsFactors = FALSE)
 
 mapping = ecaes(x = weekDay, y = saleNum, group = fruit)
 
@@ -92,12 +95,13 @@ echart() \%>\%
     mapping = ecaes(x = weekDay, y = saleNum, group = fruit))
 
 
+weekDays <- c('Mon','Tues','Wed','Thurs','Fri','Sat','Sun')
 dat <- data.frame(
-saleNum = round(runif(21,20,100), 0),
-fruit = c(rep("苹果",7), rep("梨",7), rep("香蕉",7)),
-weekDay = c(rep(c('周一','周二','周三','周四','周五','周六','周日'),3)),
-price = round(runif(21,10,20),0),
-stringsAsFactors = FALSE)
+  saleNum = round(runif(21, 20, 100), 0),
+  fruit = c(rep("Apple", 7), rep("Pear", 7), rep("Banana", 7)),
+  weekDay = c(rep(weekDays,3)),
+  price = round(runif(21, 10, 20), 0),
+  stringsAsFactors = FALSE)
 
 echarter(
   data = dat, type = 'bar',
