@@ -37,6 +37,7 @@
 #'
 echartsExample <- function (url = NULL, JScontent = NULL, width = NULL, height = NULL)
 {
+  ## This function refers to recharts::echartsExample, the author is [Lchiffon](https://github.com/Lchiffon).
   if (is.null(url) & is.null(JScontent)) {
     url = "http://echarts.baidu.com/demo.html#effectScatter-bmap"
   }
