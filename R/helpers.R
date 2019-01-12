@@ -15,7 +15,7 @@
 ec_list_parse <- function(df) {
   assertthat::assert_that(is.data.frame(df))
 
-  map_if(df, is.factor, as.character) %>%
+  purrr::map_if(df, is.factor, as.character) %>%
     as_data_frame() %>%
     rlist::list.parse() %>%
     setNames(NULL)
@@ -44,7 +44,7 @@ list_parse_data <- function(df, coordinateSystem = NULL, dimension = FALSE) {
   }else{
     tmp <- ec_list_parse(df)
 
-    if(has_name(df, "x") & has_name(df, "y")){
+    if(rlang::has_name(df, "x") & rlang::has_name(df, "y")){
       invisible(
         lapply(seq(1, length(tmp)), function(m){
           tmp[[m]][["value"]] <<- lapply(data_opt_value, function(n){
@@ -64,7 +64,7 @@ list_parse_data <- function(df, coordinateSystem = NULL, dimension = FALSE) {
 list_parse2 <- function(df, axis = 2, opt = "x,y,value") {
   assertthat::assert_that(is.data.frame(df))
 
-  opt_ <- str_split(opt, "\\,")[[1]]
+  opt_ <- stringr::str_split(opt, "\\,")[[1]]
 
   tmp <- ec_list_parse(df)
 
@@ -114,7 +114,7 @@ data_tree <- function(df, type = "tree"){
   children_name <- unique(children)
   root_child <- unique(parents[!(parents %in% children)])
 
-  if(has_name(df, "value")){
+  if(rlang::has_name(df, "value")){
     tmp <- data.frame(
       parent = "tree_root_top", children = root_child, value = NA) %>%
       rbind(., df)

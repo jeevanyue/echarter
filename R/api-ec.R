@@ -2,7 +2,7 @@
 #' @export
 ec_list_parse <- function (df) {
   assertthat::assert_that(is.data.frame(df))
-  map_if(df, is.factor, as.character) %>% as_data_frame() %>%
+  purrr::map_if(df, is.factor, as.character) %>% as_data_frame() %>%
     rlist::list.parse() %>% setNames(NULL)
 }
 
@@ -28,7 +28,7 @@ validate_args <- function(name, lstargs) {
 
   validate_args(opt_name, eval(substitute(alist(...))))
 
-  if(has_name(list(...), 'id')){
+  if(rlang::has_name(list(...), 'id')){
     add = TRUE
   }
 
@@ -101,9 +101,9 @@ ec_get_opt_ <- function(ec, opt = NULL, index = NULL, num = NULL){
   if(length(opt) != 1) stop("the length opt must be 1")
   if(nchar(opt) == 0) stop("the nchar op opt must be greater than 0")
 
-  opt_char <- str_extract(opt, "(\\D)+")
+  opt_char <- stringr::str_extract(opt, "(\\D)+")
 
-  opt_num <- as.numeric(str_extract(opt, "(\\d)+"))
+  opt_num <- as.numeric(stringr::str_extract(opt, "(\\d)+"))
 
   if(!is.na(opt_num)){
     num <- opt_num
@@ -199,7 +199,7 @@ ec_get_opt <- function(ec, opt = NULL, index = NULL, num = NULL){
   if(length(opt) != 1) stop("the length opt must be 1")
   if(nchar(opt) == 0) stop("the nchar op opt must be greater than 0")
 
-  opt_split <- str_split(opt, "\\.")[[1]]
+  opt_split <- stringr::str_split(opt, "\\.")[[1]]
 
   if(length(opt_split) > 2) stop("The '.' opt can only have one at most.")
 
@@ -553,7 +553,7 @@ ec_dataset <- function (ec, data, ..., baseoption = FALSE, add = FALSE) {
 
   assertthat::assert_that(is.echart(ec))
 
-  if(has_name(list(...), 'id')){
+  if(rlang::has_name(list(...), 'id')){
     id <- list(...)[['id']]
   }else{
     if(is.null(ec$x$opt$dataset)){
@@ -563,14 +563,14 @@ ec_dataset <- function (ec, data, ..., baseoption = FALSE, add = FALSE) {
     }
   }
 
-  if(has_name(list(...), 'source')){
+  if(rlang::has_name(list(...), 'source')){
     if(class(list(...)[['source']]) == "json"){
       source <- list(...)[['source']]
       dimensions <- NULL
     }else{
       source <- jsonlite::toJSON(setNames(list(...)[['source']], NULL))
 
-      if(has_name(list(...), 'dimensions')){
+      if(rlang::has_name(list(...), 'dimensions')){
         dimensions <- list(...)[['dimensions']]
       }else{
         dimensions <- colnames(list(...)[['source']])
@@ -583,7 +583,7 @@ ec_dataset <- function (ec, data, ..., baseoption = FALSE, add = FALSE) {
     }else{
       source <- jsonlite::toJSON(setNames(data, NULL))
 
-      if(has_name(list(...), 'dimensions')){
+      if(rlang::has_name(list(...), 'dimensions')){
         dimensions <- list(...)[['dimensions']]
       }else{
         dimensions <- colnames(data)
@@ -591,7 +591,7 @@ ec_dataset <- function (ec, data, ..., baseoption = FALSE, add = FALSE) {
     }
   }
 
-  if(has_name(list(...), 'sourceHeader')){
+  if(rlang::has_name(list(...), 'sourceHeader')){
     sourceHeader <- list(...)[['sourceHeader']]
   }else{
     sourceHeader <- FALSE

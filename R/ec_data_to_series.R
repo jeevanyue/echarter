@@ -3,14 +3,14 @@
 ec_data_to_series <- function(ec, data, mapping, ..., dim = FALSE) {
 
   # type
-  if(!has_name(list(...), 'type')){
+  if(!rlang::has_name(list(...), 'type')){
     stop("haven't the type value of series")
   }else {
     type <- list(...)[['type']]
   }
 
   # coordinateSystem
-  if(has_name(list(...), 'coordinateSystem')){
+  if(rlang::has_name(list(...), 'coordinateSystem')){
     coordinateSystem <- list(...)[['coordinateSystem']]
   }else{
     coordinateSystem <- NULL
@@ -20,7 +20,7 @@ ec_data_to_series <- function(ec, data, mapping, ..., dim = FALSE) {
   }
 
   # x
-  if(has_name(mapping, "x")) {
+  if(rlang::has_name(mapping, "x")) {
     if(lubridate::is.Date(data[["x"]])) {
       if(!is.null(coordinateSystem)){
         if(coordinateSystem == 'calendar'){
@@ -33,25 +33,25 @@ ec_data_to_series <- function(ec, data, mapping, ..., dim = FALSE) {
       }
     }
   }
-  # if(!has_name(mapping, "name")){
+  # if(!rlang::has_name(mapping, "name")){
   #   data[["name"]] <- data[["x"]]
   # }
 
   # y
-  if(has_name(mapping, "y")) {
+  if(rlang::has_name(mapping, "y")) {
     if(lubridate::is.Date(data[["y"]])) {
       data[["y"]] <- datetime_to_timestamp(data[["y"]])
     }
   }
-  # if(!has_name(mapping, "value")){
+  # if(!rlang::has_name(mapping, "value")){
   #   data[["value"]] <- data[["y"]]
   # }
 
   # group
   if(!(type %in% c('tree', 'treemap', 'sunburst', 'sankey', 'graph', 'boxplot'))){
-    if (!has_name(mapping, "group")){
+    if (!rlang::has_name(mapping, "group")){
       # name
-      if(has_name(list(...), 'name')){
+      if(rlang::has_name(list(...), 'name')){
         data[["group"]] <- list(...)[['name']]
       }else {
         data[["group"]] <- "group"
@@ -60,24 +60,24 @@ ec_data_to_series <- function(ec, data, mapping, ..., dim = FALSE) {
   }
 
   # color
-  if (has_name(mapping, "color")) {
+  if (rlang::has_name(mapping, "color")) {
     if (type == "treemap") {
       data <- rename_(data, "colorValue" = "color")
     } else if (!all(is.hexcolor(data[["color"]]))) {
       data  <- mutate_(data, "colorv" = "color", "color" = "echarter::ec_colorize(color)")
     }
-  }else if(has_name(data, "color")) {
+  }else if(rlang::has_name(data, "color")) {
     data <- plyr::rename(data, c("colorv" = "color"))
   }
 
   # size
   # c("line", "scatter", "effectScatter", "radar", "tree", "lines", "graph", "pictorialBar")
-  if (has_name(mapping, "size")){
+  if (rlang::has_name(mapping, "size")){
     data <- plyr::rename(data, c("size" = "symbolSize"))
   }
 
   # child
-  if (has_name(mapping, "child")){
+  if (rlang::has_name(mapping, "child")){
     data <- plyr::rename(data, c("child" = "children"))
   }
 
@@ -128,7 +128,7 @@ ec_data_to_series <- function(ec, data, mapping, ..., dim = FALSE) {
   }else if(type == 'boxplot'){
 
     # layout
-    if(!has_name(list(...), 'layout')){
+    if(!rlang::has_name(list(...), 'layout')){
       if(ec$x$opt$xAxis$type == "category"){
         boxplot_layout <- "horizontal"
       }else{
@@ -140,7 +140,7 @@ ec_data_to_series <- function(ec, data, mapping, ..., dim = FALSE) {
     }
 
 
-    if(has_name(list(...), "group")){
+    if(rlang::has_name(list(...), "group")){
       names(data)[names(data) == list(...)[['group']]] <- "group"
     }else{
       data[["group"]] <- "group"
@@ -149,7 +149,7 @@ ec_data_to_series <- function(ec, data, mapping, ..., dim = FALSE) {
     if(length(mapping) == 0){
 
       # outline
-      if(has_name(list(...), "outline")){
+      if(rlang::has_name(list(...), "outline")){
         outline <- list(...)[['outline']]
       }else{
         outline = TRUE
@@ -160,7 +160,7 @@ ec_data_to_series <- function(ec, data, mapping, ..., dim = FALSE) {
         do(data = t(boxplot(select_(., quote(-group)), plot = FALSE)[["stats"]])) %>%
         ungroup()
 
-      if(has_name(list(...), "name")){
+      if(rlang::has_name(list(...), "name")){
         dat_stats <- select(dat_stats, -group)
       }else{
         dat_stats <- plyr::rename(dat_stats, c("group" = "name"))
@@ -179,7 +179,7 @@ ec_data_to_series <- function(ec, data, mapping, ..., dim = FALSE) {
           do(data = boxplot(select_(., quote(-group)), plot = FALSE))%>%
           ungroup()
 
-        if(has_name(list(...), "name")){
+        if(rlang::has_name(list(...), "name")){
           dat_box <- select(dat_box, -group)
           dat_box[["name"]] <- list(...)[['name']]
         }else{
@@ -214,9 +214,9 @@ ec_data_to_series <- function(ec, data, mapping, ..., dim = FALSE) {
       return(series)
 
     }else{
-      if (!has_name(mapping, "group")){
+      if (!rlang::has_name(mapping, "group")){
         # name
-        if(has_name(list(...), 'name')){
+        if(rlang::has_name(list(...), 'name')){
           data[["group"]] <- list(...)[['name']]
         }else {
           data[["group"]] <- "group"
@@ -285,7 +285,7 @@ ec_data_to_series <- function(ec, data, mapping, ..., dim = FALSE) {
     data_ <- add_arg_to_df(data = data_, ...)
   }
 
-  if(has_name(mapping, "group")){
+  if(rlang::has_name(mapping, "group")){
     if(type != "themeRiver"){
       data_ <- plyr::rename(data_, c("group" = "name"))
     }

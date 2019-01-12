@@ -4,7 +4,7 @@ add_arg_to_df <- function(data, ...) {
 
   datal <- as.list(data)
 
-  l <- map_if(list(...), function(x) is.list(x), list)
+  l <- purrr::map_if(list(...), function(x) is.list(x), list)
 
   datal <- append(datal, l)
 
@@ -146,7 +146,7 @@ ec_add_series.data.frame <- function (ec, data, mapping = ecaes(), ...) {
 
   assertthat::assert_that(is.echart(ec), is.ecaes(mapping))
   # type
-  if(!has_name(list(...), 'type')){
+  if(!rlang::has_name(list(...), 'type')){
     stop("haven't the type value of series")
   }else {
     type <- list(...)[['type']]

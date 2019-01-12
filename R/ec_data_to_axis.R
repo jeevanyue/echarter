@@ -2,14 +2,14 @@
 ec_data_to_axis <- function(ec, data, mapping, ...) {
 
   # type
-  if(!has_name(list(...), 'type')){
+  if(!rlang::has_name(list(...), 'type')){
     stop("haven't the type value of series")
   }else {
     type <- list(...)[['type']]
   }
 
   # coordinateSystem
-  if(has_name(list(...), 'coordinateSystem')){
+  if(rlang::has_name(list(...), 'coordinateSystem')){
     coordinateSystem <- list(...)[['coordinateSystem']]
   }else{
     coordinateSystem <- NULL
@@ -28,7 +28,7 @@ ec_data_to_axis <- function(ec, data, mapping, ...) {
       # x
       if(is.null(opt$xAxis)){
         opt$xAxis <- list()
-        if (has_name(data, "x")) {
+        if (rlang::has_name(data, "x")) {
           if (lubridate::is.Date(data[["x"]])) {
             opt$xAxis$type <- "time"
           } else if (is.character(data[["x"]]) | is.factor(data[["x"]])) {
@@ -41,7 +41,7 @@ ec_data_to_axis <- function(ec, data, mapping, ...) {
         if(!is.null(names(opt$xAxis))){
           if(is.null(opt$xAxis$type)){
             opt$xAxis$type <- list()
-            if (has_name(data, "x")) {
+            if (rlang::has_name(data, "x")) {
               if (lubridate::is.Date(data[["x"]])) {
                 opt$xAxis$type <- "time"
               } else if (is.character(data[["x"]]) | is.factor(data[["x"]])) {
@@ -56,7 +56,7 @@ ec_data_to_axis <- function(ec, data, mapping, ...) {
       # y
       if(is.null(opt$yAxis)){
         opt$yAxis <- list()
-        if (has_name(data, "y")) {
+        if (rlang::has_name(data, "y")) {
           if (lubridate::is.Date(data[["y"]])) {
             opt$yAxis$type <- "time"
           } else if (is.character(data[["y"]]) | is.factor(data[["y"]])) {
@@ -69,7 +69,7 @@ ec_data_to_axis <- function(ec, data, mapping, ...) {
         if(!is.null(names(opt$yAxis))){
           if(is.null(opt$yAxis$type)){
             opt$yAxis$type <- list()
-            if (has_name(data, "y")) {
+            if (rlang::has_name(data, "y")) {
               if (lubridate::is.Date(data[["y"]])) {
                 opt$yAxis$type <- "time"
               } else if (is.character(data[["y"]]) | is.factor(data[["y"]])) {
@@ -90,7 +90,7 @@ ec_data_to_axis <- function(ec, data, mapping, ...) {
       # x -> angleAxis
       if(is.null(opt$angleAxis)){
         opt$angleAxis <- list()
-        if (has_name(data, "x")) {
+        if (rlang::has_name(data, "x")) {
           if (lubridate::is.Date(data[["x"]])) {
             opt$angleAxis$type <- "time"
           } else if (is.character(data[["x"]]) | is.factor(data[["x"]])) {
@@ -103,7 +103,7 @@ ec_data_to_axis <- function(ec, data, mapping, ...) {
         if(!is.null(names(opt$angleAxis))){
           if(is.null(opt$angleAxis$type)){
             opt$angleAxis$type <- list()
-            if (has_name(data, "x")) {
+            if (rlang::has_name(data, "x")) {
               if (lubridate::is.Date(data[["x"]])) {
                 opt$angleAxis$type <- "time"
               } else if (is.character(data[["x"]]) | is.factor(data[["x"]])) {
@@ -118,7 +118,7 @@ ec_data_to_axis <- function(ec, data, mapping, ...) {
       # y -> radiusAxis
       if(is.null(opt$radiusAxis)){
         opt$radiusAxis <- list()
-        if (has_name(data, "y")) {
+        if (rlang::has_name(data, "y")) {
           if (lubridate::is.Date(data[["y"]])) {
             opt$radiusAxis$type <- "time"
           } else if (is.character(data[["y"]]) | is.factor(data[["y"]])) {
@@ -131,7 +131,7 @@ ec_data_to_axis <- function(ec, data, mapping, ...) {
         if(!is.null(names(opt$radiusAxis))){
           if(is.null(opt$radiusAxis$type)){
             opt$radiusAxis$type <- list()
-            if (has_name(data, "y")) {
+            if (rlang::has_name(data, "y")) {
               if (lubridate::is.Date(data[["y"]])) {
                 opt$radiusAxis$type <- "time"
               } else if (is.character(data[["y"]]) | is.factor(data[["y"]])) {
@@ -177,7 +177,7 @@ ec_data_to_axis <- function(ec, data, mapping, ...) {
 
     if(is.null(opt$parallelAxis)){
       opt$parallelAxis <- list()
-      if (has_name(data, "y")) {
+      if (rlang::has_name(data, "y")) {
         if (lubridate::is.Date(data[["y"]])) {
           opt$parallelAxis$type <- "time"
         } else if (is.character(data[["y"]]) | is.factor(data[["y"]])) {

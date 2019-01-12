@@ -13,7 +13,7 @@ ec_mutate_mapping <- function(data, mapping, drop = TRUE, indicator = NULL) {
 
   data <- dplyr::mutate(data, !!! list_names)
 
-  if(has_name(data, "series"))
+  if(rlang::has_name(data, "series"))
 
     data <- dplyr::rename(data, "seriess" = "series")
 
