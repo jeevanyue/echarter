@@ -36,4 +36,23 @@ echart() \%>\%
     color = c('#d94e5d','#eac736')) \%>\%
   ec_tooltip(trigger = 'item',formatter = '{b}: {c}')
 
+shanghai_geoJson <- jsonlite::read_json("https://raw.githubusercontent.com/ecomfe/echarts-www/master/asset/map/json/province/shanghai.json")
+
+shanghai_dat <- data.frame(name = c("崇明区","静安区","宝山区","嘉定区","青浦区","虹口区","杨浦区","黄浦区","卢湾区","长宁区","浦东新区","松江区","金山区","奉贤区","普陀区","闵行区","徐汇区"), n = round(runif(17,1,100),0), stringsAsFactors = FALSE)
+
+echart() \%>\%
+ ec_registerMap("shanghai", shanghai_geoJson) \%>\%
+ ec_add_series(
+   type = 'map', mapType = 'shanghai',
+   data = shanghai_dat,
+   mapping = ecaes(name = name, value = n),
+   label = list(
+     normal = list(show = FALSE),
+     emphasis = list(show = FALSE))) \%>\%
+ ec_visualMap(
+   calculable = TRUE,
+   min = 0, max = 100, text = c("高", "低"),
+   color = c('#d94e5d','#eac736')) \%>\%
+ ec_tooltip(trigger = 'item',formatter = '{b}: {c}')
+
 }

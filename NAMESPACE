@@ -3,6 +3,7 @@
 S3method(ec_add_series,character)
 S3method(ec_add_series,data.frame)
 S3method(ec_add_series,default)
+S3method(ec_add_series,factor)
 S3method(ec_add_series,forecast)
 S3method(ec_add_series,matrix)
 S3method(ec_add_series,numeric)

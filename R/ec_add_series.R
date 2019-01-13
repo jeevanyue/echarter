@@ -8,7 +8,7 @@ add_arg_to_df <- function(data, ...) {
 
   datal <- append(datal, l)
 
-  as_data_frame(datal)
+  tibble::as_data_frame(datal)
 
 }
 
@@ -217,12 +217,31 @@ ec_add_series.numeric <- function (ec, data, ...) {
   ec
 }
 
+#' `ec_add_series.factor` for factor objects
+#'
+#' @name ec_add_series
+#'
+#' @export
+ec_add_series.factor <- function(ec, data, ...) {
+  assertthat::assert_that(is.echart(ec), is.factor(data))
+
+  series <- data %>%
+    table() %>%
+    as.data.frame(stringsAsFactors = FALSE) %>%
+    setNames(c("x", "y"))
+
+  ec_add_series(
+    ec, data = series, mapping = ecaes(x = x, y = y), ...)
+
+}
+
 #' `ec_add_series.character` for character objects
 #'
 #' @name ec_add_series
 #'
 #' @export
 ec_add_series.character <- function(ec, data, ...) {
+  assertthat::assert_that(is.echart(ec), is.character(data))
 
   series <- data %>%
     table() %>%
@@ -288,7 +307,7 @@ ec_add_series.forecast <- function(ec, data, addOriginal = TRUE, addLevels = TRU
 
     # for (m in seq(ncol(data$upper))){
     m <- 1
-    dfbands <- data_frame(
+    dfbands <- tibble::data_frame(
       t = tmf,
       l = as.vector(data$lower[, m]),
       u = as.vector(data$upper[, m])

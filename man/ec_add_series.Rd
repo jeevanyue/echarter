@@ -11,6 +11,8 @@
 \alias{ec_add_series}
 \alias{ec_add_series.numeric}
 \alias{ec_add_series}
+\alias{ec_add_series.factor}
+\alias{ec_add_series}
 \alias{ec_add_series.character}
 \alias{ec_add_series}
 \alias{ec_add_series.ts}
@@ -29,6 +31,8 @@ ec_add_series(ec, data = NULL, ...)
 \method{ec_add_series}{matrix}(ec, data, ...)
 
 \method{ec_add_series}{numeric}(ec, data, ...)
+
+\method{ec_add_series}{factor}(ec, data, ...)
 
 \method{ec_add_series}{character}(ec, data, ...)
 
@@ -68,6 +72,8 @@ Adding series from echarts objects
 `ec_add_series.matrix` for matrix objects
 
 `ec_add_series.numeric` for numeric objects
+
+`ec_add_series.factor` for factor objects
 
 `ec_add_series.character` for character objects
 
