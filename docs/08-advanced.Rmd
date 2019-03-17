@@ -46,7 +46,7 @@ echart(lf_opt)
 
 ```{r eval = FALSE}
 library(jiebaR)
-file <- read_lines("data/2017年中央政府工作报告.txt")
+file <- read_lines("data/2017_Government_Work_Report.txt")
 word <- segment(file, worker())
 word_freq <- freq(word)
 write.csv(word_freq, "data/word_freq.csv", row.names = FALSE)
