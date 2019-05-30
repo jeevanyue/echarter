@@ -108,8 +108,8 @@ data_tree <- function(df, type = "tree"){
 
   assertthat::assert_that(is.data.frame(df))
 
-  parents <- df[, "parent"]
-  children <- df[, "children"]
+  parents <- df$parent
+  children <- df$children
   parents_name <- unique(parents)
   children_name <- unique(children)
   root_child <- unique(parents[!(parents %in% children)])
