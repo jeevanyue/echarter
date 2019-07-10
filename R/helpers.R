@@ -16,7 +16,7 @@ ec_list_parse <- function(df) {
   assertthat::assert_that(is.data.frame(df))
 
   purrr::map_if(df, is.factor, as.character) %>%
-    as_data_frame() %>%
+    tibble::as_data_frame() %>%
     rlist::list.parse() %>%
     setNames(NULL)
 }

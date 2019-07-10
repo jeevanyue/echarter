@@ -62,7 +62,7 @@ add_arg_to_df <- function(data, ...) {
 
   datal <- append(datal, l)
 
-  as_data_frame(datal)
+  tibble::as_data_frame(datal)
 
 }
 
