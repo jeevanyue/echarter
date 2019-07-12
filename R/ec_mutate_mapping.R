@@ -9,7 +9,7 @@ ec_mutate_mapping <- function(data, mapping, drop = TRUE, indicator = NULL) {
 
   tran <- as.character(mapping)
   newv <- names(mapping)
-  list_names <- setNames(tran, newv) %>% lapply(rlang::parse_quosure)
+  list_names <- setNames(tran, newv) %>% lapply(rlang::parse_quo)
 
   data <- dplyr::mutate(data, !!! list_names)
 
