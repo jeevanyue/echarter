@@ -1,3 +1,0 @@
-# 作者简介 {#author .unnumbered}
-
-[Jeevan Yue](http://github.com/jeevanyue) - R developer.
