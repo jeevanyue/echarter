@@ -13,12 +13,13 @@ ec_registerMap(ec, mapName, geoJson, specialAreas = NULL)
 
 \item{geoJson}{\href{Geojson}{http://geojson.org/}.}
 
-\item{specialAreas}{}
+\item{specialAreas}{specialAreas}
 }
 \description{
 Register a \href{geojson}{http://geojson.org/} map.
 }
 \examples{
+library(tidyverse)
 USA_geoJson <- jsonlite::read_json("http://www.echartsjs.com/gallery/data/asset/geo/USA.json")
 
 USArrests_ <- USArrests \%>\%
@@ -36,9 +37,14 @@ echart() \%>\%
     color = c('#d94e5d','#eac736')) \%>\%
   ec_tooltip(trigger = 'item',formatter = '{b}: {c}')
 
-shanghai_geoJson <- jsonlite::read_json("https://raw.githubusercontent.com/ecomfe/echarts-www/master/asset/map/json/province/shanghai.json")
+shanghai_geoJson <- jsonlite::read_json(
+"https://raw.githubusercontent.com/ecomfe/echarts-www/master/asset/map/json/province/shanghai.json")
 
-shanghai_dat <- data.frame(name = c("崇明区","静安区","宝山区","嘉定区","青浦区","虹口区","杨浦区","黄浦区","卢湾区","长宁区","浦东新区","松江区","金山区","奉贤区","普陀区","闵行区","徐汇区"), n = round(runif(17,1,100),0), stringsAsFactors = FALSE)
+shanghai_dat <- data.frame(
+name = c("崇明区","静安区","宝山区","嘉定区","青浦区",
+"虹口区","杨浦区","黄浦区","卢湾区","长宁区","浦东新区",
+"松江区","金山区","奉贤区","普陀区","闵行区","徐汇区"),
+n = round(runif(17,1,100),0), stringsAsFactors = FALSE)
 
 echart() \%>\%
  ec_registerMap("shanghai", shanghai_geoJson) \%>\%

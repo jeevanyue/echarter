@@ -509,7 +509,8 @@ ec_geo <- function(ec, ..., baseoption = FALSE, add = FALSE){
 #'     color = c('#d94e5d','#eac736')) %>%
 #'   ec_tooltip(trigger = 'item',formatter = '{b}: {c}')
 #'
-#' shanghai_geoJson <- jsonlite::read_json("https://raw.githubusercontent.com/ecomfe/echarts-www/master/asset/map/json/province/shanghai.json")
+#' shanghai_geoJson <- jsonlite::read_json(
+#' "https://raw.githubusercontent.com/ecomfe/echarts-www/master/asset/map/json/province/shanghai.json")
 #'
 #' shanghai_dat <- data.frame(
 #' name = c("崇明区","静安区","宝山区","嘉定区","青浦区",
