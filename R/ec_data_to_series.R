@@ -112,7 +112,7 @@ ec_data_to_series <- function(ec, data, mapping, ..., dim = FALSE) {
         value = data_[x, xvar] %>% setNames(NULL)
       ))
     })
-    data_ <- tibble::data_frame(
+    data_ <- tibble::tibble(
       group = data_$group,
       data = data_list)
 
@@ -123,7 +123,7 @@ ec_data_to_series <- function(ec, data, mapping, ..., dim = FALSE) {
       ungroup()
   }else if(type %in% c('tree', 'treemap', 'sunburst')){
     data_ <- data_tree(data, type = type)
-    data_ <- tibble::data_frame(data = list(data_))
+    data_ <- tibble::tibble(data = list(data_))
 
   }else if(type == 'boxplot'){
 
@@ -189,17 +189,17 @@ ec_data_to_series <- function(ec, data, mapping, ..., dim = FALSE) {
         if(boxplot_layout == "horizontal"){
           dat_outline <- map2_df(seq(nrow(dat_box)), dat_box$data, function(x, y){
             if (length(y$out) > 0)
-              d <- tibble::data_frame(name = dat_box$name[x], data = list(ec_dim(tibble::data_frame(x = y$group - 1, y = y$out))))
+              d <- tibble::tibble(name = dat_box$name[x], data = list(ec_dim(tibble::tibble(x = y$group - 1, y = y$out))))
             else
-              d <- tibble::data_frame()
+              d <- tibble::tibble()
             d
           })
         }else{
           dat_outline <- map2_df(seq(nrow(dat_box)), dat_box$data, function(x, y){
             if (length(y$out) > 0)
-              d <- tibble::data_frame(name = dat_box$name[x], data = list(ec_dim(tibble::data_frame(x = y$out, y = y$group - 1))))
+              d <- tibble::tibble(name = dat_box$name[x], data = list(ec_dim(tibble::tibble(x = y$out, y = y$group - 1))))
             else
-              d <- tibble::data_frame()
+              d <- tibble::tibble()
             d
           })
         }
@@ -260,7 +260,7 @@ ec_data_to_series <- function(ec, data, mapping, ..., dim = FALSE) {
     data_ <- data %>%
       select(x, y, group) %>%
       ec_list_parse_()
-    data_ <- tibble::data_frame(data = list(data_))
+    data_ <- tibble::tibble(data = list(data_))
 
   }else if(type == 'lines'){
     dat_tmp <- data %>%
@@ -270,7 +270,7 @@ ec_data_to_series <- function(ec, data, mapping, ..., dim = FALSE) {
     data_ <- apply(dat_tmp, 1, function(x){
       x <- unname(x)
       coords = list(c(x[1], x[2]), c(x[3], x[4]))})
-    data_ <- tibble::data_frame(data = list(data_))
+    data_ <- tibble::tibble(data = list(data_))
 
   }else if(type %in% c('line','bar','scatter','effectScatter','pictorialBar','heatmap', 'liquidFill', 'wordCloud')){
 

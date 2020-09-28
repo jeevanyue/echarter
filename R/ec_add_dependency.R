@@ -9,7 +9,7 @@
 #' @export
 ec_add_dependency <- function(ec, name = NULL) {
 
-  deps <- tibble::data_frame(
+  deps <- tibble::tibble(
     name = c('liquidFill', 'wordCloud', 'bmap', 'china', 'world'),
     js = list(
       'echarts-liquidfill.min.js',

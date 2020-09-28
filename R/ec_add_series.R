@@ -8,7 +8,7 @@ add_arg_to_df <- function(data, ...) {
 
   datal <- append(datal, l)
 
-  tibble::as_data_frame(datal)
+  tibble::as_tibble(datal)
 
 }
 
@@ -307,7 +307,7 @@ ec_add_series.forecast <- function(ec, data, addOriginal = TRUE, addLevels = TRU
 
     # for (m in seq(ncol(data$upper))){
     m <- 1
-    dfbands <- tibble::data_frame(
+    dfbands <- tibble::tibble(
       t = tmf,
       l = as.vector(data$lower[, m]),
       u = as.vector(data$upper[, m])
