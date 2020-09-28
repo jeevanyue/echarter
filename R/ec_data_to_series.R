@@ -104,7 +104,7 @@ ec_data_to_series <- function(ec, data, mapping, ..., dim = FALSE) {
     data_ <- data %>%
       select(x, y, group) %>%
       spread(x, y)
-      # dplyr::select_(.dots= c("group", xvar))
+      # dplyr::select(.dots= c("group", xvar))
 
     data_list <- lapply(seq(nrow(data_)), function(x){
       list(list(
@@ -119,7 +119,7 @@ ec_data_to_series <- function(ec, data, mapping, ..., dim = FALSE) {
   }else if(type %in% c('pie', 'map', 'funnel', 'gauge')){
     data_ <- data %>%
       group_by(group) %>%
-      do(data = ec_list_parse(select_(., -group))) %>%
+      do(data = ec_list_parse(select(., -group))) %>%
       ungroup()
   }else if(type %in% c('tree', 'treemap', 'sunburst')){
     data_ <- data_tree(data, type = type)
@@ -157,7 +157,7 @@ ec_data_to_series <- function(ec, data, mapping, ..., dim = FALSE) {
 
       dat_stats <- data %>%
         group_by(group) %>%
-        do(data = t(boxplot(select_(., -group), plot = FALSE)[["stats"]])) %>%
+        do(data = t(boxplot(select(., -group), plot = FALSE)[["stats"]])) %>%
         ungroup()
 
       if(rlang::has_name(list(...), "name")){
@@ -176,7 +176,7 @@ ec_data_to_series <- function(ec, data, mapping, ..., dim = FALSE) {
 
         dat_box <- data %>%
           group_by(group) %>%
-          do(data = boxplot(select_(., -group), plot = FALSE))%>%
+          do(data = boxplot(select(., -group), plot = FALSE))%>%
           ungroup()
 
         if(rlang::has_name(list(...), "name")){
@@ -234,7 +234,7 @@ ec_data_to_series <- function(ec, data, mapping, ..., dim = FALSE) {
       }
       data_ <- data %>%
         group_by(group) %>%
-        do(data = ec_dim(select_(., -group))) %>%
+        do(data = ec_dim(select(., -group))) %>%
         ungroup()
     }
 
@@ -249,7 +249,7 @@ ec_data_to_series <- function(ec, data, mapping, ..., dim = FALSE) {
 
     data_ <- data %>%
       group_by(group) %>%
-      do(data = ec_dim(select_(., quote(-group)))) %>%
+      do(data = ec_dim(select(., quote(-group)))) %>%
       ungroup()
 
   }else if(type %in% c('sankey', 'graph')){
