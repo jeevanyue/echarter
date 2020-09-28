@@ -8,7 +8,7 @@
 #'
 #' @param data  A data object.
 #' @param ... Additional arguments for the data series
-#'    (\url{http://echarts.baidu.com/option.html#series}).
+#'    (\url{https://echarts.apache.org/zh/option.html#series}).
 #'
 #' @name echarter
 #'

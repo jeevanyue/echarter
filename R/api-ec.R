@@ -300,7 +300,7 @@ ec_axisPointer <- function (ec, ..., baseoption = FALSE, add = FALSE) {
 #' @description Rectangular Coordinate
 #' @param ec An \code{echarter} object as returned by \code{\link{echart}}.
 #' @param ... Additional arguments for the grid
-#'    (\url{http://www.echartsjs.com/option.html#grid}).
+#'    (\url{https://echarts.apache.org/zh/option.html#grid}).
 #' @param baseoption default FALSE
 #' @param add default FALSE
 #'
@@ -314,7 +314,7 @@ ec_grid <- function(ec, ..., baseoption = FALSE, add = TRUE){
 #' @description The x axis in Rectangular Coordinate
 #' @param ec An \code{echarter} object as returned by \code{\link{echart}}.
 #' @param ... Additional arguments for the xAxis
-#'    (\url{http://www.echartsjs.com/option.html#xAxis}).
+#'    (\url{https://echarts.apache.org/zh/option.html#xAxis}).
 #' @param baseoption default FALSE
 #' @param add default FALSE
 #'
@@ -329,7 +329,7 @@ ec_xAxis <- function (ec, ..., baseoption = FALSE, add = FALSE) {
 #' @description The y axis in Rectangular Coordinate
 #' @param ec An \code{echarter} object as returned by \code{\link{echart}}.
 #' @param ... Additional arguments for the yAxis
-#'    (\url{http://www.echartsjs.com/option.html#yAxis}).
+#'    (\url{https://echarts.apache.org/zh/option.html#yAxis}).
 #' @param baseoption default FALSE
 #' @param add default FALSE
 #'
@@ -347,7 +347,7 @@ ec_yAxis <- function (ec, ..., baseoption = FALSE, add = FALSE) {
 #'
 #' @param ec An \code{echarter} object as returned by \code{\link{echart}}.
 #' @param ... Additional arguments for the polor.
-#'    (\url{http://www.echartsjs.com/option.html#polar}).
+#'    (\url{https://echarts.apache.org/zh/option.html#polar}).
 #' @param baseoption default FALSE
 #' @param add default FALSE
 #'
@@ -361,7 +361,7 @@ ec_polar <- function(ec, ..., baseoption = FALSE, add = FALSE){
 #' @description The angle axis in Polar Coordinate.
 #' @param ec An \code{echarter} object as returned by \code{\link{echart}}.
 #' @param ... Additional arguments for the angleAxis.
-#'    (\url{http://www.echartsjs.com/option.html#angleAxis}).
+#'    (\url{https://echarts.apache.org/zh/option.html#angleAxis}).
 #' @param baseoption default FALSE
 #' @param add default FALSE
 #'
@@ -376,7 +376,7 @@ ec_angleAxis <- function(ec, ..., baseoption = FALSE, add = FALSE){
 #' @description The Radial axis in Polar Coordinate.
 #' @param ec An \code{echarter} object as returned by \code{\link{echart}}.
 #' @param ... Additional arguments for the radiusAxis.
-#'    (\url{http://www.echartsjs.com/option.html#radiusAxis}).
+#'    (\url{https://echarts.apache.org/zh/option.html#radiusAxis}).
 #' @param baseoption default FALSE
 #' @param add default FALSE
 #'
@@ -394,7 +394,7 @@ ec_radiusAxis <- function(ec, ..., baseoption = FALSE, add = FALSE){
 #'
 #' @param ec An \code{echarter} object as returned by \code{\link{echart}}.
 #' @param ... Additional arguments for the radar
-#'    (\url{http://www.echartsjs.com/option.html#radar}).
+#'    (\url{https://echarts.apache.org/zh/option.html#radar}).
 #' @param baseoption default FALSE
 #' @param add default FALSE
 #'
@@ -410,7 +410,7 @@ ec_radar <- function(ec, ..., baseoption = FALSE, add = FALSE){
 #' @description Parallel Coordinates
 #' @param ec An \code{echarter} object as returned by \code{\link{echart}}.
 #' @param ... Additional arguments for the parallel
-#'    (\url{http://www.echartsjs.com/option.html#parallel}).
+#'    (\url{https://echarts.apache.org/zh/option.html#parallel}).
 #' @param baseoption default FALSE
 #' @param add default FALSE
 #'
@@ -424,7 +424,7 @@ ec_parallel <- function(ec, ..., baseoption = FALSE, add = FALSE){
 #' @description the coordinate axis for Parallel Coordinates.
 #' @param ec An \code{echarter} object as returned by \code{\link{echart}}.
 #' @param ... Additional arguments for the parallelAxis
-#'    (\url{http://www.echartsjs.com/option.html#parallelAxis}).
+#'    (\url{https://echarts.apache.org/zh/option.html#parallelAxis}).
 #' @param baseoption default FALSE
 #' @param add default FALSE
 #'
@@ -440,7 +440,7 @@ ec_parallelAxis <- function(ec, ..., baseoption = FALSE, add = FALSE){
 #' @description An axis with a single dimension
 #' @param ec An \code{echarter} object as returned by \code{\link{echart}}.
 #' @param ... Additional arguments for the singleAxis
-#'    (\url{http://www.echartsjs.com/option.html#singleAxis}).
+#'    (\url{https://echarts.apache.org/zh/option.html#singleAxis}).
 #' @param baseoption default FALSE
 #' @param add default FALSE
 #'
@@ -456,7 +456,7 @@ ec_singleAxis <- function(ec, ..., baseoption = FALSE, add = FALSE){
 #' @description Calendar Coordinates
 #' @param ec An \code{echarter} object as returned by \code{\link{echart}}.
 #' @param ... Additional arguments for the calendar
-#'    (\url{http://www.echartsjs.com/option.html#calendar}).
+#'    (\url{https://echarts.apache.org/zh/option.html#calendar}).
 #' @param baseoption default FALSE
 #' @param add default FALSE
 #'
@@ -472,7 +472,7 @@ ec_calendar <- function(ec, ..., baseoption = FALSE, add = FALSE){
 #' @description Geographic Coordinates
 #' @param ec An \code{echarter} object as returned by \code{\link{echart}}.
 #' @param ... Additional arguments for the geo
-#'    (\url{http://www.echartsjs.com/option.html#geo}).
+#'    (\url{https://echarts.apache.org/zh/option.html#geo}).
 #' @param baseoption default FALSE
 #' @param add default FALSE
 #'
@@ -545,7 +545,7 @@ ec_registerMap <- function(ec, mapName, geoJson, specialAreas = NULL){
 #' @param ec An \code{echarter} object as returned by \code{\link{echart}}.
 #' @param data An R object like json, data.frame, matrix.
 #' @param ... Additional arguments for the dataset
-#'    (\url{http://www.echartsjs.com/option.html#dataset}).
+#'    (\url{https://echarts.apache.org/zh/option.html#dataset}).
 #' @param baseoption default FALSE
 #' @param add default FALSE
 #'
@@ -612,9 +612,9 @@ ec_dataset <- function (ec, data, ..., baseoption = FALSE, add = FALSE) {
 #' @param ec An \code{echarter} object as returned by \code{\link{echart}}.
 #' @param markname The mark name, markPoint, markLine, markArea
 #' @param ... Additional arguments for the mark.
-#'    markPoint see (\url{http://www.echartsjs.com/option.html#series-line.markPoint}).
-#'    markLine see (\url{http://www.echartsjs.com/option.html#series-line.markLine}).
-#'    markArea see (\url{http://www.echartsjs.com/option.html#series-line.markArea}).
+#'    markPoint see (\url{https://echarts.apache.org/zh/option.html#series-line.markPoint}).
+#'    markLine see (\url{https://echarts.apache.org/zh/option.html#series-line.markLine}).
+#'    markArea see (\url{https://echarts.apache.org/zh/option.html#series-line.markArea}).
 #' @param serie The serie index of ec
 #'
 #' @rdname ec_mark
@@ -684,7 +684,7 @@ ec_markArea <- function(ec, ..., serie = NULL){
 #' @description tooltip component.
 #' @param ec An \code{echarter} object as returned by \code{\link{echart}}.
 #' @param ... Additional arguments for the tooltip
-#'    (\url{http://www.echartsjs.com/option.html#tooltip}).
+#'    (\url{https://echarts.apache.org/zh/option.html#tooltip}).
 #' @param baseoption default FALSE
 #' @param add default FALSE
 #'
@@ -698,7 +698,7 @@ ec_tooltip <- function (ec, ..., baseoption = FALSE, add = FALSE) {
 #' @description toolbox component.
 #' @param ec An \code{echarter} object as returned by \code{\link{echart}}.
 #' @param ... Additional arguments for the toolbox
-#'    (\url{http://www.echartsjs.com/option.html#toolbox}).
+#'    (\url{https://echarts.apache.org/zh/option.html#toolbox}).
 #' @param baseoption default FALSE
 #' @param add default FALSE
 #'
@@ -712,7 +712,7 @@ ec_toolbox  <- function (ec, ..., baseoption = FALSE, add = FALSE) {
 #' @description visualMap component.
 #' @param ec An \code{echarter} object as returned by \code{\link{echart}}.
 #' @param ... Additional arguments for the visualMap
-#'    (\url{http://www.echartsjs.com/option.html#visualMap}).
+#'    (\url{https://echarts.apache.org/zh/option.html#visualMap}).
 #' @param baseoption default FALSE
 #' @param add default FALSE
 #'
@@ -726,7 +726,7 @@ ec_visualMap <- function (ec, ..., baseoption = FALSE, add = FALSE) {
 #' @description dataZoom component.
 #' @param ec An \code{echarter} object as returned by \code{\link{echart}}.
 #' @param ... Additional arguments for the dataZoom
-#'    (\url{http://www.echartsjs.com/option.html#dataZoom}).
+#'    (\url{https://echarts.apache.org/zh/option.html#dataZoom}).
 #' @param baseoption default FALSE
 #' @param add default FALSE
 #'
@@ -741,7 +741,7 @@ ec_dataZoom <- function (ec, ..., baseoption = FALSE, add = FALSE) {
 #' @description graphic component.
 #' @param ec An \code{echarter} object as returned by \code{\link{echart}}.
 #' @param ... Additional arguments for the graphic
-#'    (\url{http://www.echartsjs.com/option.html#graphic}).
+#'    (\url{https://echarts.apache.org/zh/option.html#graphic}).
 #' @param baseoption default FALSE
 #' @param add default FALSE
 #'
@@ -755,7 +755,7 @@ ec_graphic <- function(ec, ..., baseoption = FALSE, add = FALSE){
 #' @description brush component.
 #' @param ec An \code{echarter} object as returned by \code{\link{echart}}.
 #' @param ... Additional arguments for the brush
-#'    (\url{http://www.echartsjs.com/option.html#brush}).
+#'    (\url{https://echarts.apache.org/zh/option.html#brush}).
 #' @param baseoption default FALSE
 #' @param add default FALSE
 #'
@@ -769,7 +769,7 @@ ec_brush <- function(ec, ..., baseoption = FALSE, add = FALSE){
 #' @description timeline component.
 #' @param ec An \code{echarter} object as returned by \code{\link{echart}}.
 #' @param ... Additional arguments for the timeline
-#'    (\url{http://www.echartsjs.com/option.html#timeline}).
+#'    (\url{https://echarts.apache.org/zh/option.html#timeline}).
 #' @param baseoption default TRUE
 #' @param add default FALSE
 #'
@@ -808,7 +808,7 @@ ec_options <- function(ec, ecs){
 #' @description timeline component.
 #' @param ecs An \code{echarter} object list.
 #' @param ... Additional arguments for the timeline
-#'    (\url{http://www.echartsjs.com/option.html#timeline}).
+#'    (\url{https://echarts.apache.org/zh/option.html#timeline}).
 #'
 #' @export
 ec_timeline2 <- function(ecs, ...){
@@ -861,7 +861,7 @@ ec_media <- function(ec, query, option, baseoption = FALSE, add = TRUE){
 #' @description generating description for charts automatically.
 #' @param ec An \code{echarter} object as returned by \code{\link{echart}}.
 #' @param ... Additional arguments for the aria
-#'    (\url{http://www.echartsjs.com/option.html#aria}).
+#'    (\url{https://echarts.apache.org/zh/option.html#aria}).
 #' @param baseoption default FALSE
 #' @param add default FALSE
 #'

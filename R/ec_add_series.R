@@ -63,7 +63,7 @@ ecaes_ <- ecaes_string
 #'
 #' @param ec A `echarter` object.
 #' @param data An R object like list, data.frame, matrix, numeric, character, ts, forecast, etc.
-#' @param ... Arguments defined in \url{http://echarts.baidu.com/option.html#series}.
+#' @param ... Arguments defined in \url{https://echarts.apache.org/zh/option.html#series}.
 #'
 #' @name ec_add_series
 #'

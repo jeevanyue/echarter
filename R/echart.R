@@ -6,7 +6,7 @@
 #' other applications.
 #'
 #' @param opt A `list` object containing options defined as
-#'    \url{http://echarts.baidu.com/option.html}.
+#'    \url{https://echarts.apache.org/zh/option.html}.
 #' @param theme A \code{ec_theme} class object
 #' @param width A numeric input in pixels.
 #' @param height  A numeric input in pixels.

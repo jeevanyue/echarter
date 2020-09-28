@@ -12,7 +12,7 @@
   }, force = TRUE)
 
   packageStartupMessage(
-    "ECharts (echarts.baidu.com) is a free, powerful charting and visualization library.")
+    "ECharts is a free, powerful charting and visualization library.")
 }
 
 .onLoad <- function(libname, pkgname) {

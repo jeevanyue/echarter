@@ -74,7 +74,7 @@ themeDependencies <- function(themeName){
 #' define ec_theme object
 #'
 #' @param ... A `list` object containing options defined as
-#'    \url{http://echarts.baidu.com/option.html}.
+#'    \url{https://echarts.apache.org/zh/option.html}.
 #'
 #' @export
 #'

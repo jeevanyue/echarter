@@ -3,7 +3,7 @@
 
 ![](http://echarter.jeevanyue.com/img/echarter_logo_mini.png)
 
-[ECharts 4](http://echarts.baidu.com)的R语言接口实现, 详细说明文档和案例请查看[echarter](http://echarter.jeevanyue.com) 。
+[ECharts 4](https://echarts.apache.org)的R语言接口实现, 详细说明文档和案例请查看[echarter](http://echarter.jeevanyue.com) 。
 
 ## 简介
 
@@ -21,7 +21,7 @@ devtools::install_github("jeevanyue/echarter")
 
 ## 基础组件
 
-支持官方配置项的所有组件，详细可以查看官方文档[option](http://echarts.baidu.com/option.html)和[案例](http://echarts.baidu.com/examples/)。
+支持官方配置项的所有组件，详细可以查看官方文档[option](https://echarts.apache.org/zh/option.html)和[案例](https://echarts.apache.org/examples/zh/index.html)。
 
 - [ec_title](http://echarter.jeevanyue.com/api-ec.html#ec_title)
 - [ec_legend](http://echarter.jeevanyue.com/api-ec.html#ec_legend)
@@ -100,7 +100,7 @@ devtools::install_github("jeevanyue/echarter")
 可以通过下列四种方式设置主题，详见[echarter.theme](http://echarter.jeevanyue.com/theme.html)。
 
 - 支持自带的theme: dark, infographic, macarons, roma, shine, vintage，``echart(theme = 'dark')``
-- 导入[echarts theme 构建工具](http://echarts.baidu.com/theme-builder/)的js主题文件，``echart(theme = '**.js')``
+- 导入[echarts theme 构建工具](https://echarts.apache.org/zh/theme-builder.html)的js主题文件，``echart(theme = '**.js')``
 - 导入``ec_theme``构建的主题，`echart(theme = thm)`导入
 - 修改全局主题``getOption("echarter.option")``，该方式目前还没有跟所有图表类型匹配，建议采用以上三种方式
 
