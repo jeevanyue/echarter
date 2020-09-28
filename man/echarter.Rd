@@ -2,15 +2,10 @@
 % Please edit documentation in R/echarter.R
 \name{echarter}
 \alias{echarter}
-\alias{echarter}
 \alias{echarter.default}
-\alias{echarter}
 \alias{echarter.numeric}
-\alias{echarter}
 \alias{echarter.character}
-\alias{echarter}
 \alias{echarter.ts}
-\alias{echarter}
 \alias{echarter.forecast}
 \title{Create a echarts object from a particular data type}
 \usage{
@@ -18,24 +13,59 @@ echarter(data, ...)
 
 \method{echarter}{default}(data, ...)
 
-\method{echarter}{numeric}(data, ..., theme = "default", width = NULL,
-  height = NULL, elementId = NULL, dispose = TRUE, renderer = "canvas")
+\method{echarter}{numeric}(
+  data,
+  ...,
+  theme = "default",
+  width = NULL,
+  height = NULL,
+  elementId = NULL,
+  dispose = TRUE,
+  renderer = "canvas"
+)
 
-\method{echarter}{character}(data, ..., theme = "default", width = NULL,
-  height = NULL, elementId = NULL, dispose = TRUE, renderer = "canvas")
+\method{echarter}{character}(
+  data,
+  ...,
+  theme = "default",
+  width = NULL,
+  height = NULL,
+  elementId = NULL,
+  dispose = TRUE,
+  renderer = "canvas"
+)
 
-\method{echarter}{ts}(data, ..., theme = "default", width = NULL,
-  height = NULL, elementId = NULL, dispose = TRUE, renderer = "canvas")
+\method{echarter}{ts}(
+  data,
+  ...,
+  theme = "default",
+  width = NULL,
+  height = NULL,
+  elementId = NULL,
+  dispose = TRUE,
+  renderer = "canvas"
+)
 
-\method{echarter}{forecast}(data, addOriginal = TRUE, addLevels = TRUE,
-  fillOpacity = 0.1, name = NULL, ..., theme = "default", width = NULL,
-  height = NULL, elementId = NULL, dispose = TRUE, renderer = "canvas")
+\method{echarter}{forecast}(
+  data,
+  addOriginal = TRUE,
+  addLevels = TRUE,
+  fillOpacity = 0.1,
+  name = NULL,
+  ...,
+  theme = "default",
+  width = NULL,
+  height = NULL,
+  elementId = NULL,
+  dispose = TRUE,
+  renderer = "canvas"
+)
 }
 \arguments{
 \item{data}{A data object.}
 
 \item{...}{Additional arguments for the data series
-(\url{http://echarts.baidu.com/option.html#series}).}
+(\url{https://echarts.apache.org/zh/option.html#series}).}
 
 \item{addOriginal}{Logical value to add the original series or not.}
 
@@ -49,14 +79,6 @@ echarter(data, ...)
 \code{echarter} uses `echart` to draw a particular plot for an
 object of a particular class in a single command. This defines the S3
 generic that other classes and packages can extend.
-
-`echarter.numeric` for numeric objects
-
-`echarter.character` for character objects
-
-`echarter.ts` for ts objects
-
-`echarter.forecast` for numeric objects
 }
 \details{
 Run \code{methods(echart)} to see what objects are supported.

@@ -4,12 +4,20 @@
 \alias{echart}
 \title{Create a Echarts chart widget}
 \usage{
-echart(opt = list(), theme = "default", width = NULL, height = NULL,
-  elementId = NULL, dispose = TRUE, renderer = "canvas", ...)
+echart(
+  opt = list(),
+  theme = "default",
+  width = NULL,
+  height = NULL,
+  elementId = NULL,
+  dispose = TRUE,
+  renderer = "canvas",
+  ...
+)
 }
 \arguments{
 \item{opt}{A `list` object containing options defined as
-\url{http://echarts.baidu.com/option.html}.}
+\url{https://echarts.apache.org/zh/option.html}.}
 
 \item{theme}{A \code{ec_theme} class object}
 

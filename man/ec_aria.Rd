@@ -10,7 +10,7 @@ ec_aria(ec, ..., baseoption = FALSE, add = TRUE)
 \item{ec}{An \code{echarter} object as returned by \code{\link{echart}}.}
 
 \item{...}{Additional arguments for the aria
-(\url{http://www.echartsjs.com/option.html#aria}).}
+(\url{https://echarts.apache.org/zh/option.html#aria}).}
 
 \item{baseoption}{default FALSE}
 

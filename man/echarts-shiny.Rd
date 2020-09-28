@@ -3,7 +3,6 @@
 \name{echarts-shiny}
 \alias{echarts-shiny}
 \alias{echartsOutput}
-\alias{echarts-shiny}
 \alias{renderEcharts}
 \title{Widget output function for use in Shiny}
 \usage{
@@ -27,8 +26,6 @@ string and have \code{'px'} appended.}
 \description{
 Output and render functions for using echarts within Shiny
 applications and interactive Rmd documents.
-
-Widget render function for use in Shiny
 }
 \details{
 Widget output function for use in Shiny

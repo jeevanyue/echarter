@@ -10,7 +10,7 @@ ec_radar(ec, ..., baseoption = FALSE, add = FALSE)
 \item{ec}{An \code{echarter} object as returned by \code{\link{echart}}.}
 
 \item{...}{Additional arguments for the radar
-(\url{http://www.echartsjs.com/option.html#radar}).}
+(\url{https://echarts.apache.org/zh/option.html#radar}).}
 
 \item{baseoption}{default FALSE}
 

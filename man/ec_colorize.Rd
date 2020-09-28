@@ -4,8 +4,11 @@
 \alias{ec_colorize}
 \title{Create vector of color from vector}
 \usage{
-ec_colorize(x, colors = c("#c23531", "#2f4554", "#61a0a8", "#d48265",
-  "#91c7ae", "#749f83", "#ca8622", "#bda29a", "#6e7074", "#546570", "#c4ccd3"))
+ec_colorize(
+  x,
+  colors = c("#c23531", "#2f4554", "#61a0a8", "#d48265", "#91c7ae", "#749f83",
+    "#ca8622", "#bda29a", "#6e7074", "#546570", "#c4ccd3")
+)
 }
 \arguments{
 \item{x}{A numeric, character or factor object.}

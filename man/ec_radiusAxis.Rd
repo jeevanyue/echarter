@@ -10,7 +10,7 @@ ec_radiusAxis(ec, ..., baseoption = FALSE, add = FALSE)
 \item{ec}{An \code{echarter} object as returned by \code{\link{echart}}.}
 
 \item{...}{Additional arguments for the radiusAxis.
-(\url{http://www.echartsjs.com/option.html#radiusAxis}).}
+(\url{https://echarts.apache.org/zh/option.html#radiusAxis}).}
 
 \item{baseoption}{default FALSE}
 

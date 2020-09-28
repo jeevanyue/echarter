@@ -10,7 +10,7 @@ ec_polar(ec, ..., baseoption = FALSE, add = FALSE)
 \item{ec}{An \code{echarter} object as returned by \code{\link{echart}}.}
 
 \item{...}{Additional arguments for the polor.
-(\url{http://www.echartsjs.com/option.html#polar}).}
+(\url{https://echarts.apache.org/zh/option.html#polar}).}
 
 \item{baseoption}{default FALSE}
 

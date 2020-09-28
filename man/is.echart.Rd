@@ -2,7 +2,6 @@
 % Please edit documentation in R/echart.R
 \name{is.echart}
 \alias{is.echart}
-\alias{is.echart}
 \alias{is.echarter}
 \title{Reports whether x is a echarts object}
 \usage{

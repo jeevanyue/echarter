@@ -10,7 +10,7 @@ ec_timeline(ec, ..., baseoption = TRUE, add = FALSE)
 \item{ec}{An \code{echarter} object as returned by \code{\link{echart}}.}
 
 \item{...}{Additional arguments for the timeline
-(\url{http://www.echartsjs.com/option.html#timeline}).}
+(\url{https://echarts.apache.org/zh/option.html#timeline}).}
 
 \item{baseoption}{default TRUE}
 

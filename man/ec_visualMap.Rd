@@ -10,7 +10,7 @@ ec_visualMap(ec, ..., baseoption = FALSE, add = FALSE)
 \item{ec}{An \code{echarter} object as returned by \code{\link{echart}}.}
 
 \item{...}{Additional arguments for the visualMap
-(\url{http://www.echartsjs.com/option.html#visualMap}).}
+(\url{https://echarts.apache.org/zh/option.html#visualMap}).}
 
 \item{baseoption}{default FALSE}
 

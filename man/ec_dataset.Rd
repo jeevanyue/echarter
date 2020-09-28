@@ -12,7 +12,7 @@ ec_dataset(ec, data, ..., baseoption = FALSE, add = FALSE)
 \item{data}{An R object like json, data.frame, matrix.}
 
 \item{...}{Additional arguments for the dataset
-(\url{http://www.echartsjs.com/option.html#dataset}).}
+(\url{https://echarts.apache.org/zh/option.html#dataset}).}
 
 \item{baseoption}{default FALSE}
 

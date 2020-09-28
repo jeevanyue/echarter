@@ -9,6 +9,8 @@ ec_media(ec, query, option, baseoption = FALSE, add = TRUE)
 \arguments{
 \item{ec}{An \code{echarter} object as returned by \code{\link{echart}}.}
 
+\item{query}{query}
+
 \item{option}{default FALSE}
 
 \item{add}{default TRUE}

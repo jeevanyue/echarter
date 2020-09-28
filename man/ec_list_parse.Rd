@@ -14,8 +14,6 @@ ec_list_parse_(df)
 }
 \description{
 \code{ec_list_parse} are similar to \code{rlist::list.parse} but this removes names.
-
-\code{ec_list_parse_} set result name of ec_list_parse is null
 }
 \examples{
 

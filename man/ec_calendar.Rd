@@ -10,7 +10,7 @@ ec_calendar(ec, ..., baseoption = FALSE, add = FALSE)
 \item{ec}{An \code{echarter} object as returned by \code{\link{echart}}.}
 
 \item{...}{Additional arguments for the calendar
-(\url{http://www.echartsjs.com/option.html#calendar}).}
+(\url{https://echarts.apache.org/zh/option.html#calendar}).}
 
 \item{baseoption}{default FALSE}
 

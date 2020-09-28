@@ -10,7 +10,7 @@ ec_angleAxis(ec, ..., baseoption = FALSE, add = FALSE)
 \item{ec}{An \code{echarter} object as returned by \code{\link{echart}}.}
 
 \item{...}{Additional arguments for the angleAxis.
-(\url{http://www.echartsjs.com/option.html#angleAxis}).}
+(\url{https://echarts.apache.org/zh/option.html#angleAxis}).}
 
 \item{baseoption}{default FALSE}
 

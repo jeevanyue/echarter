@@ -10,7 +10,7 @@ ec_grid(ec, ..., baseoption = FALSE, add = TRUE)
 \item{ec}{An \code{echarter} object as returned by \code{\link{echart}}.}
 
 \item{...}{Additional arguments for the grid
-(\url{http://www.echartsjs.com/option.html#grid}).}
+(\url{https://echarts.apache.org/zh/option.html#grid}).}
 
 \item{baseoption}{default FALSE}
 

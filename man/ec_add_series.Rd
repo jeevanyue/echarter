@@ -2,23 +2,14 @@
 % Please edit documentation in R/ec_add_series.R, R/echarter.R
 \name{ec_add_series}
 \alias{ec_add_series}
-\alias{ec_add_series}
 \alias{ec_add_series.default}
-\alias{ec_add_series}
 \alias{ec_add_series.data.frame}
-\alias{ec_add_series}
 \alias{ec_add_series.matrix}
-\alias{ec_add_series}
 \alias{ec_add_series.numeric}
-\alias{ec_add_series}
 \alias{ec_add_series.factor}
-\alias{ec_add_series}
 \alias{ec_add_series.character}
-\alias{ec_add_series}
 \alias{ec_add_series.ts}
-\alias{ec_add_series}
 \alias{ec_add_series.forecast}
-\alias{ec_add_series}
 \alias{echarter.data.frame}
 \title{Adding series from echarts objects}
 \usage{
@@ -38,19 +29,34 @@ ec_add_series(ec, data = NULL, ...)
 
 \method{ec_add_series}{ts}(ec, data, ...)
 
-\method{ec_add_series}{forecast}(ec, data, addOriginal = TRUE,
-  addLevels = TRUE, fillOpacity = 0.1, name = NULL, ...)
+\method{ec_add_series}{forecast}(
+  ec,
+  data,
+  addOriginal = TRUE,
+  addLevels = TRUE,
+  fillOpacity = 0.1,
+  name = NULL,
+  ...
+)
 
-\method{echarter}{data.frame}(data, mapping = ecaes(), ...,
-  theme = "default", width = NULL, height = NULL, elementId = NULL,
-  dispose = TRUE, renderer = "canvas")
+\method{echarter}{data.frame}(
+  data,
+  mapping = ecaes(),
+  ...,
+  theme = "default",
+  width = NULL,
+  height = NULL,
+  elementId = NULL,
+  dispose = TRUE,
+  renderer = "canvas"
+)
 }
 \arguments{
 \item{ec}{A `echarter` object.}
 
 \item{data}{An R object like list, data.frame, matrix, numeric, character, ts, forecast, etc.}
 
-\item{...}{Arguments defined in \url{http://echarts.baidu.com/option.html#series}.}
+\item{...}{Arguments defined in \url{https://echarts.apache.org/zh/option.html#series}.}
 
 \item{mapping}{a ecaes object}
 
@@ -61,8 +67,6 @@ ec_add_series(ec, data = NULL, ...)
 \item{fillOpacity}{The opacity of bands.}
 
 \item{name}{The name of the series.}
-
-\item{mapping}{a ecaes object}
 }
 \description{
 Adding series from echarts objects
@@ -85,6 +89,7 @@ Adding series from echarts objects
 }
 \examples{
 
+library(tidyverse)
 weekDays <- c('Mon','Tues','Wed','Thurs','Fri','Sat','Sun')
 dat <- data.frame(
   saleNum = round(runif(21, 20, 100), 0),

@@ -10,7 +10,7 @@ ec_parallel(ec, ..., baseoption = FALSE, add = FALSE)
 \item{ec}{An \code{echarter} object as returned by \code{\link{echart}}.}
 
 \item{...}{Additional arguments for the parallel
-(\url{http://www.echartsjs.com/option.html#parallel}).}
+(\url{https://echarts.apache.org/zh/option.html#parallel}).}
 
 \item{baseoption}{default FALSE}
 

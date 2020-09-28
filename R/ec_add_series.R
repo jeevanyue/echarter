@@ -125,6 +125,7 @@ ec_add_series.default <- function(ec, ...) {
 #' @name ec_add_series
 #'
 #' @examples
+#' library(tidyverse)
 #' weekDays <- c('Mon','Tues','Wed','Thurs','Fri','Sat','Sun')
 #' dat <- data.frame(
 #'   saleNum = round(runif(21, 20, 100), 0),
@@ -142,6 +143,7 @@ ec_add_series.default <- function(ec, ...) {
 #'
 #'
 #' @export
+#' @importFrom magrittr %>%
 ec_add_series.data.frame <- function (ec, data, mapping = ecaes(), ...) {
 
   assertthat::assert_that(is.echart(ec), is.ecaes(mapping))

@@ -488,9 +488,10 @@ ec_geo <- function(ec, ..., baseoption = FALSE, add = FALSE){
 #' @param ec An \code{echarter} object as returned by \code{\link{echart}}.
 #' @param mapName Name of map
 #' @param geoJson \href{Geojson}{http://geojson.org/}.
-#' @param specialAreas
+#' @param specialAreas specialAreas
 #'
 #' @examples
+#' library(tidyverse)
 #' USA_geoJson <- jsonlite::read_json("http://www.echartsjs.com/gallery/data/asset/geo/USA.json")
 #'
 #' USArrests_ <- USArrests %>%
@@ -510,7 +511,11 @@ ec_geo <- function(ec, ..., baseoption = FALSE, add = FALSE){
 #'
 #' shanghai_geoJson <- jsonlite::read_json("https://raw.githubusercontent.com/ecomfe/echarts-www/master/asset/map/json/province/shanghai.json")
 #'
-#' shanghai_dat <- data.frame(name = c("崇明区","静安区","宝山区","嘉定区","青浦区","虹口区","杨浦区","黄浦区","卢湾区","长宁区","浦东新区","松江区","金山区","奉贤区","普陀区","闵行区","徐汇区"), n = round(runif(17,1,100),0), stringsAsFactors = FALSE)
+#' shanghai_dat <- data.frame(
+#' name = c("崇明区","静安区","宝山区","嘉定区","青浦区",
+#' "虹口区","杨浦区","黄浦区","卢湾区","长宁区","浦东新区",
+#' "松江区","金山区","奉贤区","普陀区","闵行区","徐汇区"),
+#' n = round(runif(17,1,100),0), stringsAsFactors = FALSE)
 #'
 #'echart() %>%
 #'  ec_registerMap("shanghai", shanghai_geoJson) %>%
@@ -846,7 +851,7 @@ ec_timeline2 <- function(ecs, ...){
 #'
 #' @description media component for responsive.
 #' @param ec An \code{echarter} object as returned by \code{\link{echart}}.
-#' @param query
+#' @param query query
 #' @param option default FALSE
 #' @param add default TRUE
 #'

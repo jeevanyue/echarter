@@ -10,7 +10,7 @@ ec_brush(ec, ..., baseoption = FALSE, add = FALSE)
 \item{ec}{An \code{echarter} object as returned by \code{\link{echart}}.}
 
 \item{...}{Additional arguments for the brush
-(\url{http://www.echartsjs.com/option.html#brush}).}
+(\url{https://echarts.apache.org/zh/option.html#brush}).}
 
 \item{baseoption}{default FALSE}
 

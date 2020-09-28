@@ -10,7 +10,7 @@ ec_xAxis(ec, ..., baseoption = FALSE, add = FALSE)
 \item{ec}{An \code{echarter} object as returned by \code{\link{echart}}.}
 
 \item{...}{Additional arguments for the xAxis
-(\url{http://www.echartsjs.com/option.html#xAxis}).}
+(\url{https://echarts.apache.org/zh/option.html#xAxis}).}
 
 \item{baseoption}{default FALSE}
 

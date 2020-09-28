@@ -10,7 +10,7 @@ ec_graphic(ec, ..., baseoption = FALSE, add = FALSE)
 \item{ec}{An \code{echarter} object as returned by \code{\link{echart}}.}
 
 \item{...}{Additional arguments for the graphic
-(\url{http://www.echartsjs.com/option.html#graphic}).}
+(\url{https://echarts.apache.org/zh/option.html#graphic}).}
 
 \item{baseoption}{default FALSE}
 

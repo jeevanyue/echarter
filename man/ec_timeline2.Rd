@@ -10,7 +10,7 @@ ec_timeline2(ecs, ...)
 \item{ecs}{An \code{echarter} object list.}
 
 \item{...}{Additional arguments for the timeline
-(\url{http://www.echartsjs.com/option.html#timeline}).}
+(\url{https://echarts.apache.org/zh/option.html#timeline}).}
 }
 \description{
 timeline component.

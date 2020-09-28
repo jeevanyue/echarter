@@ -19,9 +19,9 @@ ec_markArea(ec, ..., serie = NULL)
 \item{ec}{An \code{echarter} object as returned by \code{\link{echart}}.}
 
 \item{...}{Additional arguments for the mark.
-markPoint see (\url{http://www.echartsjs.com/option.html#series-line.markPoint}).
-markLine see (\url{http://www.echartsjs.com/option.html#series-line.markLine}).
-markArea see (\url{http://www.echartsjs.com/option.html#series-line.markArea}).}
+markPoint see (\url{https://echarts.apache.org/zh/option.html#series-line.markPoint}).
+markLine see (\url{https://echarts.apache.org/zh/option.html#series-line.markLine}).
+markArea see (\url{https://echarts.apache.org/zh/option.html#series-line.markArea}).}
 
 \item{markname}{The mark name, markPoint, markLine, markArea}
 

@@ -10,7 +10,7 @@ ec_dataZoom(ec, ..., baseoption = FALSE, add = FALSE)
 \item{ec}{An \code{echarter} object as returned by \code{\link{echart}}.}
 
 \item{...}{Additional arguments for the dataZoom
-(\url{http://www.echartsjs.com/option.html#dataZoom}).}
+(\url{https://echarts.apache.org/zh/option.html#dataZoom}).}
 
 \item{baseoption}{default FALSE}
 
