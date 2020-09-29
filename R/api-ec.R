@@ -879,7 +879,7 @@ ec_aria <- function(ec, ..., baseoption = FALSE, add = TRUE){
 #' @param ec An \code{echarter} object as returned by \code{\link{echart}}.
 #' @param ... Additional arguments for the series
 #'    (\url{https://echarts.apache.org/zh/option.html#series}).
-#' @example
+#' @examples
 #' library(dplyr)
 #' library(echarter)
 #' echart() %>%
@@ -926,4 +926,121 @@ ec_aria <- function(ec, ..., baseoption = FALSE, add = TRUE){
 #' @export
 ec_series <- function (ec, ..., baseoption = FALSE, add = TRUE) {
   .ec_opt(ec, "series", baseoption = FALSE, add = TRUE, ...)
+}
+
+
+## gl component====
+
+#' globe
+#'
+#' @description The component provides the drawing of the Earth and the coordinate system. The developer can display 3D Scatter, 3D Bubble, 3D Bar, 3D Lines on it.
+#' @param ec An \code{echarter} object as returned by \code{\link{echart}}.
+#' @param ... Additional arguments for the aria
+#'    (\url{https://echarts.apache.org/en/option-gl.html#globe}).
+#'
+#' @export
+ec_globe <- function(ec, ...){
+  .ec_opt(ec, "globe", baseoption = FALSE, add = TRUE, ...)
+}
+
+#' geo3D
+#'
+#' @description The component can draw a 3D GeoJSON and coordinate system. Developers can display 3D Scatter, 3D Bubble, 3D Bar, 3D Lines on it.
+#' @param ec An \code{echarter} object as returned by \code{\link{echart}}.
+#' @param ... Additional arguments for the aria
+#'    (\url{https://echarts.apache.org/en/option-gl.html#geo3D}).
+#'
+#' @export
+ec_geo3D <- function(ec, ...){
+  .ec_opt(ec, "geo3D", baseoption = FALSE, add = TRUE, ...)
+}
+
+#' mapbox3D
+#'
+#' @description The component can draw a 3D GeoJSON and coordinate system. Developers can display 3D Scatter, 3D Bubble, 3D Bar, 3D Lines on it.
+#' @param ec An \code{echarter} object as returned by \code{\link{echart}}.
+#' @param ... Additional arguments for the aria
+#'    (\url{https://echarts.apache.org/en/option-gl.html#mapbox3D}).
+#'
+#' @export
+ec_mapbox3D <- function(ec, ...){
+  .ec_opt(ec, "mapbox3D", baseoption = FALSE, add = TRUE, ...)
+}
+
+#' grid3D
+#'
+#' @description 3D cartesian coordinate system component. It requires \code{ec_xAxis3D}, \code{ec_yAxis3D} and \code{ec_zAxis3D} axis components to be used together.
+#' @param ec An \code{echarter} object as returned by \code{\link{echart}}.
+#' @param ... Additional arguments for the aria
+#'    (\url{https://echarts.apache.org/en/option-gl.html#grid3D}).
+#'
+#' @export
+ec_grid3D <- function(ec, ...){
+  .ec_opt(ec, "grid3D", baseoption = FALSE, add = TRUE, ...)
+}
+
+#' xAxis3D
+#'
+#' @description The X-axis in a 3D cartesian coordinate system.
+#' @param ec An \code{echarter} object as returned by \code{\link{echart}}.
+#' @param ... Additional arguments for the aria
+#'    (\url{https://echarts.apache.org/en/option-gl.html#xAxis3D}).
+#'
+#' @examples
+#' hours <- c('12a', '1a', '2a', '3a', '4a', '5a', '6a',
+#'            '7a', '8a', '9a','10a','11a',
+#'            '12p', '1p', '2p', '3p', '4p', '5p',
+#'            '6p', '7p', '8p', '9p', '10p', '11p')
+#' days <- c('Saturday', 'Friday', 'Thursday',
+#'           'Wednesday', 'Tuesday', 'Monday', 'Sunday')
+#' data <- data.frame(
+#'   hours = rep(0:23, 7),
+#'   days = rep(0:6, 24),
+#'   value = round(runif(168,1,100), 0),
+#'   stringsAsFactors = FALSE)
+#' echart() %>%
+#'   ec_grid3D(
+#'     show = TRUE, boxWidth = 200, boxDepth = 80) %>%
+#'   ec_xAxis3D(
+#'     show = TRUE, type = 'category',
+#'     data = hours) %>%
+#'   ec_yAxis3D(
+#'     show = TRUE, type = 'category',
+#'     data = days) %>%
+#'   ec_zAxis3D(
+#'     show = TRUE, type = 'value') %>%
+#'   ec_series(type = 'bar3D', data = as.matrix(data)) %>%
+#'   ec_visualMap(
+#'     max = 100,
+#'     inRange =  list(
+#'       color = c('#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026')
+#'     )
+#'   )
+#' @export
+ec_xAxis3D <- function(ec, ...){
+  .ec_opt(ec, "xAxis3D", baseoption = FALSE, add = TRUE, ...)
+}
+
+#' yAxis3D
+#'
+#' @description The Y-axis in a 3D cartesian coordinate system.
+#' @param ec An \code{echarter} object as returned by \code{\link{echart}}.
+#' @param ... Additional arguments for the aria
+#'    (\url{https://echarts.apache.org/en/option-gl.html#yAxis3D}).
+#'
+#' @export
+ec_yAxis3D <- function(ec, ...){
+  .ec_opt(ec, "yAxis3D", baseoption = FALSE, add = TRUE, ...)
+}
+
+#' zAxis3D
+#'
+#' @description The Z-axis in a 3D cartesian coordinate system.
+#' @param ec An \code{echarter} object as returned by \code{\link{echart}}.
+#' @param ... Additional arguments for the aria
+#'    (\url{https://echarts.apache.org/en/option-gl.html#zAxis3D}).
+#'
+#' @export
+ec_zAxis3D <- function(ec, ...){
+  .ec_opt(ec, "zAxis3D", baseoption = FALSE, add = TRUE, ...)
 }
