@@ -875,3 +875,17 @@ ec_media <- function(ec, query, option, baseoption = FALSE, add = TRUE){
 ec_aria <- function(ec, ..., baseoption = FALSE, add = TRUE){
   .ec_opt(ec, "aria", baseoption = FALSE, add = add, ...)
 }
+
+## series ====
+
+#' series
+#'
+#' @description series.
+#' @param ec An \code{echarter} object as returned by \code{\link{echart}}.
+#' @param ... Additional arguments for the series
+#'    (\url{https://echarts.apache.org/zh/option.html#series}).
+#'
+#' @export
+ec_series <- function (ec, ..., baseoption = FALSE, add = TRUE) {
+  .ec_opt(ec, "series", baseoption = FALSE, add = TRUE, ...)
+}
