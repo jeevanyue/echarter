@@ -24,7 +24,6 @@ validate_args <- function(name, lstargs) {
 
 ## set ec options
 .ec_opt = function(ec, opt_name, baseoption = FALSE, add = FALSE, ...){
-
   assertthat::assert_that(is.echart(ec))
 
   validate_args(opt_name, eval(substitute(alist(...))))
@@ -34,9 +33,7 @@ validate_args <- function(name, lstargs) {
   }
 
   if(!baseoption){
-
     if (is.null(ec$x$opt[[opt_name]])) {
-      # 如果配置项为空
       if(is.null(names(c(...)))){
         ec$x$opt[[opt_name]] <- c(...)
       }else{
@@ -47,10 +44,10 @@ validate_args <- function(name, lstargs) {
         ec$x$opt[[opt_name]] <- list(...)
       }else{
         if(add == FALSE){
-          # 如果 add == FALSE, 改变原来的配置项
+          # if add == FALSE, change option
           ec$x$opt[[opt_name]] <- rlist::list.merge(ec$x$opt[[opt_name]], list(...))
         }else{
-          # if add == TRUE, 添加新的配置项
+          # if add == TRUE, add option
           if(is.null(names(ec$x$opt[[opt_name]]))){
             ec$x$opt[[opt_name]] <- append(ec$x$opt[[opt_name]], list(list(...)))
           }else{
@@ -61,7 +58,6 @@ validate_args <- function(name, lstargs) {
     }
   }else{
     if (is.null(ec$x$opt$baseOption[[opt_name]])) {
-      # 如果配置项为空
       if(is.null(names(c(...)))){
         ec$x$opt$baseOption[[opt_name]] <- list(...)
       }else{
@@ -69,10 +65,8 @@ validate_args <- function(name, lstargs) {
       }
     }else{
       if(add == FALSE){
-        # 如果 add == FALSE, 改变原来的配置项
         ec$x$opt$baseOption[[opt_name]] <- rlist::list.merge(ec$x$opt$baseOption[[opt_name]], list(...))
       }else{
-        # if add == TRUE, 添加新的配置项
         if(is.null(names(ec$x$opt$baseOption[[opt_name]]))){
           ec$x$opt$baseOption[[opt_name]] <- append(ec$x$opt$baseOption[[opt_name]], list(list(...)))
         }else{
@@ -82,7 +76,8 @@ validate_args <- function(name, lstargs) {
     }
   }
 
-  ec
+  ec %>%
+    ec_add_dependency()
 
 }
 
@@ -884,6 +879,49 @@ ec_aria <- function(ec, ..., baseoption = FALSE, add = TRUE){
 #' @param ec An \code{echarter} object as returned by \code{\link{echart}}.
 #' @param ... Additional arguments for the series
 #'    (\url{https://echarts.apache.org/zh/option.html#series}).
+#' @example
+#' library(dplyr)
+#' library(echarter)
+#' echart() %>%
+#'   ec_xAxis(type = 'category', data = weekDays) %>%
+#'   ec_yAxis(type = 'value') %>%
+#'   ec_series(
+#'     type = 'line',
+#'     name = 'Apple',
+#'     data = as.integer(runif(7, 20,100)))
+#'
+#' echart() %>%
+#'   ec_xAxis(type = 'category', data = weekDays) %>%
+#'   ec_yAxis(type = 'value') %>%
+#'   ec_add_series(
+#'     type = 'line',
+#'     name = 'Apple',
+#'     data = as.integer(runif(7, 20,100)))
+#'
+#' dat <- data.frame(
+#'   saleNum = round(runif(21, 20, 100), 0),
+#'   fruit = c(rep("Apple", 7), rep("Pear", 7), rep("Banana", 7)),
+#'   weekDay = c(rep(weekDays,3)),
+#'   price = round(runif(21, 10, 20), 0),
+#'   stringsAsFactors = FALSE)
+#'
+#' dat_sp <- dat %>%
+#'   select(fruit, weekDay, saleNum) %>%
+#'   spread(fruit, saleNum) %>%
+#'   arrange(match(weekDay, weekDays))
+#'
+#' echart() %>%
+#'   ec_xAxis(type = 'category', data = weekDays) %>%
+#'   ec_yAxis(type = 'value') %>%
+#'   ec_dataset(data = dat_sp) %>%
+#'   ec_series(
+#'     name = "Apple",
+#'     datasetIndex = 0,
+#'     type = 'line', encode = list(y = "Apple")) %>%
+#'   ec_series(
+#'     name = "Banana",
+#'     datasetIndex = 0,
+#'     type = 'line', encode = list(y = 2, tooltip = c(0, 3)))
 #'
 #' @export
 ec_series <- function (ec, ..., baseoption = FALSE, add = TRUE) {
