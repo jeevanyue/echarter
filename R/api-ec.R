@@ -937,7 +937,20 @@ ec_series <- function (ec, ..., baseoption = FALSE, add = TRUE) {
 #' @param ec An \code{echarter} object as returned by \code{\link{echart}}.
 #' @param ... Additional arguments for the aria
 #'    (\url{https://echarts.apache.org/en/option-gl.html#globe}).
+#' @examples
+#' base_texture <- paste0("data:image/png;base64,", base64enc::base64encode('https://github.com/jeevanyue/echarter_docs/raw/master/data/gl/dnb_land_ocean_ice.2012.3600x1800.jpg'))
 #'
+#' echart() %>%
+#'   ec_globe(
+#'     show = TRUE,
+#'     shading = 'color',
+#'     environment = '#000', heightTexture = NULL,
+#'     globeOuterRadius = 100,
+#'     baseTexture = base_texture,
+#'     viewControl = list(
+#'       autoRotate = TRUE
+#'     )
+#'   )
 #' @export
 ec_globe <- function(ec, ...){
   .ec_opt(ec, "globe", baseoption = FALSE, add = TRUE, ...)
@@ -973,20 +986,8 @@ ec_mapbox3D <- function(ec, ...){
 #' @param ec An \code{echarter} object as returned by \code{\link{echart}}.
 #' @param ... Additional arguments for the aria
 #'    (\url{https://echarts.apache.org/en/option-gl.html#grid3D}).
-#'
-#' @export
-ec_grid3D <- function(ec, ...){
-  .ec_opt(ec, "grid3D", baseoption = FALSE, add = TRUE, ...)
-}
-
-#' xAxis3D
-#'
-#' @description The X-axis in a 3D cartesian coordinate system.
-#' @param ec An \code{echarter} object as returned by \code{\link{echart}}.
-#' @param ... Additional arguments for the aria
-#'    (\url{https://echarts.apache.org/en/option-gl.html#xAxis3D}).
-#'
 #' @examples
+#' https://echarts.apache.org/examples/zh/editor.html?c=bar3d-punch-card&gl=1
 #' hours <- c('12a', '1a', '2a', '3a', '4a', '5a', '6a',
 #'            '7a', '8a', '9a','10a','11a',
 #'            '12p', '1p', '2p', '3p', '4p', '5p',
@@ -1016,6 +1017,19 @@ ec_grid3D <- function(ec, ...){
 #'       color = c('#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026')
 #'     )
 #'   )
+#'
+#' @export
+ec_grid3D <- function(ec, ...){
+  .ec_opt(ec, "grid3D", baseoption = FALSE, add = TRUE, ...)
+}
+
+#' xAxis3D
+#'
+#' @description The X-axis in a 3D cartesian coordinate system.
+#' @param ec An \code{echarter} object as returned by \code{\link{echart}}.
+#' @param ... Additional arguments for the aria
+#'    (\url{https://echarts.apache.org/en/option-gl.html#xAxis3D}).
+#'
 #' @export
 ec_xAxis3D <- function(ec, ...){
   .ec_opt(ec, "xAxis3D", baseoption = FALSE, add = TRUE, ...)

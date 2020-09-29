@@ -15,3 +15,36 @@ ec_grid3D(ec, ...)
 \description{
 3D cartesian coordinate system component. It requires \code{ec_xAxis3D}, \code{ec_yAxis3D} and \code{ec_zAxis3D} axis components to be used together.
 }
+\examples{
+https://echarts.apache.org/examples/zh/editor.html?c=bar3d-punch-card&gl=1
+hours <- c('12a', '1a', '2a', '3a', '4a', '5a', '6a',
+           '7a', '8a', '9a','10a','11a',
+           '12p', '1p', '2p', '3p', '4p', '5p',
+           '6p', '7p', '8p', '9p', '10p', '11p')
+days <- c('Saturday', 'Friday', 'Thursday',
+          'Wednesday', 'Tuesday', 'Monday', 'Sunday')
+data <- data.frame(
+  hours = rep(0:23, 7),
+  days = rep(0:6, 24),
+  value = round(runif(168,1,100), 0),
+  stringsAsFactors = FALSE)
+echart() \%>\%
+  ec_grid3D(
+    show = TRUE, boxWidth = 200, boxDepth = 80) \%>\%
+  ec_xAxis3D(
+    show = TRUE, type = 'category',
+    data = hours) \%>\%
+  ec_yAxis3D(
+    show = TRUE, type = 'category',
+    data = days) \%>\%
+  ec_zAxis3D(
+    show = TRUE, type = 'value') \%>\%
+  ec_series(type = 'bar3D', data = as.matrix(data)) \%>\%
+  ec_visualMap(
+    max = 100,
+    inRange =  list(
+      color = c('#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026')
+    )
+  )
+
+}

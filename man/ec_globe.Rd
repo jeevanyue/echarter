@@ -15,3 +15,18 @@ ec_globe(ec, ...)
 \description{
 The component provides the drawing of the Earth and the coordinate system. The developer can display 3D Scatter, 3D Bubble, 3D Bar, 3D Lines on it.
 }
+\examples{
+base_texture <- paste0("data:image/png;base64,", base64enc::base64encode('https://github.com/jeevanyue/echarter_docs/raw/master/data/gl/dnb_land_ocean_ice.2012.3600x1800.jpg'))
+
+echart() \%>\%
+  ec_globe(
+    show = TRUE,
+    shading = 'color',
+    environment = '#000', heightTexture = NULL,
+    globeOuterRadius = 100,
+    baseTexture = base_texture,
+    viewControl = list(
+      autoRotate = TRUE
+    )
+  )
+}
