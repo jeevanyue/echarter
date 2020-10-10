@@ -16,7 +16,8 @@ ec_grid3D(ec, ...)
 3D cartesian coordinate system component. It requires \code{ec_xAxis3D}, \code{ec_yAxis3D} and \code{ec_zAxis3D} axis components to be used together.
 }
 \examples{
-https://echarts.apache.org/examples/zh/editor.html?c=bar3d-punch-card&gl=1
+library(dplyr)
+# https://echarts.apache.org/examples/zh/editor.html?c=bar3d-punch-card&gl=1
 hours <- c('12a', '1a', '2a', '3a', '4a', '5a', '6a',
            '7a', '8a', '9a','10a','11a',
            '12p', '1p', '2p', '3p', '4p', '5p',
@@ -43,7 +44,9 @@ echart() \%>\%
   ec_visualMap(
     max = 100,
     inRange =  list(
-      color = c('#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026')
+      color = c('#313695', '#4575b4', '#74add1',
+      '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090',
+      '#fdae61', '#f46d43', '#d73027', '#a50026')
     )
   )
 

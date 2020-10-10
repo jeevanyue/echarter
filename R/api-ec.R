@@ -486,47 +486,23 @@ ec_geo <- function(ec, ..., baseoption = FALSE, add = FALSE){
 #' @param specialAreas specialAreas
 #'
 #' @examples
-#' library(tidyverse)
-#' USA_geoJson <- jsonlite::read_json("http://www.echartsjs.com/gallery/data/asset/geo/USA.json")
+#' library(dplyr)
+#' data("USA_geojson", package = "echarter")
 #'
 #' USArrests_ <- USArrests %>%
 #'   dplyr::mutate(states = row.names(.))
 #'
 #' echart() %>%
-#'   ec_registerMap("USA", USA_geoJson) %>%
+#'   ec_registerMap("USA", USA_geojson) %>%
 #'   ec_add_series(
 #'     type = 'map', mapType = 'USA',
 #'     data = USArrests_,
 #'     mapping = ecaes(name = states, value = Murder)) %>%
 #'   ec_visualMap(
 #'     calculable = TRUE,
-#'     min = 0, max = 20, text = c("高", "低"),
+#'     min = 0, max = 20, text = c("high", "low"),
 #'     color = c('#d94e5d','#eac736')) %>%
 #'   ec_tooltip(trigger = 'item',formatter = '{b}: {c}')
-#'
-#' shanghai_geoJson <- jsonlite::read_json(
-#' "https://raw.githubusercontent.com/ecomfe/echarts-www/master/asset/map/json/province/shanghai.json")
-#'
-#' shanghai_dat <- data.frame(
-#' name = c("崇明区","静安区","宝山区","嘉定区","青浦区",
-#' "虹口区","杨浦区","黄浦区","卢湾区","长宁区","浦东新区",
-#' "松江区","金山区","奉贤区","普陀区","闵行区","徐汇区"),
-#' n = round(runif(17,1,100),0), stringsAsFactors = FALSE)
-#'
-#'echart() %>%
-#'  ec_registerMap("shanghai", shanghai_geoJson) %>%
-#'  ec_add_series(
-#'    type = 'map', mapType = 'shanghai',
-#'    data = shanghai_dat,
-#'    mapping = ecaes(name = name, value = n),
-#'    label = list(
-#'      normal = list(show = FALSE),
-#'      emphasis = list(show = FALSE))) %>%
-#'  ec_visualMap(
-#'    calculable = TRUE,
-#'    min = 0, max = 100, text = c("高", "低"),
-#'    color = c('#d94e5d','#eac736')) %>%
-#'  ec_tooltip(trigger = 'item',formatter = '{b}: {c}')
 #'
 #' @export
 ec_registerMap <- function(ec, mapName, geoJson, specialAreas = NULL){
@@ -882,6 +858,7 @@ ec_aria <- function(ec, ..., baseoption = FALSE, add = TRUE){
 #' @examples
 #' library(dplyr)
 #' library(echarter)
+#' weekDays <- c('Mon','Tues','Wed','Thurs','Fri','Sat','Sun')
 #' echart() %>%
 #'   ec_xAxis(type = 'category', data = weekDays) %>%
 #'   ec_yAxis(type = 'value') %>%
@@ -907,7 +884,7 @@ ec_aria <- function(ec, ..., baseoption = FALSE, add = TRUE){
 #'
 #' dat_sp <- dat %>%
 #'   select(fruit, weekDay, saleNum) %>%
-#'   spread(fruit, saleNum) %>%
+#'   tidyr::spread(fruit, saleNum) %>%
 #'   arrange(match(weekDay, weekDays))
 #'
 #' echart() %>%
@@ -938,7 +915,8 @@ ec_series <- function (ec, ..., baseoption = FALSE, add = TRUE) {
 #' @param ... Additional arguments for the aria
 #'    (\url{https://echarts.apache.org/en/option-gl.html#globe}).
 #' @examples
-#' base_texture <- paste0("data:image/png;base64,", base64enc::base64encode('https://github.com/jeevanyue/echarter_docs/raw/master/data/gl/dnb_land_ocean_ice.2012.3600x1800.jpg'))
+#' library(dplyr)
+#' data(dnb_land_ocean_ice, package = "echarter")
 #'
 #' echart() %>%
 #'   ec_globe(
@@ -946,7 +924,7 @@ ec_series <- function (ec, ..., baseoption = FALSE, add = TRUE) {
 #'     shading = 'color',
 #'     environment = '#000', heightTexture = NULL,
 #'     globeOuterRadius = 100,
-#'     baseTexture = base_texture,
+#'     baseTexture = dnb_land_ocean_ice,
 #'     viewControl = list(
 #'       autoRotate = TRUE
 #'     )
@@ -987,7 +965,8 @@ ec_mapbox3D <- function(ec, ...){
 #' @param ... Additional arguments for the aria
 #'    (\url{https://echarts.apache.org/en/option-gl.html#grid3D}).
 #' @examples
-#' https://echarts.apache.org/examples/zh/editor.html?c=bar3d-punch-card&gl=1
+#' library(dplyr)
+#' # https://echarts.apache.org/examples/zh/editor.html?c=bar3d-punch-card&gl=1
 #' hours <- c('12a', '1a', '2a', '3a', '4a', '5a', '6a',
 #'            '7a', '8a', '9a','10a','11a',
 #'            '12p', '1p', '2p', '3p', '4p', '5p',
@@ -1014,7 +993,9 @@ ec_mapbox3D <- function(ec, ...){
 #'   ec_visualMap(
 #'     max = 100,
 #'     inRange =  list(
-#'       color = c('#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026')
+#'       color = c('#313695', '#4575b4', '#74add1',
+#'       '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090',
+#'       '#fdae61', '#f46d43', '#d73027', '#a50026')
 #'     )
 #'   )
 #'

@@ -12,53 +12,6 @@ add_arg_to_df <- function(data, ...) {
 
 }
 
-#' @export
-ecaes <- function (x, y, ...) {
-  # taken from https://github.com/tidyverse/ggplot2/commit/d69762269787ed0799ab4fb1f35638cc46b5b7e6
-  exprs <- rlang::enexprs(x = x, y = y, ...)
-
-  is_missing <- vapply(exprs, rlang::is_missing, logical(1))
-
-  mapping <- structure(exprs[!is_missing], class = "uneval")
-
-  class(mapping) <- c("ecaes", class(mapping))
-
-  mapping
-}
-
-is.ecaes <- function(x) {
-  inherits(x, "ecaes")
-}
-
-#' @export
-ecaes_string <- function (x, y, ...){
-
-  mapping <- list(...)
-
-  if (!missing(x))
-    mapping["x"] <- list(x)
-
-  if (!missing(y))
-    mapping["y"] <- list(y)
-
-  mapping <- lapply(mapping, function(x) {
-    if (is.character(x)) {
-      parse(text = x)[[1]]
-    }else {x}
-  })
-
-  mapping <- structure(mapping, class = "uneval")
-
-  mapping <- mapping[names(mapping) != ""]
-
-  class(mapping) <- c("ecaes", class(mapping))
-
-  mapping
-}
-
-#' @export
-ecaes_ <- ecaes_string
-
 #' Adding series from echarts objects
 #'
 #' @param ec A `echarter` object.

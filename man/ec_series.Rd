@@ -18,6 +18,7 @@ series.
 \examples{
 library(dplyr)
 library(echarter)
+weekDays <- c('Mon','Tues','Wed','Thurs','Fri','Sat','Sun')
 echart() \%>\%
   ec_xAxis(type = 'category', data = weekDays) \%>\%
   ec_yAxis(type = 'value') \%>\%
@@ -43,7 +44,7 @@ dat <- data.frame(
 
 dat_sp <- dat \%>\%
   select(fruit, weekDay, saleNum) \%>\%
-  spread(fruit, saleNum) \%>\%
+  tidyr::spread(fruit, saleNum) \%>\%
   arrange(match(weekDay, weekDays))
 
 echart() \%>\%
