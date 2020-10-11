@@ -97,9 +97,11 @@ ec_get_opt_ <- function(ec, opt = NULL, index = NULL, num = NULL){
   if(length(opt) != 1) stop("the length opt must be 1")
   if(nchar(opt) == 0) stop("the nchar op opt must be greater than 0")
 
-  opt_char <- stringr::str_extract(opt, "(\\D)+")
+  # opt_char <- stringr::str_extract(opt, "(\\D)+")
+  opt_char <- stringr::str_extract(opt, "[a-z]+(3D)*")
 
-  opt_num <- as.numeric(stringr::str_extract(opt, "(\\d)+"))
+  # opt_num <- as.numeric(stringr::str_extract(opt, "(\\d)+"))
+  opt_num <- as.numeric(stringr::str_extract(opt, "([0-9])+$"))
 
   if(!is.na(opt_num)){
     num <- opt_num
