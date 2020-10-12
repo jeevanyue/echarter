@@ -232,7 +232,7 @@ ec_data_to_series <- function(ec, data, mapping, ..., dim = FALSE) {
       }else{
         stop("maping must have min, Q1, median/Q2, Q3, max in boxplot")
       }
-      data_ <- data %>%
+      data_ <- data_ %>%
         group_by(group) %>%
         do(data = ec_dim(select(., -group))) %>%
         ungroup()
@@ -247,9 +247,9 @@ ec_data_to_series <- function(ec, data, mapping, ..., dim = FALSE) {
       stop("maping must have open, close, lowest, highest in candlestick")
     }
 
-    data_ <- data %>%
+    data_ <- data_ %>%
       group_by(group) %>%
-      do(data = ec_dim(select(., quote(-group)))) %>%
+      do(data = ec_dim(select(., -group))) %>%
       ungroup()
 
   }else if(type %in% c('sankey', 'graph')){
